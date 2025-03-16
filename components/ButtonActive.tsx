@@ -1,7 +1,8 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import colors from '../src/Color';
+import React from 'react';
 
-const ButtonActive = (props: any) => {
+const ButtonActive = React.memo((props: any) => {
   const {bgColor, width, borderColor, text, func} = props;
 
   return (
@@ -14,7 +15,7 @@ const ButtonActive = (props: any) => {
       <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
