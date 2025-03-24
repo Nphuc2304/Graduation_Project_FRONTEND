@@ -1,14 +1,12 @@
-import {StyleSheet, View} from 'react-native';
-import Wrapper from '../../components/Wrapper';
+import {ScrollView, Text, View} from 'react-native';
+import colors from '../Color';
 
-const Home = () => {
+const Home = ({navigation}: any) => {
   return (
-    <Wrapper>
-      <View></View>
-    </Wrapper>
+    <View>
+      <Text></Text>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default Home;

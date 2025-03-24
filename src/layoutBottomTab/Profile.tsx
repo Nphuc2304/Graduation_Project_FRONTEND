@@ -1,7 +1,7 @@
 import {StyleSheet, View} from 'react-native';
 import Wrapper from '../../components/Wrapper';
 
-const Setting = () => {
+const Profile = () => {
   return (
     <Wrapper>
       <View></View>
@@ -11,4 +11,4 @@ const Setting = () => {
 
 const styles = StyleSheet.create({});
 
-export default Setting;
+export default Profile;
