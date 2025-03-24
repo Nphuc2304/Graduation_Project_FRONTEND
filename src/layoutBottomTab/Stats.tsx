@@ -1,7 +1,7 @@
 import {StyleSheet, View} from 'react-native';
 import Wrapper from '../../components/Wrapper';
 
-const Dashboard = () => {
+const Stats = () => {
   return (
     <Wrapper>
       <View></View>
@@ -9,6 +9,4 @@ const Dashboard = () => {
   );
 };
 
-const styles = StyleSheet.create({});
-
-export default Dashboard;
+export default Stats;

@@ -1,33 +1,25 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import colors from '../src/Color';
-import React from 'react';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-const ButtonActive = React.memo((props: any) => {
-  const {bgColor, width, borderColor, text, func} = props;
-
+const ButtonActive = (props: any) => {
+  const {text, color, bgColor, width, borderColor, func} = props;
   return (
     <TouchableOpacity
-      onPress={func}
       style={[
-        styles.container,
-        {width: width, backgroundColor: bgColor, borderColor: borderColor},
-      ]}>
-      <Text style={styles.text}>{text}</Text>
+        styles.btn,
+        {backgroundColor: bgColor, width: width, borderColor: borderColor},
+      ]}
+      onPress={func}>
+      <Text style={{color: color, fontSize: 18}}>{text}</Text>
     </TouchableOpacity>
   );
-});
+};
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 10,
+  btn: {
+    borderRadius: 50,
+    padding: 10,
+    borderWidth: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 15,
-  },
-  text: {
-    fontSize: 17,
-    color: colors.textButton,
-    fontWeight: '500',
   },
 });
 
