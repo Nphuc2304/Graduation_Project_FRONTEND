@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     width: '80%',
     fontSize: 15,
     color: colors.primary,
+    padding: 10,
   },
   textErr: {
     color: colors.red,
