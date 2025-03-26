@@ -2,17 +2,14 @@ import {Image, TouchableOpacity} from 'react-native';
 import AppStyles from '../src/Styles/AppStyles';
 
 const ButtonIcon = (props: any) => {
-  const {icon, func, borderRa, bgColor, iconColor} = props;
+  const {icon, func, borderRa, bgColor, iconColor, styles} = props;
   return (
     <TouchableOpacity
       style={{
-        padding: 10,
+        padding: 8,
         borderRadius: borderRa,
         backgroundColor: bgColor,
-        position: 'absolute',
-        top: 15,
-        left: 15,
-        zIndex: 1,
+        ...styles,
       }}
       onPress={func}>
       <Image style={[AppStyles.icon, {tintColor: iconColor}]} source={icon} />
