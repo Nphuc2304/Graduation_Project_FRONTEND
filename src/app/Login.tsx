@@ -14,6 +14,10 @@ const Login = ({navigation}: any) => {
         bgColor={colors.gray}
         iconColor={colors.black}
         borderRa="50%"
+        styles={{position: 'absolute', top: 15, left: 15, zIndex: 1}}
+        func={() => {
+          navigation.goBack();
+        }}
       />
       <Image
         style={LoginStyles.img}
@@ -26,6 +30,10 @@ const Login = ({navigation}: any) => {
         borderColor={colors.primary}
         color={colors.white}
         width="85%"
+        radius={50}
+        func={() => {
+          navigation.navigate('Welcome');
+        }}
       />
       <Text style={LoginStyles.text}>Or</Text>
       <View style={[AppStyles.rowContainerSpace, {width: '40%'}]}>
@@ -36,7 +44,7 @@ const Login = ({navigation}: any) => {
           <Image source={require('../../assets/icons/Facebook.png')} />
         </TouchableOpacity>
       </View>
-      <View style={[AppStyles.rowContainer, {marginTop: 30}]}>
+      <View style={[AppStyles.rowContainer, {marginTop: 40}]}>
         <Text style={LoginStyles.textBlack}>Don't have an account. </Text>
         <TextLink text="Sign up" color={colors.primary} />
       </View>

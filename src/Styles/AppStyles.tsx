@@ -17,8 +17,9 @@ const AppStyles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   icon: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
   },
   textNormal: {
     fontSize: 16,
