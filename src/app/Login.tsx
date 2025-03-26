@@ -44,9 +44,15 @@ const Login = ({navigation}: any) => {
           <Image source={require('../../assets/icons/Facebook.png')} />
         </TouchableOpacity>
       </View>
-      <View style={[AppStyles.rowContainer, {marginTop: 40}]}>
+      <View style={[AppStyles.rowContainer, {marginTop: 50}]}>
         <Text style={LoginStyles.textBlack}>Don't have an account. </Text>
-        <TextLink text="Sign up" color={colors.primary} />
+        <TextLink
+          text="Sign up"
+          color={colors.primary}
+          func={() => {
+            navigation.navigate('SignUp');
+          }}
+        />
       </View>
     </View>
   );
