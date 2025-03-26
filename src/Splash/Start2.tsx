@@ -38,6 +38,7 @@ const Start2 = ({navigation}: any) => {
         borderColor={colors.primary}
         color={colors.white}
         width="85%"
+        radius={50}
         func={() => {
           navigation.navigate('Start3');
         }}
