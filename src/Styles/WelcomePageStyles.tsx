@@ -5,7 +5,7 @@ const WelcomePageStyles = StyleSheet.create({
   logo: {
     height: 175,
     resizeMode: 'contain',
-    marginTop: 80,
+    marginTop: 30,
   },
   title: {
     fontSize: 32,
