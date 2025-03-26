@@ -31,6 +31,9 @@ const WelcomePage = ({navigation}: any) => {
         borderColor={colors.darkGray}
         radius={10}
         img={require('../../assets/icons/donator.png')}
+        func={() => {
+          navigation.navigate('SignIn');
+        }}
       />
       <View style={{marginTop: 40}}></View>
       <ButtonActive

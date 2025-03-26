@@ -1,20 +1,32 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import AppStyles from '../src/Styles/AppStyles';
+import colors from '../src/Color';
 
 const ButtonActive = (props: any) => {
-  const {text, color, bgColor, width, borderColor, radius, func, img} = props;
+  const {
+    text,
+    color,
+    bgColor,
+    width,
+    borderColor,
+    radius,
+    func,
+    img,
+    disabled,
+  } = props;
   return (
     <TouchableOpacity
       style={[
         styles.btn,
         {
-          backgroundColor: bgColor,
+          backgroundColor: disabled ? colors.darkGray : bgColor,
           width: width,
-          borderColor: borderColor,
+          borderColor: disabled ? colors.darkGray : borderColor,
           borderRadius: radius,
         },
       ]}
-      onPress={func}>
+      onPress={disabled ? undefined : func}
+      disabled={disabled}>
       {img != null ? (
         <Image source={img} style={[AppStyles.icon, {marginRight: 10}]} />
       ) : (

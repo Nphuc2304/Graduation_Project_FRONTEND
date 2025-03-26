@@ -21,7 +21,7 @@ const LoginStyles = StyleSheet.create({
     marginVertical: 40,
   },
   textBlack: {
-    fontSize: 18,
+    fontSize: 17,
     color: colors.black,
   },
 });
