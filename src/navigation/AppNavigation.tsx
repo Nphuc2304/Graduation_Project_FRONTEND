@@ -10,6 +10,8 @@ import Login from '../app/Login';
 import WelcomePage from '../app/WelcomePage';
 import SignIn from '../app/SignIn';
 import SignUp from '../app/SignUp';
+import ForgotPassword from '../app/ForgotPassword';
+import Verification from '../app/Verification';
 
 const Stack = createStackNavigator();
 
@@ -17,7 +19,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Splash"
+        initialRouteName="Verification"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Start1" component={Start1} />
@@ -27,6 +29,8 @@ const AppNavigator = () => {
         <Stack.Screen name="Welcome" component={WelcomePage} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        <Stack.Screen name="Verification" component={Verification} />
         <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
