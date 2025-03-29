@@ -1,5 +1,7 @@
 import {
   Image,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -12,7 +14,6 @@ import ButtonIcon from '../../components/ButtonIcon';
 import Colors from '../Color';
 import AppStyles from '../Styles/AppStyles';
 import ForgotStyles from '../Styles/ForgotStyle';
-import {ForceTouchGesture} from 'react-native-gesture-handler/lib/typescript/handlers/gestures/forceTouchGesture';
 
 const ForgotPassword = ({navigation}: any) => {
   const [isForcus, setIsForcus] = useState(false);
@@ -33,7 +34,9 @@ const ForgotPassword = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView style={AppStyles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={AppStyles.container}>
       <ButtonIcon
         icon={require('../../assets/icons/back.png')}
         bgColor={Colors.gray}
@@ -91,7 +94,7 @@ const ForgotPassword = ({navigation}: any) => {
       <TouchableOpacity style={ForgotStyles.btnCancel}>
         <Text style={ForgotStyles.txtCancel}>Cancel</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

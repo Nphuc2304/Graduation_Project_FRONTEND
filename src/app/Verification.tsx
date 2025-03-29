@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   View,
   TextInputProps,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import AppStyles from '../Styles/AppStyles';
@@ -41,7 +43,9 @@ const Verification = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView style={AppStyles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={AppStyles.container}>
       <ButtonIcon
         icon={require('../../assets/icons/back.png')}
         bgColor={Colors.gray}
@@ -82,7 +86,7 @@ const Verification = ({navigation}: any) => {
       <TouchableOpacity style={StyleVerifiCation.btnSendAgain}>
         <Text style={StyleVerifiCation.txtSendAgain}>Send Code Again</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
