@@ -4,7 +4,7 @@ import Colors from '../Color';
 const StyleVerifiCation = StyleSheet.create({
   content: {
     flex: 1,
-    marginTop: 100,
+    marginTop: 150,
     marginRight: 20,
     marginLeft: 20,
   },
