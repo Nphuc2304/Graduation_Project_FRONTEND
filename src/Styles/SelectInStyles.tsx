@@ -18,8 +18,9 @@ const SelectInStyles = StyleSheet.create({
     marginVertical: 62,
   },
   marginBtn: {
-    marginHorizontal: 15,
-    marginVertical: 15,
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 40,
   },
   select: {
     width: '105%',

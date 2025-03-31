@@ -31,15 +31,17 @@ const SelectInterest = ({navigation}: any) => {
           Let's make a better world with us.
         </Text>
       </View>
-      <ButtonActive
-        text="Continue"
-        color={colors.white}
-        bgColor={colors.primary}
-        width="90%"
-        radius={50}
-        borderColor={colors.primary}
-        disabled={false}
-      />
+      <View style={SelectInStyles.marginBtn}>
+        <ButtonActive
+          text="Continue"
+          color={colors.white}
+          bgColor={colors.primary}
+          width="90%"
+          radius={50}
+          borderColor={colors.primary}
+          disabled={false}
+        />
+      </View>
     </View>
   );
 };

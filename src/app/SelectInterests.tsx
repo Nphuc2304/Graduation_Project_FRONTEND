@@ -53,18 +53,20 @@ const SelectInterest = ({navigation}: any) => {
           onChangeSelected={handleSelectionChange}
         />
       </View>
-      <ButtonActive
-        text="Continue"
-        color={colors.white}
-        bgColor={colors.primary}
-        width="90%"
-        radius={50}
-        borderColor={colors.primary}
-        func={() => {
-          navigation.replace('SelectSuccess');
-        }}
-        disabled={selectedItems.length === 0}
-      />
+      <View style={SelectInStyles.marginBtn}>
+        <ButtonActive
+          text="Continue"
+          color={colors.white}
+          bgColor={colors.primary}
+          width="90%"
+          radius={50}
+          borderColor={colors.primary}
+          func={() => {
+            navigation.replace('SelectSuccess');
+          }}
+          disabled={selectedItems.length === 0}
+        />
+      </View>
     </View>
   );
 };
