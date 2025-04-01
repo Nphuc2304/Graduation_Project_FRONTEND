@@ -15,6 +15,8 @@ const ButtonIcon = (props: any) => {
         marginLeft: ml,
         marginRight: mr,
         ...styles,
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
       onPress={func}>
       <Image style={[AppStyles.icon, {tintColor: iconColor}]} source={icon} />

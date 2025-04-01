@@ -88,12 +88,16 @@ const ForgotPassword = ({navigation}: any) => {
           </Text>
         )}
       </View>
-      <TouchableOpacity style={ForgotStyles.btnRequest} onPress={hanldeRequest}>
-        <Text style={ForgotStyles.txtRequest}>Request Code</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={ForgotStyles.btnCancel}>
-        <Text style={ForgotStyles.txtCancel}>Cancel</Text>
-      </TouchableOpacity>
+      <View style={ForgotStyles.viewBottom}>
+        <TouchableOpacity
+          style={ForgotStyles.btnRequest}
+          onPress={hanldeRequest}>
+          <Text style={ForgotStyles.txtRequest}>Request Code</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={ForgotStyles.btnCancel}>
+          <Text style={ForgotStyles.txtCancel}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 };

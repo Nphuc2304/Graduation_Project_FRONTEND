@@ -101,6 +101,12 @@ const ForgotStyle = StyleSheet.create({
     fontWeight: '500',
     color: Colors.primary,
   },
+  viewBottom: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 40,
+  },
 });
 
 export default ForgotStyle;
