@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 50,
+    marginBottom: 50,
   },
   txtWatch: {
     fontSize: 18,

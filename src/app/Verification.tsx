@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  TextInputProps,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -18,11 +17,17 @@ import StyleVerifiCation from '../Styles/Verification';
 const Verification = ({navigation}: any) => {
   const inputRefs = useRef<TextInput[]>([]);
   const [code, setCode] = useState<string[]>(new Array(6).fill('')); // Mảng chứa giá trị từng ô input
+  const [isFilled, setIsFilled] = useState<boolean[]>(new Array(6).fill(false)); // Mảng theo dõi trạng thái từng ô
 
   const handleChangeText = ({text, index}: {text: string; index: number}) => {
     let newCode = [...code];
     newCode[index] = text;
     setCode(newCode);
+
+    // Cập nhật trạng thái isFilled
+    let newIsFilled = [...isFilled];
+    newIsFilled[index] = text.length > 0; // Nếu ô có dữ liệu, đặt isFilled là true
+    setIsFilled(newIsFilled);
 
     if (text.length > 0 && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1]?.focus(); // Chuyển sang ô tiếp theo khi nhập
@@ -64,7 +69,12 @@ const Verification = ({navigation}: any) => {
         </Text>
         <View style={StyleVerifiCation.viewVerification}>
           {[0, 1, 2, 3, 4, 5].map(index => (
-            <View key={index} style={StyleVerifiCation.textInput}>
+            <View
+              key={index}
+              style={[
+                StyleVerifiCation.textInput,
+                {borderColor: isFilled[index] ? Colors.primary : Colors.black}, // Thay đổi màu dựa trên trạng thái
+              ]}>
               <TextInput
                 keyboardType="numeric"
                 maxLength={1}
@@ -80,12 +90,14 @@ const Verification = ({navigation}: any) => {
           ))}
         </View>
       </View>
-      <TouchableOpacity style={StyleVerifiCation.btnVerify}>
-        <Text style={StyleVerifiCation.txtVerify}>Verify</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={StyleVerifiCation.btnSendAgain}>
-        <Text style={StyleVerifiCation.txtSendAgain}>Send Code Again</Text>
-      </TouchableOpacity>
+      <View style={StyleVerifiCation.viewBottom}>
+        <TouchableOpacity style={StyleVerifiCation.btnVerify}>
+          <Text style={StyleVerifiCation.txtVerify}>Verify</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={StyleVerifiCation.btnSendAgain}>
+          <Text style={StyleVerifiCation.txtSendAgain}>Send Code Again</Text>
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 };
