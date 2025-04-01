@@ -17,6 +17,7 @@ end
 target 'Graduation_Project_FRONTEND' do
   config = use_native_modules!
 
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
