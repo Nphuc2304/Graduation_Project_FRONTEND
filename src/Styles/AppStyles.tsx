@@ -25,6 +25,13 @@ const AppStyles = StyleSheet.create({
     fontSize: 16,
     color: colors.lightBlack,
   },
+  textTitle: {
+    fontSize: 18,
+    fontWeight: 'semibold',
+    lineHeight: 18,
+    color: colors.black,
+    marginLeft: 25,
+  },
 });
 
 export default AppStyles;
