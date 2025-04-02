@@ -32,6 +32,9 @@ const AppStyles = StyleSheet.create({
     color: colors.black,
     marginLeft: 25,
   },
+  maxRow: {
+    width: '100%',
+  },
 });
 
 export default AppStyles;
