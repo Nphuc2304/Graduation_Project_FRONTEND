@@ -17,7 +17,7 @@ interface list {
 
 const CampaignList = memo(
   (props: any) => {
-    const {data, onSelectItem} = props;
+    const {data, onSelectItem, onLongPress} = props;
 
     return (
       <FlashList
@@ -37,6 +37,7 @@ const CampaignList = memo(
               onPress={() => {
                 onSelectItem?.(item.id);
               }}
+              onLongPress={() => onLongPress?.(item)}
               style={ListProdStyles.container}>
               <Image source={{uri: item.image}} style={ListProdStyles.img} />
               <View style={ListProdStyles.content}>
