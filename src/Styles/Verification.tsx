@@ -28,10 +28,15 @@ const StyleVerifiCation = StyleSheet.create({
     width: '10%',
     borderBottomWidth: 2,
     borderColor: Colors.black,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
     width: '100%',
     height: 50,
+    fontSize: 35,
+    color: Colors.primary,
+    textAlign: 'center',
   },
   line: {
     width: 41,
@@ -62,6 +67,12 @@ const StyleVerifiCation = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: Colors.primary,
+  },
+  viewBottom: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 40,
   },
 });
 
