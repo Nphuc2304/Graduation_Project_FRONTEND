@@ -18,7 +18,7 @@ const BottomTabNavigator = () => {
         tabBarStyle: {
           backgroundColor: colors.white,
           borderTopWidth: 0,
-          height: 85,
+          height: 60,
         },
         tabBarLabelStyle: {
           fontSize: 10,
