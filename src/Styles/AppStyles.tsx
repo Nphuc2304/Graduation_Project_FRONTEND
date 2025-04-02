@@ -36,6 +36,9 @@ const AppStyles = StyleSheet.create({
     width: 50,
     height: 30,
     resizeMode: 'contain',
+    },
+  maxRow: {
+    width: '100%',
   },
 });
 
