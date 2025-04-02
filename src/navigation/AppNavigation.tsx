@@ -14,7 +14,7 @@ import ForgotPassword from '../app/ForgotPassword';
 import Verification from '../app/Verification';
 import SelectInterest from '../app/SelectInterests';
 import SelectSuccess from '../app/SelectSuccess';
-import Bookmark from '../app/bookmark';
+import Bookmark from '../app/Bookmark';
 
 const Stack = createStackNavigator();
 
