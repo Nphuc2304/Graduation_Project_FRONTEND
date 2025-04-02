@@ -3,9 +3,8 @@ import colors from '../Color';
 
 const ListProdStyles = StyleSheet.create({
   container: {
-    width: '100%',
     flexGrow: 1,
-    marginVertical: 20,
+    margin: 20,
     backgroundColor: colors.white,
     borderRadius: 20,
     overflow: 'hidden',
