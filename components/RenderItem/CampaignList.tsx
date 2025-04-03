@@ -70,7 +70,7 @@ const CampaignList = memo(
                   <View
                     style={{
                       width: '90%',
-                      backgroundColor: colors.lightBlack,
+                      backgroundColor: colors.lightPrimary,
                       height: 3,
                       overflow: 'hidden',
                       position: 'relative',

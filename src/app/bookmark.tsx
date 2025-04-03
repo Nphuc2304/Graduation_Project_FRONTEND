@@ -99,11 +99,10 @@ const Bookmark = ({navigation}: any) => {
       <Header
         iconBack={require('../../assets/icons/back.png')}
         title="Bookmark"
-        iconDots={require('../../assets/icons/vertical_dots.png')}
+        icon={require('../../assets/icons/vertical_dots.png')}
         mg={20}
         navigation={navigation}
       />
-
       <View style={HomeStyles.pd}>
         <CategoryList
           data={categories}
@@ -114,13 +113,11 @@ const Bookmark = ({navigation}: any) => {
           width={100}
         />
       </View>
-
       <CampaignList
         data={data}
         onSelectItem={handleSelectItem}
         onLongPress={handleLongPress}
       />
-
       <Modal
         animationType="slide"
         transparent={true}
@@ -176,7 +173,7 @@ const Bookmark = ({navigation}: any) => {
                     <View
                       style={{
                         width: '90%',
-                        backgroundColor: colors.lightBlack,
+                        backgroundColor: colors.lightPrimary,
                         height: 3,
                         overflow: 'hidden',
                         position: 'relative',
@@ -219,6 +216,9 @@ const Bookmark = ({navigation}: any) => {
                     width="45%"
                     radius={50}
                     borderColor={colors.primary}
+                    func={() => {
+                      handleCloseModal();
+                    }}
                   />
                   <ButtonActive
                     text="Remove"
