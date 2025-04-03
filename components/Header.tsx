@@ -10,7 +10,8 @@ const Header = (props: any) => {
     iconSearch,
     iconSave,
     iconBack,
-    iconDots,
+    icon,
+    func,
     mg,
     navigation,
   } = props;
@@ -54,14 +55,14 @@ const Header = (props: any) => {
             }}
           />
         )}
-        {iconDots && (
+        {icon && (
           <ButtonIcon
-            icon={iconDots}
+            icon={icon}
             bgColor={colors.lightPrimary}
             iconColor={colors.primary}
             borderRa="10%"
             ml={10}
-            func={() => {}}
+            func={func}
           />
         )}
       </View>
