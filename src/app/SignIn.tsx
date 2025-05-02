@@ -10,13 +10,54 @@ import {useState} from 'react';
 import TextLink from '../../components/TextLink';
 import ButtonActive from '../../components/ButtonActive';
 import LoginStyles from '../Styles/LoginStyles';
+import { login, getMe } from '../api/users';
+import { saveTokens } from '../utils/tokenStorage';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../store/slices/userSlice';
+import { AppDispatch } from '../store/store';
 
-const SignIn = ({navigation}: any) => {
+const SignIn = ({ navigation }: any) => {
+  const dispatch = useDispatch<AppDispatch>()
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [hide, setHide] = useState(true);
   const [check, setCheck] = useState(false);
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSignIn = async () => {
+    if (!userName || !password) {
+      setErr('Username and password are required.');
+      return;
+    }
+
+    setLoading(true);
+    setErr(null);
+
+    try {
+      // call /login
+      const { data: loginData } = await login({ username: userName, password });
+      const { accessToken, refreshToken } = loginData;
+      await saveTokens({ accessToken, refreshToken });
+
+      // call /me
+      const { data: me } = await getMe();
+      // put it into Redux:
+      dispatch(setUser(me.user)) 
+      console.log('fetched user profile:', me);
+      navigation.replace('BottomTabs', { user: me });
+
+    } catch (e: any) {
+      console.error('SignIn API error:', e);
+      setErr(
+        e.response?.data?.message
+        ?? 'Could not sign in. Please check your credentials.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Wrapper>
       <ButtonIcon
@@ -36,8 +77,8 @@ const SignIn = ({navigation}: any) => {
         />
         <Text style={SignInStyles.title}>Start your journey</Text>
         <InputComponent
-          label="Username (or) email *"
-          placeholder="Enter your username(or)email"
+          label="Username *"
+          placeholder="Enter your username"
           width="90%"
           value={userName}
           onChangeText={setUserName}
@@ -74,13 +115,14 @@ const SignIn = ({navigation}: any) => {
         </View>
         <TextLink text="Forgot password?" color={colors.primary} mg={20} />
         <ButtonActive
-          text="Sign In"
+          text={loading ? 'Signing in…' : 'Sign In'}
           color={colors.white}
           bgColor={colors.primary}
           width="90%"
           radius={50}
           borderColor={colors.primary}
-          disabled={!(userName !== '' && password !== '')}
+          disabled={loading || !userName || !password}
+          func={handleSignIn}
         />
         <View style={[AppStyles.rowContainer, {marginTop: 50}]}>
           <Text style={LoginStyles.textBlack}>Don't have an account. </Text>

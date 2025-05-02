@@ -10,14 +10,39 @@ import {useState} from 'react';
 import ButtonActive from '../../components/ButtonActive';
 import LoginStyles from '../Styles/LoginStyles';
 import TextLink from '../../components/TextLink';
+import { signup } from '../api/users';
+import { saveTokens } from '../utils/tokenStorage';
 
-const SignUp = ({navigation}: any) => {
+const SignUp = ({ navigation }: any) => {
   const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [hide, setHide] = useState(true);
-  const [err, setErr] = useState('');
+  const [err, setErr] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSignUp = async () => {
+    if (!userName || !password) {
+      setErr('Username and password are required.');
+      return;
+    }
+
+    setLoading(true);
+    setErr(null);
+
+    try {
+      const { data } = await signup({ username: userName, password });
+      const { accessToken, refreshToken } = data;
+      await saveTokens({ accessToken, refreshToken });
+
+      navigation.navigate('BottomTabs');
+    } catch (err: any) {
+      console.error('SignUp API error:', err);
+      setErr(err.response?.data?.message ?? 'Unexpected network error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <Wrapper>
@@ -47,7 +72,7 @@ const SignUp = ({navigation}: any) => {
             mgBottom={10}
             err={err}
           />
-          <InputComponent
+          {/* <InputComponent
             label="Email *"
             placeholder="Enter your email"
             width="90%"
@@ -64,7 +89,7 @@ const SignUp = ({navigation}: any) => {
             onChangeText={setPhone}
             mgBottom={10}
             err={err}
-          />
+          /> */}
           <InputComponent
             label="Password *"
             placeholder="Enter your password"
@@ -77,15 +102,16 @@ const SignUp = ({navigation}: any) => {
             hidden={() => setHide(!hide)}
             err={err}
           />
-          <ButtonActive
-            text="Sign Up"
-            color={colors.white}
-            bgColor={colors.primary}
-            width="90%"
-            radius={50}
-            borderColor={colors.primary}
-            disabled={!(userName !== '' && password !== '')}
-          />
+           <ButtonActive
+             text={loading ? 'Signing up…' : 'Sign Up'}
+             color={colors.white}
+             bgColor={colors.primary}
+             width="90%"
+             radius={50}
+             borderColor={colors.primary}
+             disabled={loading || !userName || !password}
+             func={handleSignUp}
+           />
           <Text
             style={[LoginStyles.textBlack, {marginTop: 20, marginBottom: 30}]}>
             Or continue with
