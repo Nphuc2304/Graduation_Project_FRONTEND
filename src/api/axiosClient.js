@@ -3,7 +3,7 @@ import { loadTokens, saveTokens, clearTokens } from '../utils/tokenStorage';
 import { refreshToken } from './auth';
 
 const axiosClient = axios.create({
-  baseURL: 'http://192.168.100.157:3000/api', // replace with your pc's IPv4 address instead of mine. open windows powershell and type "ipconfig" then look for IPv4 address under your network adapter
+  baseURL: 'https://graduation-project-backend-jio7.onrender.com/api', // replace with your pc's IPv4 address instead of mine. open windows powershell and type "ipconfig" then look for IPv4 address under your network adapter
   // adb reverse tcp:3000 tcp:3000 might be able to access localhost:3000 with just an usb connection, but untested
   headers: {
     'Content-Type': 'application/json',
