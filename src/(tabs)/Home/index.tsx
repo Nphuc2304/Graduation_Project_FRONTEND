@@ -7,11 +7,11 @@ import {
   Text,
   View,
 } from 'react-native';
-import colors from '../Color';
-import ButtonIcon from '../../components/ButtonIcon';
-import AppStyles from '../Styles/AppStyles';
-import TextLink from '../../components/TextLink';
-import VideoList from '../../components/RenderItem/VideoList';
+import colors from '../../Color';
+import ButtonIcon from '../../../components/ButtonIcon';
+import AppStyles from '../../Styles/AppStyles';
+import TextLink from '../../../components/TextLink';
+import VideoList from '../../../components/RenderItem/VideoList';
 
 // Định nghĩa interface cho dữ liệu video
 interface VideoItem {
@@ -56,18 +56,18 @@ const Home = ({navigation}: any) => {
         <View style={AppStyles.rowContainerSpace}>
           <Image
             style={styles.imgHeader}
-            source={require('../../assets/images/Logo.png')}
+            source={require('../../../assets/images/Logo.png')}
           />
           <View style={AppStyles.rowContainerSpace}>
             <ButtonIcon
-              icon={require('../../assets/icons/search.png')}
+              icon={require('../../../assets/icons/search.png')}
               bgColor={'rgba(26, 143, 227, 0.5)'}
               w={34}
               h={34}
               mr={15}
             />
             <ButtonIcon
-              icon={require('../../assets/icons/save.png')}
+              icon={require('../../../assets/icons/save.png')}
               bgColor={'rgba(26, 143, 227, 0.5)'}
               w={34}
               h={34}
