@@ -14,11 +14,11 @@ import AppStyles from '../../Styles/AppStyles';
 import TextLink from '../../../components/TextLink';
 import VideoList from '../../../components/RenderItem/VideoList';
 
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 import Carousel from 'react-native-reanimated-carousel';
-import CampaignList from '../../components/RenderItem/CampaignList';
-import CategoryList from '../../components/RenderItem/CategoryList';
-import HomeStyles from '../bottomTabStyles/HomeStyles';
+import CampaignList from '../../../components/RenderItem/CampaignList';
+import CategoryList from '../../../components/RenderItem/CategoryList';
+import HomeStyles from '../../bottomTabStyles/HomeStyles';
 
 // Định nghĩa interface cho dữ liệu video
 interface VideoItem {
@@ -142,9 +142,9 @@ const Home = ({navigation}: any) => {
       <ScrollView>
         <View style={HomeStyles.container}>
           <Header
-            logo={require('../../assets/images/Logo.png')}
-            iconSearch={require('../../assets/icons/search.png')}
-            iconSave={require('../../assets/icons/save.png')}
+            logo={require('../../../assets/images/Logo.png')}
+            iconSearch={require('../../../assets/icons/search.png')}
+            iconSave={require('../../../assets/icons/save.png')}
             navigation={navigation}
             mg={20}
           />
