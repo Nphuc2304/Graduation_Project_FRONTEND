@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import Wrapper from '../../components/Wrapper';
+import Wrapper from '../../../components/Wrapper';
 
 const Stats = () => {
   return (
