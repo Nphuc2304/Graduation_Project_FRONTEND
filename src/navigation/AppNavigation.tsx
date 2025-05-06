@@ -14,6 +14,7 @@ import ForgotPassword from '../app/ForgotPassword';
 import Verification from '../app/Verification';
 import SelectInterest from '../app/SelectInterests';
 import SelectSuccess from '../app/SelectSuccess';
+import Bookmark from '../app/bookmark';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ const AppNavigator = () => {
         <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
         <Stack.Screen name="SelectInterest" component={SelectInterest} />
         <Stack.Screen name="SelectSuccess" component={SelectSuccess} />
+        <Stack.Screen name="Bookmark" component={Bookmark} />
       </Stack.Navigator>
     </NavigationContainer>
   );

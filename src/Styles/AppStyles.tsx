@@ -27,10 +27,18 @@ const AppStyles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 18,
-    fontWeight: 'semibold',
+    fontWeight: 'bold',
     lineHeight: 18,
     color: colors.black,
     marginLeft: 25,
+  },
+  logo: {
+    width: 50,
+    height: 30,
+    resizeMode: 'contain',
+    },
+  maxRow: {
+    width: '100%',
   },
 });
 
