@@ -1,16 +1,18 @@
-import React from 'react';
-import {enableScreens} from 'react-native-screens';
-import AppNavigator from './navigation/AppNavigation';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import React from 'react'
+import { enableScreens } from 'react-native-screens'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Provider } from 'react-redux'
+import AppNavigator from './navigation/AppNavigation'
+import { store } from './store/store'
 
-enableScreens();
+enableScreens()
 
-const App = () => {
+export default function App() {
   return (
-    <SafeAreaProvider>
-      <AppNavigator />
-    </SafeAreaProvider>
-  );
-};
-
-export default App;
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <AppNavigator />
+      </SafeAreaProvider>
+    </Provider>
+  )
+}

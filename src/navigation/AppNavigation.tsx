@@ -17,6 +17,7 @@ import SelectSuccess from '../app/SelectSuccess';
 import Bookmark from '../app/bookmark';
 import Detail from '../app/Detail';
 
+
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
