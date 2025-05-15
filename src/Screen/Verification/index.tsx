@@ -9,12 +9,12 @@ import {
   Platform,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
-import AppStyles from '../Styles/AppStyles';
-import ButtonIcon from '../../components/ButtonIcon';
-import Colors from '../Color';
-import StyleVerifiCation from '../Styles/Verification';
+import AppStyles from '../../Styles/AppStyles';
+import ButtonIcon from '../../../components/ButtonIcon';
+import Colors from '../../Color';
+import StyleVerifiCation from '../../Styles/Verification';
 
-const Verification = ({navigation}: any) => {
+export const Verification = ({navigation}: any) => {
   const inputRefs = useRef<TextInput[]>([]);
   const [code, setCode] = useState<string[]>(new Array(6).fill('')); // Mảng chứa giá trị từng ô input
   const [isFilled, setIsFilled] = useState<boolean[]>(new Array(6).fill(false)); // Mảng theo dõi trạng thái từng ô
@@ -52,7 +52,7 @@ const Verification = ({navigation}: any) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={AppStyles.container}>
       <ButtonIcon
-        icon={require('../../assets/icons/back.png')}
+        icon={require('../../../assets/icons/back.png')}
         bgColor={Colors.gray}
         iconColor={Colors.black}
         borderRa="50%"
@@ -101,7 +101,5 @@ const Verification = ({navigation}: any) => {
     </KeyboardAvoidingView>
   );
 };
-
-export default Verification;
 
 const styles = StyleSheet.create({});
