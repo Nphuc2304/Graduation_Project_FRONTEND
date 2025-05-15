@@ -1,17 +1,17 @@
 import {Image, Modal, Text, View} from 'react-native';
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 import {useState} from 'react';
-import HomeStyles from '../bottomTabStyles/HomeStyles';
-import CategoryList from '../../components/RenderItem/CategoryList';
-import colors from '../Color';
-import CampaignList from '../../components/RenderItem/CampaignList';
-import BookmarkStyles from '../Styles/BookmarkStyles';
-import ButtonIcon from '../../components/ButtonIcon';
-import ListProdStyles from '../Styles/ListProdStyles';
-import AppStyles from '../Styles/AppStyles';
-import ButtonActive from '../../components/ButtonActive';
+import HomeStyles from '../../bottomTabStyles/HomeStyles';
+import CategoryList from '../../../components/RenderItem/CategoryList';
+import colors from '../../Color';
+import CampaignList from '../../../components/RenderItem/CampaignList';
+import BookmarkStyles from '../../Styles/BookmarkStyles';
+import ButtonIcon from '../../../components/ButtonIcon';
+import ListProdStyles from '../../Styles/ListProdStyles';
+import AppStyles from '../../Styles/AppStyles';
+import ButtonActive from '../../../components/ButtonActive';
 
-const Bookmark = ({navigation}: any) => {
+export const Bookmark = ({navigation}: any) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
@@ -97,9 +97,9 @@ const Bookmark = ({navigation}: any) => {
   return (
     <View style={HomeStyles.container}>
       <Header
-        iconBack={require('../../assets/icons/back.png')}
+        iconBack={require('../../../assets/icons/back.png')}
         title="Bookmark"
-        icon={require('../../assets/icons/vertical_dots.png')}
+        icon={require('../../../assets/icons/vertical_dots.png')}
         mg={20}
         navigation={navigation}
       />
@@ -128,7 +128,7 @@ const Bookmark = ({navigation}: any) => {
             {selectedCampaign && (
               <>
                 <ButtonIcon
-                  icon={require('../../assets/icons/close.png')}
+                  icon={require('../../../assets/icons/close.png')}
                   bgColor={colors.white}
                   iconColor={colors.black}
                   borderRa="50%"
@@ -237,5 +237,3 @@ const Bookmark = ({navigation}: any) => {
     </View>
   );
 };
-
-export default Bookmark;

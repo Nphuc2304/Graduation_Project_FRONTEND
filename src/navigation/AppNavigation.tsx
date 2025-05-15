@@ -6,24 +6,25 @@ import Splash from '../Splash/Splash';
 import Start1 from '../Splash/Start1';
 import Start2 from '../Splash/Start2';
 import Start3 from '../Splash/Start3';
-import Login from '../app/Login';
-import WelcomePage from '../app/WelcomePage';
-import SignIn from '../app/SignIn';
-import SignUp from '../app/SignUp';
-import ForgotPassword from '../app/ForgotPassword';
-import Verification from '../app/Verification';
-import SelectInterest from '../app/SelectInterests';
-import SelectSuccess from '../app/SelectSuccess';
-import Bookmark from '../app/bookmark';
-import Detail from '../app/Detail';
-
+import {
+  Bookmark,
+  ForgotPassword,
+  Login,
+  ProfileOther,
+  SelectInterest,
+  SelectSuccess,
+  SignIn,
+  SignUp,
+  Verification,
+  WelcomePage,
+} from '../Screen';
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Detail"
+        initialRouteName="BottomTabs"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Detail" component={Detail} />
         <Stack.Screen name="Splash" component={Splash} />
@@ -40,6 +41,7 @@ const AppNavigator = () => {
         <Stack.Screen name="SelectInterest" component={SelectInterest} />
         <Stack.Screen name="SelectSuccess" component={SelectSuccess} />
         <Stack.Screen name="Bookmark" component={Bookmark} />
+        <Stack.Screen name="ProfileOther" component={ProfileOther} />
       </Stack.Navigator>
     </NavigationContainer>
   );

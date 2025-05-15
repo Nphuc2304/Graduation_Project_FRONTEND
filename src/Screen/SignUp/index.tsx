@@ -1,19 +1,19 @@
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
-import Wrapper from '../../components/Wrapper';
-import ButtonIcon from '../../components/ButtonIcon';
-import colors from '../Color';
-import AppStyles from '../Styles/AppStyles';
-import WelcomePageStyles from '../Styles/WelcomePageStyles';
-import SignInStyles from '../Styles/SignInStyles';
-import InputComponent from '../../components/InputComponent';
+import Wrapper from '../../../components/Wrapper';
+import ButtonIcon from '../../../components/ButtonIcon';
+import colors from '../../Color';
+import AppStyles from '../../Styles/AppStyles';
+import WelcomePageStyles from '../../Styles/WelcomePageStyles';
+import SignInStyles from '../../Styles/SignInStyles';
+import InputComponent from '../../../components/InputComponent';
 import {useState} from 'react';
-import ButtonActive from '../../components/ButtonActive';
-import LoginStyles from '../Styles/LoginStyles';
-import TextLink from '../../components/TextLink';
-import { signup } from '../api/users';
-import { saveTokens } from '../utils/tokenStorage';
+import ButtonActive from '../../../components/ButtonActive';
+import LoginStyles from '../../Styles/LoginStyles';
+import TextLink from '../../../components/TextLink';
+import {signup} from '../../api/users';
+import {saveTokens} from '../../utils/tokenStorage';
 
-const SignUp = ({ navigation }: any) => {
+export const SignUp = ({navigation}: any) => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [hide, setHide] = useState(true);
@@ -30,9 +30,9 @@ const SignUp = ({ navigation }: any) => {
     setErr(null);
 
     try {
-      const { data } = await signup({ username: userName, password });
-      const { accessToken, refreshToken } = data;
-      await saveTokens({ accessToken, refreshToken });
+      const {data} = await signup({username: userName, password});
+      const {accessToken, refreshToken} = data;
+      await saveTokens({accessToken, refreshToken});
 
       navigation.navigate('BottomTabs');
     } catch (err: any) {
@@ -43,11 +43,10 @@ const SignUp = ({ navigation }: any) => {
     }
   };
 
-
   return (
     <Wrapper>
       <ButtonIcon
-        icon={require('../../assets/icons/back.png')}
+        icon={require('../../../assets/icons/back.png')}
         bgColor={colors.gray}
         iconColor={colors.black}
         borderRa="50%"
@@ -60,7 +59,7 @@ const SignUp = ({ navigation }: any) => {
         <View style={AppStyles.container}>
           <Image
             style={WelcomePageStyles.logo}
-            source={require('../../assets/images/img_splash.png')}
+            source={require('../../../assets/images/img_splash.png')}
           />
           <Text style={SignInStyles.title}>Start your journey</Text>
           <InputComponent
@@ -97,31 +96,31 @@ const SignUp = ({ navigation }: any) => {
             value={password}
             onChangeText={setPassword}
             mgBottom={20}
-            icon={require('../../assets/icons/eye.png')}
+            icon={require('../../../assets/icons/eye.png')}
             secureTextEntry={hide}
             hidden={() => setHide(!hide)}
             err={err}
           />
-           <ButtonActive
-             text={loading ? 'Signing up…' : 'Sign Up'}
-             color={colors.white}
-             bgColor={colors.primary}
-             width="90%"
-             radius={50}
-             borderColor={colors.primary}
-             disabled={loading || !userName || !password}
-             func={handleSignUp}
-           />
+          <ButtonActive
+            text={loading ? 'Signing up…' : 'Sign Up'}
+            color={colors.white}
+            bgColor={colors.primary}
+            width="90%"
+            radius={50}
+            borderColor={colors.primary}
+            disabled={loading || !userName || !password}
+            func={handleSignUp}
+          />
           <Text
             style={[LoginStyles.textBlack, {marginTop: 20, marginBottom: 30}]}>
             Or continue with
           </Text>
           <View style={[AppStyles.rowContainerSpace, {width: '40%'}]}>
             <TouchableOpacity>
-              <Image source={require('../../assets/icons/Google.png')} />
+              <Image source={require('../../../assets/icons/Google.png')} />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Image source={require('../../assets/icons/Facebook.png')} />
+              <Image source={require('../../../assets/icons/Facebook.png')} />
             </TouchableOpacity>
           </View>
           <View style={[AppStyles.rowContainer, {marginVertical: 30}]}>
@@ -139,5 +138,3 @@ const SignUp = ({ navigation }: any) => {
     </Wrapper>
   );
 };
-
-export default SignUp;

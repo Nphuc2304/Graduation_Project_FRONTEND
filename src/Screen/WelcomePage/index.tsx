@@ -1,15 +1,15 @@
 import {Image, Text, View} from 'react-native';
-import AppStyles from '../Styles/AppStyles';
-import ButtonIcon from '../../components/ButtonIcon';
-import colors from '../Color';
-import WelcomePageStyles from '../Styles/WelcomePageStyles';
-import ButtonActive from '../../components/ButtonActive';
+import AppStyles from '../../Styles/AppStyles';
+import ButtonIcon from '../../../components/ButtonIcon';
+import colors from '../../Color';
+import WelcomePageStyles from '../../Styles/WelcomePageStyles';
+import ButtonActive from '../../../components/ButtonActive';
 
-const WelcomePage = ({navigation}: any) => {
+export const WelcomePage = ({navigation}: any) => {
   return (
     <View style={AppStyles.container}>
       <ButtonIcon
-        icon={require('../../assets/icons/back.png')}
+        icon={require('../../../assets/icons/back.png')}
         bgColor={colors.gray}
         iconColor={colors.black}
         borderRa="50%"
@@ -20,7 +20,7 @@ const WelcomePage = ({navigation}: any) => {
       />
       <Image
         style={WelcomePageStyles.logo}
-        source={require('../../assets/images/img_splash.png')}
+        source={require('../../../assets/images/img_splash.png')}
       />
       <Text style={WelcomePageStyles.title}>WHO ARE YOU?</Text>
       <ButtonActive
@@ -30,7 +30,7 @@ const WelcomePage = ({navigation}: any) => {
         width="85%"
         borderColor={colors.darkGray}
         radius={10}
-        img={require('../../assets/icons/donator.png')}
+        img={require('../../../assets/icons/donator.png')}
         func={() => {
           navigation.navigate('SignIn');
         }}
@@ -43,10 +43,8 @@ const WelcomePage = ({navigation}: any) => {
         width="85%"
         borderColor={colors.darkGray}
         radius={10}
-        img={require('../../assets/icons/Fundraiser.png')}
+        img={require('../../../assets/icons/Fundraiser.png')}
       />
     </View>
   );
 };
-
-export default WelcomePage;

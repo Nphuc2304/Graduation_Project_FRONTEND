@@ -1,23 +1,23 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import Wrapper from '../../components/Wrapper';
-import ButtonIcon from '../../components/ButtonIcon';
-import colors from '../Color';
-import WelcomePageStyles from '../Styles/WelcomePageStyles';
-import AppStyles from '../Styles/AppStyles';
-import SignInStyles from '../Styles/SignInStyles';
-import InputComponent from '../../components/InputComponent';
+import Wrapper from '../../../components/Wrapper';
+import ButtonIcon from '../../../components/ButtonIcon';
+import colors from '../../Color';
+import WelcomePageStyles from '../../Styles/WelcomePageStyles';
+import AppStyles from '../../Styles/AppStyles';
+import SignInStyles from '../../Styles/SignInStyles';
+import InputComponent from '../../../components/InputComponent';
 import {useState} from 'react';
-import TextLink from '../../components/TextLink';
-import ButtonActive from '../../components/ButtonActive';
-import LoginStyles from '../Styles/LoginStyles';
-import { login, getMe } from '../api/users';
-import { saveTokens } from '../utils/tokenStorage';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../store/slices/userSlice';
-import { AppDispatch } from '../store/store';
+import TextLink from '../../../components/TextLink';
+import ButtonActive from '../../../components/ButtonActive';
+import LoginStyles from '../../Styles/LoginStyles';
+import {login, getMe} from '../../api/users';
+import {saveTokens} from '../../utils/tokenStorage';
+import {useDispatch} from 'react-redux';
+import {setUser} from '../../store/slices/userSlice';
+import {AppDispatch} from '../../store/store';
 
-const SignIn = ({ navigation }: any) => {
-  const dispatch = useDispatch<AppDispatch>()
+export const SignIn = ({navigation}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [hide, setHide] = useState(true);
@@ -36,22 +36,21 @@ const SignIn = ({ navigation }: any) => {
 
     try {
       // call /login
-      const { data: loginData } = await login({ username: userName, password });
-      const { accessToken, refreshToken } = loginData;
-      await saveTokens({ accessToken, refreshToken });
+      const {data: loginData} = await login({username: userName, password});
+      const {accessToken, refreshToken} = loginData;
+      await saveTokens({accessToken, refreshToken});
 
       // call /me
-      const { data: me } = await getMe();
+      const {data: me} = await getMe();
       // put it into Redux:
-      dispatch(setUser(me.user)) 
+      dispatch(setUser(me.user));
       console.log('fetched user profile:', me);
-      navigation.replace('BottomTabs', { user: me });
-
+      navigation.replace('BottomTabs', {user: me});
     } catch (e: any) {
       console.error('SignIn API error:', e);
       setErr(
-        e.response?.data?.message
-        ?? 'Could not sign in. Please check your credentials.'
+        e.response?.data?.message ??
+          'Could not sign in. Please check your credentials.',
       );
     } finally {
       setLoading(false);
@@ -61,7 +60,7 @@ const SignIn = ({ navigation }: any) => {
   return (
     <Wrapper>
       <ButtonIcon
-        icon={require('../../assets/icons/back.png')}
+        icon={require('../../../assets/icons/back.png')}
         bgColor={colors.gray}
         iconColor={colors.black}
         borderRa="50%"
@@ -73,7 +72,7 @@ const SignIn = ({ navigation }: any) => {
       <View style={AppStyles.container}>
         <Image
           style={WelcomePageStyles.logo}
-          source={require('../../assets/images/img_splash.png')}
+          source={require('../../../assets/images/img_splash.png')}
         />
         <Text style={SignInStyles.title}>Start your journey</Text>
         <InputComponent
@@ -92,7 +91,7 @@ const SignIn = ({ navigation }: any) => {
           value={password}
           onChangeText={setPassword}
           mgBottom={10}
-          icon={require('../../assets/icons/eye.png')}
+          icon={require('../../../assets/icons/eye.png')}
           secureTextEntry={hide}
           hidden={() => setHide(!hide)}
           err={err}
@@ -108,7 +107,7 @@ const SignIn = ({ navigation }: any) => {
                 SignInStyles.iconRemember,
                 {tintColor: check ? colors.primary : colors.transparent},
               ]}
-              source={require('../../assets/icons/check.png')}
+              source={require('../../../assets/icons/check.png')}
             />
           </TouchableOpacity>
           <Text>Remember me</Text>
@@ -138,5 +137,3 @@ const SignIn = ({ navigation }: any) => {
     </Wrapper>
   );
 };
-
-export default SignIn;

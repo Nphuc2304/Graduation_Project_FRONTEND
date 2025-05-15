@@ -1,11 +1,10 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, StyleSheet} from 'react-native';
-import Home from '../layoutBottomTab/Home';
-import Setting from '../layoutBottomTab/Profile';
+import Home from '../(tabs)/Home';
 import colors from '../Color';
-import Notification from '../layoutBottomTab/Notification';
-import Stats from '../layoutBottomTab/Stats';
-import Profile from '../layoutBottomTab/Profile';
+import Notification from '../(tabs)/Notification';
+import Stats from '../(tabs)/Stats';
+import Profile from '../(tabs)/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +17,9 @@ const BottomTabNavigator = () => {
         tabBarStyle: {
           backgroundColor: colors.white,
           borderTopWidth: 0,
-          height: 60,
+          height: 85,
+          shadowColor: 'gray',
+          shadowOpacity: 0.3,
         },
         tabBarLabelStyle: {
           fontSize: 10,

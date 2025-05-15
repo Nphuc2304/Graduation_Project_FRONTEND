@@ -1,16 +1,16 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import ButtonActive from '../../components/ButtonActive';
-import colors from '../Color';
-import TextLink from '../../components/TextLink';
-import AppStyles from '../Styles/AppStyles';
-import ButtonIcon from '../../components/ButtonIcon';
-import LoginStyles from '../Styles/LoginStyles';
+import ButtonActive from '../../../components/ButtonActive';
+import colors from '../../Color';
+import TextLink from '../../../components/TextLink';
+import AppStyles from '../../Styles/AppStyles';
+import ButtonIcon from '../../../components/ButtonIcon';
+import LoginStyles from '../../Styles/LoginStyles';
 
-const Login = ({navigation}: any) => {
+export const Login = ({navigation}: any) => {
   return (
     <View style={AppStyles.container}>
       <ButtonIcon
-        icon={require('../../assets/icons/back.png')}
+        icon={require('../../../assets/icons/back.png')}
         bgColor={colors.gray}
         iconColor={colors.black}
         borderRa="50%"
@@ -21,7 +21,7 @@ const Login = ({navigation}: any) => {
       />
       <Image
         style={LoginStyles.img}
-        source={require('../../assets/images/img_login.png')}
+        source={require('../../../assets/images/img_login.png')}
       />
       <Text style={LoginStyles.title}>LET'S GET YOU IN</Text>
       <ButtonActive
@@ -38,10 +38,10 @@ const Login = ({navigation}: any) => {
       <Text style={LoginStyles.text}>Or</Text>
       <View style={[AppStyles.rowContainerSpace, {width: '40%'}]}>
         <TouchableOpacity>
-          <Image source={require('../../assets/icons/Google.png')} />
+          <Image source={require('../../../assets/icons/Google.png')} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Image source={require('../../assets/icons/Facebook.png')} />
+          <Image source={require('../../../assets/icons/Facebook.png')} />
         </TouchableOpacity>
       </View>
       <View style={[AppStyles.rowContainer, {marginTop: 50}]}>
@@ -57,5 +57,3 @@ const Login = ({navigation}: any) => {
     </View>
   );
 };
-
-export default Login;
