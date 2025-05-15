@@ -1,11 +1,11 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import ButtonActive from '../../components/ButtonActive';
-import colors from '../Color';
-import AppStyles from '../Styles/AppStyles';
-import ButtonIcon from '../../components/ButtonIcon';
-import ThreeCol from '../../components/ThreeCol';
+import ButtonActive from '../../../components/ButtonActive';
+import colors from '../../Color';
+import AppStyles from '../../Styles/AppStyles';
+import ButtonIcon from '../../../components/ButtonIcon';
+import ThreeCol from '../../../components/ThreeCol';
 import {useState} from 'react';
-import SelectInStyles from '../Styles/SelectInStyles';
+import SelectInStyles from '../../Styles/SelectInStyles';
 
 const Data = [
   'Medical',
@@ -19,7 +19,7 @@ const Data = [
   'Other',
 ];
 
-const SelectInterest = ({navigation}: any) => {
+export const SelectInterest = ({navigation}: any) => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleSelectionChange = (items: string[]) => {
@@ -30,7 +30,7 @@ const SelectInterest = ({navigation}: any) => {
     <View style={[AppStyles.container, SelectInStyles.container]}>
       <View style={[AppStyles.rowContainer, SelectInStyles.title]}>
         <ButtonIcon
-          icon={require('../../assets/icons/back.png')}
+          icon={require('../../../assets/icons/back.png')}
           bgColor={colors.gray}
           iconColor={colors.black}
           borderRa="50%"
@@ -70,5 +70,3 @@ const SelectInterest = ({navigation}: any) => {
     </View>
   );
 };
-
-export default SelectInterest;
