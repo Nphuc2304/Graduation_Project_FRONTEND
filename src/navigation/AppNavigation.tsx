@@ -23,7 +23,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Detail"
+        initialRouteName="SignUp"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Detail" component={Detail} />
         <Stack.Screen name="Splash" component={Splash} />
