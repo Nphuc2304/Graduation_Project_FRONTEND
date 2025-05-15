@@ -13,18 +13,22 @@ import {useState} from 'react';
 
 import About from './compoenets/About';
 import Fundraising from './compoenets/Fundraising';
+import colors from '../../Color';
 
 export const ProfileOther = () => {
   const [btnSelected, setBtnSelected] = useState('about');
-
+  const [follow, setFollow] = useState(false);
+  const toggleFollow = () => {
+    setFollow(prev => !prev);
+  };
   return (
     <Wrapper>
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <View style={styles.header}>
             <Image
-              style={styles.imgHeader}
-              source={require('../../../assets/images/Logo.png')}
+              style={styles.icon}
+              source={require('../../../assets/icons/back.png')}
               resizeMode="contain"
             />
             <Text style={styles.titleHeader}>Profile</Text>
@@ -58,6 +62,26 @@ export const ProfileOther = () => {
               <Text style={styles.informationTxt}>Fundraising</Text>
             </View>
           </View>
+
+          <TouchableOpacity
+            style={!follow ? styles.btnFollow : styles.btnFollowing}
+            onPress={toggleFollow}>
+            {!follow ? (
+              <Image
+                style={styles.icon}
+                source={require('../../../assets/icons/user-plus.png')}
+              />
+            ) : (
+              <Image
+                style={styles.iconing}
+                source={require('../../../assets/icons/user-plus.png')}
+              />
+            )}
+            <Text style={!follow ? styles.txtFollow : styles.txtFollowing}>
+              {' '}
+              {!follow ? 'Follow' : 'Following'}
+            </Text>
+          </TouchableOpacity>
 
           <View style={styles.viewBtn}>
             <TouchableOpacity
@@ -125,11 +149,49 @@ const styles = StyleSheet.create({
   },
   icon: {
     flexDirection: 'row',
+    tintColor: colors.primary,
+  },
+  iconing: {
+    flexDirection: 'row',
+    tintColor: colors.white,
   },
   imgAvatar: {
     width: 105,
     height: 105,
     borderRadius: 50,
+  },
+  btnFollow: {
+    marginTop: 25,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 56,
+    borderRadius: 25,
+  },
+  btnFollowing: {
+    marginTop: 25,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 56,
+    borderRadius: 25,
+    backgroundColor: colors.primary,
+  },
+  txtFollow: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.primary,
+    marginLeft: 8,
+  },
+  txtFollowing: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.white,
+    marginLeft: 8,
   },
   avatarWrapper: {
     marginTop: 30,

@@ -15,18 +15,6 @@ const About = () => (
       Interdum risus at praesent dui. Eget convallis vitae mauris id feugiat
       tortor scelerisque.
     </Text>
-    <Text style={styles.aboutTitle}>Interests</Text>
-    <View style={styles.viewBtnBottom}>
-      <TouchableOpacity style={styles.btnAbout}>
-        <Text style={styles.btnTxtAbout}>cat1</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btnAbout}>
-        <Text style={styles.btnTxtAbout}>cat2</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btnAbout}>
-        <Text style={styles.btnTxtAbout}>cat3</Text>
-      </TouchableOpacity>
-    </View>
   </View>
 );
 
