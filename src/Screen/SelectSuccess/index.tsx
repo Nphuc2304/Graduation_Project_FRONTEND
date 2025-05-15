@@ -1,7 +1,7 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import ButtonActive from '../../components/ButtonActive';
-import colors from '../Color';
-import SelectInStyles from '../Styles/SelectInStyles';
+import ButtonActive from '../../../components/ButtonActive';
+import colors from '../../Color';
+import SelectInStyles from '../../Styles/SelectInStyles';
 
 const Data = [
   'Medical',
@@ -15,12 +15,12 @@ const Data = [
   'Other',
 ];
 
-const SelectInterest = ({navigation}: any) => {
+export const SelectSuccess = ({navigation}: any) => {
   return (
     <View style={[SelectInStyles.container]}>
       <View style={SelectInStyles.centerContainer}>
         <Image
-          source={require('../../assets/images/img_Success.png')}
+          source={require('../../../assets/images/img_Success.png')}
           style={SelectInStyles.img}
         />
         <Text style={SelectInStyles.textW}>Welcome to HLU DAN</Text>
@@ -45,5 +45,3 @@ const SelectInterest = ({navigation}: any) => {
     </View>
   );
 };
-
-export default SelectInterest;

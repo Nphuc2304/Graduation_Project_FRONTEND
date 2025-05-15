@@ -10,12 +10,12 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import ButtonIcon from '../../components/ButtonIcon';
-import Colors from '../Color';
-import AppStyles from '../Styles/AppStyles';
-import ForgotStyles from '../Styles/ForgotStyle';
+import ButtonIcon from '../../../components/ButtonIcon';
+import Colors from '../../Color';
+import AppStyles from '../../Styles/AppStyles';
+import ForgotStyles from '../../Styles/ForgotStyle';
 
-const ForgotPassword = ({navigation}: any) => {
+export const ForgotPassword = ({navigation}: any) => {
   const [isForcus, setIsForcus] = useState(false);
   const [value, setValue] = useState('');
   const [err, setErr] = useState(false);
@@ -38,7 +38,7 @@ const ForgotPassword = ({navigation}: any) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={AppStyles.container}>
       <ButtonIcon
-        icon={require('../../assets/icons/back.png')}
+        icon={require('../../../assets/icons/back.png')}
         bgColor={Colors.gray}
         iconColor={Colors.black}
         borderRa="50%"
@@ -78,7 +78,7 @@ const ForgotPassword = ({navigation}: any) => {
           {err && (
             <Image
               style={ForgotStyles.imgError}
-              source={require('../../assets/images/Error.png')}
+              source={require('../../../assets/images/Error.png')}
             />
           )}
         </View>
@@ -101,5 +101,3 @@ const ForgotPassword = ({navigation}: any) => {
     </KeyboardAvoidingView>
   );
 };
-
-export default ForgotPassword;
