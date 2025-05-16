@@ -8,19 +8,21 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import DetailsStyles from '../Styles/DetailStyles';
+import DetailsStyles from '../../Styles/DetailStyles';
+import { useNavigation } from '@react-navigation/native';
 
 const DetailData = {
   id: 1,
   name: 'Ensuring medicine for all the children',
-  image: require('../../assets/images/imageD.png'),
+  image: require('../../../assets/images/imageD.png'),
   priceCurrent: 300,
   pricegoal: 600,
   donators: 300,
   dayLeft: 14,
 };
 
-const Detail = () => {
+export const Detail = () => {
+  const navigation = useNavigation<any>();
   const percent = parseFloat(
     Math.min(
       100,
@@ -32,26 +34,27 @@ const Detail = () => {
       <ScrollView style={DetailsStyles.container}>
         <View style={{width: '100%'}}>
           <Image
-            source={require('../../assets/images/imageD.png')}
+            source={require('../../../assets/images/imageD.png')}
             style={DetailsStyles.mainImg}
           />
-          <View style={[DetailsStyles.rowSpace, DetailsStyles.rowSpaceAbsolute]}>
-            <TouchableOpacity style={DetailsStyles.btnRounded}>
+          <View
+            style={[DetailsStyles.rowSpace, DetailsStyles.rowSpaceAbsolute]}>
+            <TouchableOpacity style={DetailsStyles.btnRounded} onPress={() => navigation.goBack()}>
               <Image
-                source={require('../../assets/icons/back.png')}
+                source={require('../../../assets/icons/back.png')}
                 style={DetailsStyles.iconBack}
               />
             </TouchableOpacity>
             <View style={[DetailsStyles.row, DetailsStyles.fourContainer]}>
               <TouchableOpacity>
                 <Image
-                  source={require('../../assets/icons/share.png')}
+                  source={require('../../../assets/icons/share.png')}
                   style={DetailsStyles.icon}
                 />
               </TouchableOpacity>
               <TouchableOpacity>
                 <Image
-                  source={require('../../assets/icons/mark.png')}
+                  source={require('../../../assets/icons/mark.png')}
                   style={DetailsStyles.icon}
                 />
               </TouchableOpacity>
@@ -86,7 +89,9 @@ const Detail = () => {
                   top: 0,
                 }}></View>
             </View>
-            <Text style={[DetailsStyles.textXS, {marginLeft: 15}]}>{percent}%</Text>
+            <Text style={[DetailsStyles.textXS, {marginLeft: 15}]}>
+              {percent}%
+            </Text>
           </View>
           <View style={DetailsStyles.rowSpace}>
             <Text style={DetailsStyles.textS}>
@@ -108,10 +113,13 @@ const Detail = () => {
               <Text style={[DetailsStyles.textXS, {color: '#1A8FE3'}]}>
                 {DetailData.donators} Donators
               </Text>
-              <Image source={require('../../assets/icons/rightB.png')} style={DetailsStyles.smallIcon}/>
+              <Image
+                source={require('../../../assets/icons/rightB.png')}
+                style={DetailsStyles.smallIcon}
+              />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={DetailsStyles.btnLarge}>
+          <TouchableOpacity style={DetailsStyles.btnLarge} onPress={() => navigation.navigate('Donation')}>
             <Text style={[DetailsStyles.textL, {color: 'white'}]}>
               Donation Now
             </Text>
@@ -123,7 +131,7 @@ const Detail = () => {
             <View style={DetailsStyles.rowSpace}>
               <View style={[DetailsStyles.btnRounded, {width: 46, height: 46}]}>
                 <Image
-                  source={require('../../assets/icons/homeB.png')}
+                  source={require('../../../assets/icons/homeB.png')}
                   style={DetailsStyles.smallIcon}
                 />
               </View>
@@ -143,28 +151,35 @@ const Detail = () => {
             <View style={DetailsStyles.row}>
               <View style={[DetailsStyles.btnRounded, {width: 46, height: 46}]}>
                 <Image
-                  source={require('../../assets/icons/userB.png')}
+                  source={require('../../../assets/icons/userB.png')}
                   style={DetailsStyles.smallIcon}
                 />
               </View>
               <View style={DetailsStyles.mgL}>
                 <Text style={DetailsStyles.textM}>Patient (or) Place</Text>
-                <Text style={DetailsStyles.textXXS}>Accompanied by medical documents ✅</Text>
+                <Text style={DetailsStyles.textXXS}>
+                  Accompanied by medical documents ✅
+                </Text>
               </View>
             </View>
           </View>
           <View style={DetailsStyles.fourContainer}>
             <Text style={DetailsStyles.textL}>Story</Text>
-              <Text style={[DetailsStyles.textM, {fontWeight: '400', textAlign: 'justify'}]}>
-                Massa eu tincidunt viverra quis scelerisque sit sollicitudin
-                condimentum. Interdum risus at praesent dui. Eget convallis
-                vitae mauris id feugiat tortor scelerisque.{' '}<Text style={[DetailsStyles.textM, {color: '#1A8FE3'}]}>Read more ...</Text>
+            <Text
+              style={[
+                DetailsStyles.textM,
+                {fontWeight: '400', textAlign: 'justify'},
+              ]}>
+              Massa eu tincidunt viverra quis scelerisque sit sollicitudin
+              condimentum. Interdum risus at praesent dui. Eget convallis vitae
+              mauris id feugiat tortor scelerisque.{' '}
+              <Text style={[DetailsStyles.textM, {color: '#1A8FE3'}]}>
+                Read more ...
               </Text>
+            </Text>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-
-export default Detail;
