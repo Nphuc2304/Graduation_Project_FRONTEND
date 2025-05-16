@@ -9,3 +9,6 @@ export * from './SignIn';
 export * from './SignUp';
 export * from './Verification';
 export * from './WelcomePage';
+export * from './Detail';
+export * from './Donation';
+export * from './Payment';
