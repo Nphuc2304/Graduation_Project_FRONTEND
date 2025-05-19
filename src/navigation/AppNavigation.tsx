@@ -17,8 +17,10 @@ import {
   SignUp,
   Verification,
   WelcomePage,
+  Detail,
+  Dontation,
+  Payment
 } from '../Screen';
-
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
@@ -27,6 +29,9 @@ const AppNavigator = () => {
       <Stack.Navigator
         initialRouteName="BottomTabs"
         screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Payment" component={Payment} />
+          <Stack.Screen name="Donation" component={Dontation} />
+        <Stack.Screen name="Detail" component={Detail} />
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Start1" component={Start1} />
         <Stack.Screen name="Start2" component={Start2} />

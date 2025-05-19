@@ -1,11 +1,11 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import colors from '../src/Color';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {FlashList} from '@shopify/flash-list';
 
 const ThreeCol = (props: any) => {
   const [selectItems, setSelectedItems] = useState<string[]>([]);
-  const {color, colorActive, pad, data, isMultipleSelect, onChangeSelected} =
+  const {color, colorActive, pad, data, isMultipleSelect, onChangeSelected, isNumber=false, mgV, isMatch=true} =
     props;
 
   const Press = (item: string) => {
@@ -23,6 +23,12 @@ const ThreeCol = (props: any) => {
     onChangeSelected && onChangeSelected(newSelected);
   };
 
+  useEffect(() => {
+    if (!isMatch) {
+      setSelectedItems([]);
+    }
+  }, [isMatch]);
+
   return (
     <FlashList
       data={data}
@@ -38,10 +44,10 @@ const ThreeCol = (props: any) => {
             style={{
               flex: 1,
               marginHorizontal: 7,
-              marginVertical: 20,
+              marginVertical: mgV ? mgV : 20,
               paddingVertical: pad,
               paddingHorizontal: 8,
-              backgroundColor: isSelected ? colors.primary : colors.white,
+              backgroundColor: isSelected && isMatch ? colors.primary : colors.white,
               borderRadius: 10,
               alignItems: 'center',
               justifyContent: 'center',
@@ -52,9 +58,9 @@ const ThreeCol = (props: any) => {
               style={{
                 fontSize: 14,
                 fontWeight: 'bold',
-                color: isSelected ? colors.white : colors.primary,
+                color: isSelected && isMatch ? colors.white : colors.primary,
               }}>
-              {item}
+              {isNumber ? item.toString() : item}
             </Text>
           </TouchableOpacity>
         );
