@@ -19,7 +19,9 @@ import {
   WelcomePage,
   Detail,
   Dontation,
-  Payment
+  Payment,
+  InfoVerification,
+  ScanDoneScreen,
 } from '../Screen';
 const Stack = createStackNavigator();
 
@@ -27,10 +29,10 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="BottomTabs"
+        initialRouteName="InfoVerifycation"
         screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Payment" component={Payment} />
-          <Stack.Screen name="Donation" component={Dontation} />
+        <Stack.Screen name="Payment" component={Payment} />
+        <Stack.Screen name="Donation" component={Dontation} />
         <Stack.Screen name="Detail" component={Detail} />
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Start1" component={Start1} />
@@ -47,6 +49,8 @@ const AppNavigator = () => {
         <Stack.Screen name="SelectSuccess" component={SelectSuccess} />
         <Stack.Screen name="Bookmark" component={Bookmark} />
         <Stack.Screen name="ProfileOther" component={ProfileOther} />
+        <Stack.Screen name="InfoVerifycation" component={InfoVerification} />
+        <Stack.Screen name="ScanDone" component={ScanDoneScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
