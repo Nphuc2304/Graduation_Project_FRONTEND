@@ -22,6 +22,8 @@ import {
   Payment,
   InfoVerification,
   ScanDoneScreen,
+  VerifyingStart,
+  CountrySelector
 } from '../Screen';
 const Stack = createStackNavigator();
 
@@ -29,8 +31,10 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="InfoVerifycation"
+        initialRouteName="VerifyingStart"
         screenOptions={{headerShown: false}}>
+        <Stack.Screen name="CountrySelector" component={CountrySelector} />
+        <Stack.Screen name="VerifyingStart" component={VerifyingStart} />
         <Stack.Screen name="Payment" component={Payment} />
         <Stack.Screen name="Donation" component={Dontation} />
         <Stack.Screen name="Detail" component={Detail} />
