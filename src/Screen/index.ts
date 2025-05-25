@@ -14,3 +14,5 @@ export * from './Donation';
 export * from './Payment';
 export * from './InfoVerify';
 export * from './ScanDone';
+export * from './ScanFace';
+export * from './ScanCCCD';

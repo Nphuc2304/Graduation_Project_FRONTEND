@@ -23,13 +23,15 @@ import {
   InfoVerification,
   ScanDoneScreen,
 } from '../Screen';
+import FaceCaptureScreen from '../Screen/ScanFace';
+import IDCardScannerScreen from '../Screen/ScanCCCD';
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="InfoVerifycation"
+        initialRouteName="ScanCCCD"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Payment" component={Payment} />
         <Stack.Screen name="Donation" component={Dontation} />
@@ -51,6 +53,8 @@ const AppNavigator = () => {
         <Stack.Screen name="ProfileOther" component={ProfileOther} />
         <Stack.Screen name="InfoVerifycation" component={InfoVerification} />
         <Stack.Screen name="ScanDone" component={ScanDoneScreen} />
+        <Stack.Screen name="ScanFace" component={FaceCaptureScreen} />
+        <Stack.Screen name="ScanCCCD" component={IDCardScannerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
