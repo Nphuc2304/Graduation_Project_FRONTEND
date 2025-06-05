@@ -32,7 +32,9 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+
         initialRouteName="Search"
+
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="CountrySelector" component={CountrySelector} />
