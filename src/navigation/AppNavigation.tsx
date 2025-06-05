@@ -31,7 +31,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="VerifyingStart"
+        initialRouteName="BottomTabs"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="CountrySelector" component={CountrySelector} />
         <Stack.Screen name="VerifyingStart" component={VerifyingStart} />
