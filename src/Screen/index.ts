@@ -17,3 +17,4 @@ export * from './ScanDone';
 export * from './VerifyingStart';
 export * from './CountrySelector';
 export * from './Search';
+export * from './Setting';

@@ -25,16 +25,16 @@ import {
   VerifyingStart,
   CountrySelector,
   Search,
+  Setting,
 } from '../Screen';
+
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-
-        initialRouteName="Search"
-
+        initialRouteName="Splash"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="CountrySelector" component={CountrySelector} />
@@ -59,6 +59,7 @@ const AppNavigator = () => {
         <Stack.Screen name="ProfileOther" component={ProfileOther} />
         <Stack.Screen name="InfoVerifycation" component={InfoVerification} />
         <Stack.Screen name="ScanDone" component={ScanDoneScreen} />
+        <Stack.Screen name="Setting" component={Setting} />
       </Stack.Navigator>
     </NavigationContainer>
   );
