@@ -1,7 +1,7 @@
 import {Image, Text, View} from 'react-native';
 import ButtonIcon from './ButtonIcon';
-import colors from '../src/Color';
 import AppStyles from '../src/Styles/AppStyles';
+import {useTheme} from '../src/utils/ThemeContext';
 
 const Header = (props: any) => {
   const {
@@ -15,6 +15,9 @@ const Header = (props: any) => {
     mg,
     navigation,
   } = props;
+
+  const {colors} = useTheme();
+
   return (
     <View style={[AppStyles.rowContainerSpace, {margin: mg}]}>
       <View style={AppStyles.rowContainer}>
@@ -23,14 +26,18 @@ const Header = (props: any) => {
           <ButtonIcon
             icon={iconBack}
             bgColor={colors.gray}
-            iconColor={colors.black}
+            iconColor={colors.text}
             borderRa="50%"
             func={() => {
               navigation.goBack();
             }}
           />
         )}
-        {title && <Text style={AppStyles.textTitle}>{title}</Text>}
+        {title && (
+          <Text style={[AppStyles.textTitle, {color: colors.text}]}>
+            {title}
+          </Text>
+        )}
       </View>
       <View style={AppStyles.rowContainer}>
         {iconSearch && (
