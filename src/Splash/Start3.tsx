@@ -40,7 +40,7 @@ const Start3 = ({navigation}: any) => {
         width="85%"
         radius={50}
         func={() => {
-          navigation.navigate('Login');
+          navigation.navigate('SignIn');
         }}
       />
     </View>

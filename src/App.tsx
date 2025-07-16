@@ -1,11 +1,11 @@
-import React from 'react'
-import { enableScreens } from 'react-native-screens'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Provider } from 'react-redux'
-import AppNavigator from './navigation/AppNavigation'
-import { store } from './store/store'
+import React from 'react';
+import {enableScreens} from 'react-native-screens';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {Provider} from 'react-redux';
+import AppNavigator from './navigation/AppNavigation';
+import {store} from '../services/store/store';
 
-enableScreens()
+enableScreens();
 
 export default function App() {
   return (
@@ -14,5 +14,5 @@ export default function App() {
         <AppNavigator />
       </SafeAreaProvider>
     </Provider>
-  )
+  );
 }

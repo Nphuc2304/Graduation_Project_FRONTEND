@@ -5,17 +5,57 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import Wrapper from '../../../components/Wrapper';
 import ButtonIcon from '../../../components/ButtonIcon';
 import Color from '../../Color';
 import {useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {resetUser} from '../../../services/userRedux/userReducer';
+import {clearTokens, clearLoginCredentials} from '../../utils/tokenStorage';
+import {AppDispatch} from '../../../services/store/store';
 
 import About from './compoenets/About';
 import Fundraising from './compoenets/Fundraising';
 
-const Profile = () => {
+const Profile = ({navigation}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [btnSelected, setBtnSelected] = useState('about');
+
+  const handleLogout = () => {
+    Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất?', [
+      {
+        text: 'Hủy',
+        style: 'cancel',
+      },
+      {
+        text: 'Đăng xuất',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            // Clear all stored data
+            await clearTokens();
+            await clearLoginCredentials();
+
+            // Reset Redux state
+            dispatch(resetUser());
+
+            // Navigate to login screen
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'SignIn'}],
+            });
+
+            console.log('✅ Logout successful');
+          } catch (error) {
+            console.error('❌ Logout error:', error);
+            Alert.alert('Lỗi', 'Có lỗi xảy ra khi đăng xuất');
+          }
+        },
+      },
+    ]);
+  };
 
   return (
     <Wrapper>
@@ -29,13 +69,16 @@ const Profile = () => {
             />
             <Text style={styles.titleHeader}>Profile</Text>
 
-            <ButtonIcon
-              icon={require('../../../assets/icons/settings.png')}
-              bgColor={'rgba(26, 143, 227, 0.5)'}
-              w={34}
-              h={34}
-              mr={15}
-            />
+            <View style={styles.headerButtons}>
+              <ButtonIcon
+                icon={require('../../../assets/icons/settings.png')}
+                bgColor={'rgba(26, 143, 227, 0.5)'}
+                w={34}
+                h={34}
+                mr={10}
+                func={() => navigation.navigate('Setting')}
+              />
+            </View>
           </View>
           <View style={styles.avatarWrapper}>
             <Image
@@ -188,6 +231,21 @@ const styles = StyleSheet.create({
     color: Color.white,
     fontSize: 14,
     fontWeight: '400',
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoutButton: {
+    backgroundColor: Color.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  logoutText: {
+    color: Color.white,
+    fontSize: 12,
+    fontWeight: '500',
   },
 });
 
