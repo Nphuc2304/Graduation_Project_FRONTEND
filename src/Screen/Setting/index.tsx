@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -23,10 +23,12 @@ import {
 import {clearTokens, clearLoginCredentials} from '../../utils/tokenStorage';
 import {useDispatch} from 'react-redux';
 import {resetUser} from '../../../services/userRedux/userReducer';
+import {useTheme} from '../../utils/ThemeContext';
+import {ThemeToggle} from '../../../components/ThemeToggle';
 
 export const Setting = ({navigation}: any) => {
   const dispatch = useDispatch();
-  const [darkMode, setDarkMode] = useState(false);
+  const {theme, colors, toggleTheme} = useTheme();
 
   const menuItems = [
     {
@@ -108,17 +110,21 @@ export const Setting = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+    <SafeAreaView
+      style={[styles.container, {backgroundColor: colors.background}]}>
+      <StatusBar
+        barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.background}
+      />
 
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, {borderBottomColor: colors.border}]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <ChevronLeft size={24} color="#000" />
+          <ChevronLeft size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Setting</Text>
+        <Text style={[styles.headerTitle, {color: colors.text}]}>Setting</Text>
       </View>
 
       {/* Menu Items */}
@@ -133,8 +139,12 @@ export const Setting = ({navigation}: any) => {
               style={[styles.iconContainer, {backgroundColor: item.iconBg}]}>
               <item.icon size={20} color={item.iconColor} />
             </View>
-            <Text style={styles.menuLabel}>{item.label}</Text>
-            {item.hasChevron && <ChevronRight size={20} color="#9E9E9E" />}
+            <Text style={[styles.menuLabel, {color: colors.text}]}>
+              {item.label}
+            </Text>
+            {item.hasChevron && (
+              <ChevronRight size={20} color={colors.textSecondary} />
+            )}
           </TouchableOpacity>
         ))}
 
@@ -143,14 +153,7 @@ export const Setting = ({navigation}: any) => {
           <View style={[styles.iconContainer, {backgroundColor: '#E3F2FD'}]}>
             <Moon size={20} color="#1976D2" />
           </View>
-          <Text style={styles.menuLabel}>Dark Mode</Text>
-          <Switch
-            value={darkMode}
-            onValueChange={setDarkMode}
-            trackColor={{false: '#E0E0E0', true: '#1976D2'}}
-            thumbColor={darkMode ? '#FFFFFF' : '#FFFFFF'}
-            ios_backgroundColor="#E0E0E0"
-          />
+          <ThemeToggle showLabel={false} size="medium" />
         </View>
 
         {/* Logout */}
@@ -167,7 +170,7 @@ export const Setting = ({navigation}: any) => {
 
       {/* Home Indicator */}
       <View style={styles.homeIndicator}>
-        <View style={styles.indicator} />
+        <View style={[styles.indicator, {backgroundColor: colors.text}]} />
       </View>
     </SafeAreaView>
   );
@@ -176,7 +179,6 @@ export const Setting = ({navigation}: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
   header: {
     flexDirection: 'row',
@@ -184,7 +186,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F5F5F5',
   },
   backButton: {
     marginRight: 12,
@@ -193,7 +194,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#000',
   },
   menuContainer: {
     flex: 1,
@@ -218,7 +218,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '500',
-    color: '#000',
   },
   homeIndicator: {
     alignItems: 'center',
@@ -227,7 +226,6 @@ const styles = StyleSheet.create({
   indicator: {
     width: 134,
     height: 5,
-    backgroundColor: '#000',
     borderRadius: 2.5,
   },
 });
