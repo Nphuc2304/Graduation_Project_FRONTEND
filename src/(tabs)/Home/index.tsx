@@ -9,17 +9,18 @@ import {
   View,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import colors from '../../Color';
+import {useTheme} from '../../utils/ThemeContext';
 import ButtonIcon from '../../../components/ButtonIcon';
 import AppStyles from '../../Styles/AppStyles';
 import TextLink from '../../../components/TextLink';
 import VideoList from './components/VideoList';
 
 import Header from '../../../components/Header';
+import {ThemeToggle} from '../../../components/ThemeToggle';
 import Carousel from 'react-native-reanimated-carousel';
 import CampaignList from './components/CampaignList';
 import CategoryList from './components/CategoryList';
-import HomeStyles from '../../bottomTabStyles/HomeStyles';
+import createHomeStyles from '../../bottomTabStyles/HomeStyles';
 import {RootState, AppDispatch} from '../../../services/store/store';
 import {fetchGetAllCampaignsWithMedia} from '../../../services/campaignRedux/campaignSlice';
 import {resetGetAllStatus} from '../../../services/campaignRedux/campaignReducer';
@@ -35,6 +36,7 @@ const {width} = Dimensions.get('window');
 
 const Home = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
+  const {colors} = useTheme();
   const {campaigns, isLoadingGetAll, isErrorGetAll, errorMessageGetAll} =
     useSelector((state: RootState) => state.campaigns);
 
@@ -121,7 +123,7 @@ const Home = ({navigation}: any) => {
   const transformCampaignsData = () => {
     return campaigns.map(campaign => {
       // Get all images from media array
-      let images: string[] = ['https://via.placeholder.com/300x200'];
+      let images: string[] = ['https://picsum.photos/300/200'];
 
       if (campaign.media && campaign.media.length > 0) {
         // Filter only images (not videos)
@@ -161,9 +163,11 @@ const Home = ({navigation}: any) => {
     navigation.navigate('Detail', {campaignId: id});
   };
 
+  const HomeStyles = createHomeStyles(colors);
+
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView style={{backgroundColor: colors.background}}>
+      <ScrollView style={{backgroundColor: colors.background}}>
         <View style={HomeStyles.container}>
           <Header
             logo={require('../../../assets/images/Logo.png')}
@@ -172,6 +176,7 @@ const Home = ({navigation}: any) => {
             navigation={navigation}
             mg={20}
           />
+
           <View style={HomeStyles.carouselContainer}>
             <Carousel
               loop
@@ -183,7 +188,11 @@ const Home = ({navigation}: any) => {
               scrollAnimationDuration={1000}
               renderItem={({item}) => (
                 <View style={HomeStyles.card}>
-                  <Image source={{uri: item.url}} style={HomeStyles.image} />
+                  <Image
+                    source={{uri: item.url}}
+                    style={HomeStyles.image}
+                    resizeMode="cover"
+                  />
                 </View>
               )}
               onSnapToItem={handleCarouselIndexChange}
@@ -201,57 +210,46 @@ const Home = ({navigation}: any) => {
             </View>
           </View>
 
-          <View style={[HomeStyles.pd, AppStyles.rowContainerSpace]}>
-            <Text style={HomeStyles.txtWatch}>Watch the impact</Text>
-            <TextLink
-              text="See all"
-              size={18}
-              color={colors.primary}
-              fontw="600"
-            />
-          </View>
-
-          <View style={HomeStyles.pd}>
+          <View style={[HomeStyles.pd, HomeStyles.sectionContainer]}>
+            <Text style={HomeStyles.sectionTitle}>Categories</Text>
             <CategoryList
               data={categories}
               onChangeIndex={handleCategoryChange}
-              color={colors.white}
+              color={colors.card}
               colorActive={colors.primary}
               padV={10}
               width={100}
             />
           </View>
 
-          {isLoadingGetAll ? (
-            <View style={HomeStyles.pd}>
-              <Text style={{textAlign: 'center', color: colors.primary}}>
-                Loading campaigns...
-              </Text>
-            </View>
-          ) : isErrorGetAll ? (
-            <View style={HomeStyles.pd}>
-              <Text style={{textAlign: 'center', color: 'red'}}>
-                {errorMessageGetAll}
-              </Text>
-            </View>
-          ) : (
-            <CampaignList
-              data={transformCampaignsData()}
-              onSelectItem={handleSelectItem}
-            />
-          )}
-
-          <View style={[HomeStyles.pd, AppStyles.rowContainerSpace]}>
-            <Text style={HomeStyles.txtWatch}>Watch the impact</Text>
-            <TextLink
-              text="See all"
-              size={18}
-              color={colors.primary}
-              fontw="600"
-            />
+          <View style={[HomeStyles.pd, HomeStyles.sectionContainer]}>
+            <Text style={HomeStyles.sectionTitle}>Active Campaigns</Text>
+            {isLoadingGetAll ? (
+              <View style={HomeStyles.loadingContainer}>
+                <Text style={HomeStyles.loadingText}>Loading campaigns...</Text>
+              </View>
+            ) : isErrorGetAll ? (
+              <View style={HomeStyles.errorContainer}>
+                <Text style={HomeStyles.errorText}>{errorMessageGetAll}</Text>
+              </View>
+            ) : (
+              <CampaignList
+                data={transformCampaignsData()}
+                onSelectItem={handleSelectItem}
+              />
+            )}
           </View>
 
-          <View style={HomeStyles.viewVideo}>
+          <View style={[HomeStyles.pd, HomeStyles.sectionContainer]}>
+            <View style={AppStyles.rowContainerSpace}>
+              <Text style={HomeStyles.sectionTitle}>Featured Videos</Text>
+              <TextLink
+                text="See all"
+                size={16}
+                color={colors.primary}
+                fontw="600"
+              />
+            </View>
             <VideoList videoData={videoData} />
           </View>
         </View>

@@ -1,6 +1,7 @@
 // RenderVideo.tsx
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useTheme} from '../../../utils/ThemeContext';
 import Video from 'react-native-video';
 
 // Định nghĩa interface cho dữ liệu video
@@ -17,7 +18,35 @@ interface RenderVideoProps {
 
 // Component RenderVideo
 const RenderVideo: React.FC<RenderVideoProps> = ({item}) => {
+  const {colors} = useTheme();
+
   console.log('Rendering item:', item); // Kiểm tra item
+
+  const styles = StyleSheet.create({
+    videoContainer: {
+      marginVertical: 10,
+      alignItems: 'center',
+      marginRight: 30,
+      borderRadius: 8,
+    },
+    videoWrapper: {
+      borderRadius: 8, // Bo góc cho View cha
+      overflow: 'hidden', // Cắt nội dung con (video) theo borderRadius
+    },
+    video: {
+      width: 155,
+      height: 210,
+      backgroundColor: colors.card,
+      borderRadius: 8,
+      borderBlockColor: colors.border,
+    },
+    text: {
+      marginTop: 5,
+      fontSize: 16,
+      color: colors.text,
+    },
+  });
+
   return (
     <TouchableOpacity style={styles.videoContainer}>
       <View style={styles.videoWrapper}>
@@ -33,30 +62,5 @@ const RenderVideo: React.FC<RenderVideoProps> = ({item}) => {
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  videoContainer: {
-    marginVertical: 10,
-    alignItems: 'center',
-    marginRight: 30,
-    borderRadius: 8,
-  },
-  videoWrapper: {
-    borderRadius: 8, // Bo góc cho View cha
-    overflow: 'hidden', // Cắt nội dung con (video) theo borderRadius
-  },
-  video: {
-    width: 155,
-    height: 210,
-    backgroundColor: '#000',
-    borderRadius: 8,
-    borderBlockColor: '#000',
-  },
-  text: {
-    marginTop: 5,
-    fontSize: 16,
-    color: '#333',
-  },
-});
 
 export default RenderVideo;
