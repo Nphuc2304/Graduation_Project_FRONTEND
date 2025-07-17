@@ -8,7 +8,7 @@ const DetailsStyles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rowSpace: {
     flexDirection: 'row',
@@ -17,34 +17,36 @@ const DetailsStyles = StyleSheet.create({
   },
   iconBack: {
     width: 7,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   btnRounded: {
-    width: 31, height: 31,
+    width: 31,
+    height: 31,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
     backgroundColor: '#D9D9D9',
   },
   icon: {
-    width: 24, height: 24,
-    resizeMode: 'contain'
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
   },
   rowSpaceAbsolute: {
     position: 'absolute',
-    right: 24, left: 24,
+    right: 24,
+    left: 24,
     top: 30,
   },
   mainImg: {
     height: 340,
     width: '100%',
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   textXL: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#353535',
-    textAlign: 'justify'
   },
   textL: {
     fontSize: 18,
@@ -95,7 +97,7 @@ const DetailsStyles = StyleSheet.create({
     paddingHorizontal: 23,
     paddingVertical: 8,
     borderRadius: 50,
-    backgroundColor: '#BBDEF7'
+    backgroundColor: '#BBDEF7',
   },
   btnLarge: {
     width: '100%',
@@ -103,11 +105,12 @@ const DetailsStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
-    backgroundColor: '#1A8FE3'
+    backgroundColor: '#1A8FE3',
   },
   smallIcon: {
-    width: 20, height: 20,
-    resizeMode: 'contain'
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
   },
   btnBorder: {
     paddingHorizontal: 20,
@@ -120,7 +123,7 @@ const DetailsStyles = StyleSheet.create({
   },
   mgL: {
     marginLeft: 20,
-  }
+  },
 });
 
 export default DetailsStyles;

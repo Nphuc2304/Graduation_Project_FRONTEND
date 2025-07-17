@@ -27,4 +27,13 @@ export const API = {
 
   //// Auth
   GET_ACCESS_TOKEN: 'users/refresh-access-token',
+
+  //// Campaign
+  GET_ALL_CAMPAIGNS: 'campaigns',
+  GET_CAMPAIGN_BY_ID: 'campaigns',
+  CREATE_CAMPAIGN: 'campaigns/new',
+  UPDATE_CAMPAIGN: 'campaigns',
+
+  //// Media
+  GET_MEDIA_BY_ID: 'media',
 };

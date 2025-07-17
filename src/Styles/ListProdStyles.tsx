@@ -23,6 +23,10 @@ const ListProdStyles = StyleSheet.create({
     height: 180,
     resizeMode: 'cover',
   },
+  imageCarousel: {
+    width: '100%',
+    height: 180,
+  },
   content: {
     paddingHorizontal: 23,
     paddingTop: 20,
@@ -36,7 +40,7 @@ const ListProdStyles = StyleSheet.create({
   textContent: {
     fontSize: 14,
     fontWeight: 'medium',
-    color: '#9A9A9A',
+    color: '#999',
   },
   textPer: {
     fontSize: 12,
