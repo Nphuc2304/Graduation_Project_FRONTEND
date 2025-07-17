@@ -8,7 +8,7 @@ import {
   Text,
 } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import colors from '../../../Color';
+import {useTheme} from '../../../utils/ThemeContext';
 
 interface DetailImageCarouselProps {
   images: string[];
@@ -26,6 +26,75 @@ const DetailImageCarousel: React.FC<DetailImageCarouselProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef<any>(null);
   const autoPlayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const {colors} = useTheme();
+
+  const styles = StyleSheet.create({
+    container: {
+      position: 'relative',
+    },
+    singleImage: {
+      resizeMode: 'cover',
+    },
+    image: {
+      resizeMode: 'cover',
+    },
+    navButton: {
+      position: 'absolute',
+      top: '50%',
+      transform: [{translateY: -20}],
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 10,
+    },
+    leftButton: {
+      left: 10,
+    },
+    rightButton: {
+      right: 10,
+    },
+    navButtonText: {
+      color: colors.white,
+      fontSize: 24,
+      fontWeight: 'bold',
+    },
+    dotsContainer: {
+      position: 'absolute',
+      bottom: 20,
+      left: 0,
+      right: 0,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    dot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      marginHorizontal: 4,
+    },
+    activeDot: {
+      backgroundColor: colors.white,
+    },
+    counterContainer: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      borderRadius: 12,
+    },
+    counterText: {
+      color: colors.white,
+      fontSize: 12,
+      fontWeight: '600',
+    },
+  });
 
   // Auto-play functionality
   useEffect(() => {
@@ -114,7 +183,7 @@ const DetailImageCarousel: React.FC<DetailImageCarouselProps> = ({
   if (images.length <= 1) {
     return (
       <Image
-        source={{uri: images[0] || 'https://via.placeholder.com/400x250'}}
+        source={{uri: images[0] || 'https://picsum.photos/400x250'}}
         style={[styles.singleImage, {height, width}]}
         resizeMode="cover"
       />
@@ -175,73 +244,5 @@ const DetailImageCarousel: React.FC<DetailImageCarouselProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-  },
-  singleImage: {
-    resizeMode: 'cover',
-  },
-  image: {
-    resizeMode: 'cover',
-  },
-  navButton: {
-    position: 'absolute',
-    top: '50%',
-    transform: [{translateY: -20}],
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
-  },
-  leftButton: {
-    left: 10,
-  },
-  rightButton: {
-    right: 10,
-  },
-  navButtonText: {
-    color: colors.white,
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  dotsContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    marginHorizontal: 4,
-  },
-  activeDot: {
-    backgroundColor: colors.white,
-  },
-  counterContainer: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  counterText: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: '600',
-  },
-});
 
 export default DetailImageCarousel;

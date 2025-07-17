@@ -1,6 +1,7 @@
 // VideoList.tsx
 import React from 'react';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {useTheme} from '../../../utils/ThemeContext';
 import RenderVideo from './RenderVideo';
 
 // Định nghĩa interface cho dữ liệu video
@@ -17,6 +18,20 @@ interface VideoListProps {
 
 // Component VideoList
 const VideoList: React.FC<VideoListProps> = ({videoData}) => {
+  const {colors} = useTheme();
+
+  const styles = StyleSheet.create({
+    viewVideo: {
+      flex: 1,
+      width: '100%',
+    },
+    emptyText: {
+      textAlign: 'center',
+      marginTop: 20,
+      color: colors.text,
+    },
+  });
+
   return (
     <View style={styles.viewVideo}>
       <FlatList<VideoItem>
@@ -25,20 +40,11 @@ const VideoList: React.FC<VideoListProps> = ({videoData}) => {
         keyExtractor={item => item.id}
         horizontal={true}
         ListEmptyComponent={() => (
-          <Text style={{textAlign: 'center', marginTop: 20}}>
-            No videos available
-          </Text>
+          <Text style={styles.emptyText}>No videos available</Text>
         )}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  viewVideo: {
-    flex: 1,
-    width: '100%',
-  },
-});
 
 export default VideoList;

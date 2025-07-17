@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {View, Image, Dimensions, StyleSheet} from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import colors from '../../../Color';
-import ListProdStyles from '../../../Styles/ListProdStyles';
+import {useTheme} from '../../../utils/ThemeContext';
+import createListProdStyles from '../../../Styles/ListProdStyles';
 
 interface ImageCarouselProps {
   images: string[];
@@ -18,16 +18,44 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
   width = screenWidth - 40, // Account for container margin
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const {colors} = useTheme();
+  const listProdStyles = createListProdStyles(colors);
 
   // If only one image, don't show carousel
   if (images.length <= 1) {
     return (
       <Image
-        source={{uri: images[0] || 'https://via.placeholder.com/300x200'}}
-        style={ListProdStyles.img}
+        source={{uri: images[0] || 'https://picsum.photos/300/200'}}
+        style={listProdStyles.img}
+        resizeMode="cover"
       />
     );
   }
+
+  const styles = StyleSheet.create({
+    container: {
+      position: 'relative',
+    },
+    dotsContainer: {
+      position: 'absolute',
+      bottom: 10,
+      left: 0,
+      right: 0,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    dot: {
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      marginHorizontal: 4,
+    },
+    activeDot: {
+      backgroundColor: colors.white,
+    },
+  });
 
   return (
     <View style={styles.container}>
@@ -39,7 +67,11 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
         data={images}
         scrollAnimationDuration={500}
         renderItem={({item}) => (
-          <Image source={{uri: item}} style={ListProdStyles.img} />
+          <Image
+            source={{uri: item}}
+            style={listProdStyles.img}
+            resizeMode="cover"
+          />
         )}
         onSnapToItem={setCurrentIndex}
       />
@@ -55,30 +87,5 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-  },
-  dotsContainer: {
-    position: 'absolute',
-    bottom: 10,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    marginHorizontal: 4,
-  },
-  activeDot: {
-    backgroundColor: colors.white,
-  },
-});
 
 export default ImageCarousel;

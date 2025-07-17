@@ -9,13 +9,13 @@ import {
   Dimensions,
 } from 'react-native';
 import React, {useEffect} from 'react';
-import DetailsStyles from '../../Styles/DetailStyles';
+import createDetailStyles from '../../Styles/DetailStyles';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../services/store/store';
 import {fetchGetCampaignById} from '../../../services/campaignRedux/campaignSlice';
 import {resetGetByIdStatus} from '../../../services/campaignRedux/campaignReducer';
-import colors from '../../Color';
+import {useTheme} from '../../utils/ThemeContext';
 import DetailImageCarousel from './components/DetailImageCarousel';
 import {BASE_URL} from '../../../services/api';
 
@@ -25,6 +25,8 @@ export const Detail = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const dispatch = useDispatch<AppDispatch>();
+  const {colors} = useTheme();
+  const DetailStyles = createDetailStyles(colors);
 
   // Get campaign ID from route params
   const {campaignId} = route.params || {};
@@ -132,7 +134,8 @@ export const Detail = () => {
 
   if (isLoadingGetById) {
     return (
-      <SafeAreaView style={DetailsStyles.container}>
+      <SafeAreaView
+        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Text style={{color: colors.primary}}>
             Loading campaign details...
@@ -144,9 +147,10 @@ export const Detail = () => {
 
   if (isErrorGetById) {
     return (
-      <SafeAreaView style={DetailsStyles.container}>
+      <SafeAreaView
+        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: 'red'}}>{errorMessageGetById}</Text>
+          <Text style={{color: colors.error}}>{errorMessageGetById}</Text>
           <TouchableOpacity
             style={{
               marginTop: 20,
@@ -155,7 +159,7 @@ export const Detail = () => {
               borderRadius: 5,
             }}
             onPress={() => navigation.goBack()}>
-            <Text style={{color: 'white'}}>Go Back</Text>
+            <Text style={{color: colors.white}}>Go Back</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -164,9 +168,10 @@ export const Detail = () => {
 
   if (!currentCampaign) {
     return (
-      <SafeAreaView style={DetailsStyles.container}>
+      <SafeAreaView
+        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: 'red'}}>Campaign not found</Text>
+          <Text style={{color: colors.error}}>Campaign not found</Text>
           <TouchableOpacity
             style={{
               marginTop: 20,
@@ -175,7 +180,7 @@ export const Detail = () => {
               borderRadius: 5,
             }}
             onPress={() => navigation.goBack()}>
-            <Text style={{color: 'white'}}>Go Back</Text>
+            <Text style={{color: colors.white}}>Go Back</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -183,58 +188,62 @@ export const Detail = () => {
   }
 
   return (
-    <SafeAreaView style={DetailsStyles.container}>
-      <ScrollView style={DetailsStyles.container}>
+    <SafeAreaView
+      style={[DetailStyles.container, {backgroundColor: colors.background}]}>
+      <ScrollView
+        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
         <View style={{width: '100%'}}>
           <DetailImageCarousel
             images={getCampaignImages()}
             height={250}
             width={screenWidth}
           />
-          <View
-            style={[DetailsStyles.rowSpace, DetailsStyles.rowSpaceAbsolute]}>
+          <View style={[DetailStyles.rowSpace, DetailStyles.rowSpaceAbsolute]}>
             <TouchableOpacity
-              style={DetailsStyles.btnRounded}
+              style={[
+                DetailStyles.btnRounded,
+                {backgroundColor: colors.background},
+              ]}
               onPress={() => navigation.goBack()}>
               <Image
                 source={require('../../../assets/icons/back.png')}
-                style={DetailsStyles.iconBack}
+                style={[DetailStyles.iconBack, {tintColor: colors.text}]}
               />
             </TouchableOpacity>
-            <View style={[DetailsStyles.row, DetailsStyles.fourContainer]}>
+            <View style={[DetailStyles.row, DetailStyles.fourContainer]}>
               <TouchableOpacity>
                 <Image
                   source={require('../../../assets/icons/share.png')}
-                  style={DetailsStyles.icon}
+                  style={DetailStyles.icon}
                 />
               </TouchableOpacity>
               <TouchableOpacity>
                 <Image
                   source={require('../../../assets/icons/mark.png')}
-                  style={DetailsStyles.icon}
+                  style={DetailStyles.icon}
                 />
               </TouchableOpacity>
             </View>
           </View>
         </View>
-        <View style={DetailsStyles.secondContainer}>
+        <View style={DetailStyles.secondContainer}>
           <Text
             numberOfLines={2}
             ellipsizeMode="tail"
-            style={DetailsStyles.textXL}>
+            style={DetailStyles.textXL}>
             {currentCampaign.campName}
           </Text>
-          <View style={DetailsStyles.row}>
-            <Text style={[DetailsStyles.textS, {color: colors.primary}]}>
+          <View style={DetailStyles.row}>
+            <Text style={[DetailStyles.textS, {color: colors.primary}]}>
               {currentCampaign.currentFund.toLocaleString()} VNĐ{' '}
             </Text>
-            <Text style={DetailsStyles.textS}>Quỹ huy động từ </Text>
-            <Text style={[DetailsStyles.textS, {color: colors.primary}]}>
+            <Text style={DetailStyles.textS}>Quỹ huy động từ </Text>
+            <Text style={[DetailStyles.textS, {color: colors.primary}]}>
               {currentCampaign.totalGoal.toLocaleString()} VNĐ
             </Text>
           </View>
-          <View style={DetailsStyles.row}>
-            <View style={DetailsStyles.goal}>
+          <View style={DetailStyles.row}>
+            <View style={DetailStyles.goal}>
               <View
                 style={{
                   height: percent == 0 ? 0 : 3,
@@ -245,97 +254,97 @@ export const Detail = () => {
                   top: 0,
                 }}></View>
             </View>
-            <Text style={[DetailsStyles.textXS, {marginLeft: 15}]}>
+            <Text style={[DetailStyles.textXS, {marginLeft: 15}]}>
               {percent}%
             </Text>
           </View>
-          <View style={DetailsStyles.rowSpace}>
-            <Text style={DetailsStyles.textS}>
+          <View style={DetailStyles.rowSpace}>
+            <Text style={DetailStyles.textS}>
               <Text style={{color: colors.primary}}>
                 {currentCampaign.currentFund.toLocaleString()}
               </Text>{' '}
               raised
             </Text>
-            <Text style={DetailsStyles.textS}>
+            <Text style={DetailStyles.textS}>
               <Text style={{color: colors.primary}}>{getDaysLeft()}</Text> days
               left
             </Text>
           </View>
-          <View style={DetailsStyles.rowSpace}>
-            <TouchableOpacity style={DetailsStyles.btnSmall}>
-              <Text style={[DetailsStyles.textXXS, {color: 'white'}]}>
+          <View style={DetailStyles.rowSpace}>
+            <TouchableOpacity style={DetailStyles.btnSmall}>
+              <Text style={[DetailStyles.textXXS, {color: colors.white}]}>
                 {getCampaignTypeName(currentCampaign.campTypeID)}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={DetailsStyles.row}>
-              <Text style={[DetailsStyles.textXS, {color: colors.primary}]}>
+            <TouchableOpacity style={DetailStyles.row}>
+              <Text style={[DetailStyles.textXS, {color: colors.primary}]}>
                 {currentCampaign.totalGoal.toLocaleString()} goal
               </Text>
               <Image
                 source={require('../../../assets/icons/rightB.png')}
-                style={DetailsStyles.smallIcon}
+                style={DetailStyles.smallIcon}
               />
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            style={DetailsStyles.btnLarge}
+            style={DetailStyles.btnLarge}
             onPress={() => navigation.navigate('Donation')}>
-            <Text style={[DetailsStyles.textL, {color: 'white'}]}>
+            <Text style={[DetailStyles.textL, {color: colors.white}]}>
               Donation Now
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={DetailsStyles.thirdContainer}>
-          <View style={DetailsStyles.fourContainer}>
-            <Text style={DetailsStyles.textL}>Fundraiser</Text>
-            <View style={DetailsStyles.rowSpace}>
-              <View style={[DetailsStyles.btnRounded, {width: 46, height: 46}]}>
+        <View style={DetailStyles.thirdContainer}>
+          <View style={DetailStyles.fourContainer}>
+            <Text style={DetailStyles.textL}>Fundraiser</Text>
+            <View style={DetailStyles.rowSpace}>
+              <View style={[DetailStyles.btnRounded, {width: 46, height: 46}]}>
                 <Image
                   source={require('../../../assets/icons/homeB.png')}
-                  style={DetailsStyles.smallIcon}
+                  style={DetailStyles.smallIcon}
                 />
               </View>
-              <View style={[DetailsStyles.mgL, {flex: 1}]}>
-                <Text style={DetailsStyles.textM}>
+              <View style={[DetailStyles.mgL, {flex: 1}]}>
+                <Text style={DetailStyles.textM}>
                   {currentCampaign.hostType === 'admin'
                     ? 'Organization'
                     : 'Individual'}
                 </Text>
-                <Text style={DetailsStyles.textXXS}>Verfied ✅</Text>
+                <Text style={DetailStyles.textXXS}>Verfied ✅</Text>
               </View>
-              <TouchableOpacity style={DetailsStyles.btnBorder}>
-                <Text style={[DetailsStyles.textXXS, {color: colors.primary}]}>
+              <TouchableOpacity style={DetailStyles.btnBorder}>
+                <Text style={[DetailStyles.textXXS, {color: colors.primary}]}>
                   Follow
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
-          <View style={DetailsStyles.fourContainer}>
-            <Text style={DetailsStyles.textL}>Patient</Text>
-            <View style={DetailsStyles.row}>
-              <View style={[DetailsStyles.btnRounded, {width: 46, height: 46}]}>
+          <View style={DetailStyles.fourContainer}>
+            <Text style={DetailStyles.textL}>Patient</Text>
+            <View style={DetailStyles.row}>
+              <View style={[DetailStyles.btnRounded, {width: 46, height: 46}]}>
                 <Image
                   source={require('../../../assets/icons/userB.png')}
-                  style={DetailsStyles.smallIcon}
+                  style={DetailStyles.smallIcon}
                 />
               </View>
-              <View style={DetailsStyles.mgL}>
-                <Text style={DetailsStyles.textM}>Patient (or) Place</Text>
-                <Text style={DetailsStyles.textXXS}>
+              <View style={DetailStyles.mgL}>
+                <Text style={DetailStyles.textM}>Patient (or) Place</Text>
+                <Text style={DetailStyles.textXXS}>
                   Accompanied by medical documents ✅
                 </Text>
               </View>
             </View>
           </View>
-          <View style={DetailsStyles.fourContainer}>
-            <Text style={DetailsStyles.textL}>Story</Text>
+          <View style={DetailStyles.fourContainer}>
+            <Text style={DetailStyles.textL}>Story</Text>
             <Text
               style={[
-                DetailsStyles.textM,
+                DetailStyles.textM,
                 {fontWeight: '400', textAlign: 'justify'},
               ]}>
               {currentCampaign.campDescription || 'No description available'}{' '}
-              <Text style={[DetailsStyles.textM, {color: colors.primary}]}>
+              <Text style={[DetailStyles.textM, {color: colors.primary}]}>
                 Read more ...
               </Text>
             </Text>

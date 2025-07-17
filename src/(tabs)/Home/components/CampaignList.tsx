@@ -1,8 +1,8 @@
 import {Text, TouchableOpacity, View} from 'react-native';
 import {memo, useState} from 'react';
 import {FlashList} from '@shopify/flash-list';
-import colors from '../../../Color';
-import ListProdStyles from '../../../Styles/ListProdStyles';
+import {useTheme} from '../../../utils/ThemeContext';
+import createListProdStyles from '../../../Styles/ListProdStyles';
 import AppStyles from '../../../Styles/AppStyles';
 import ImageCarousel from './ImageCarousel';
 
@@ -20,6 +20,8 @@ interface list {
 const CampaignList = memo(
   (props: any) => {
     const {data, onSelectItem, onLongPress} = props;
+    const {colors} = useTheme();
+    const styles = createListProdStyles(colors);
 
     return (
       <FlashList
@@ -40,31 +42,21 @@ const CampaignList = memo(
                 onSelectItem?.(item.id);
               }}
               onLongPress={() => onLongPress?.(item)}
-              style={ListProdStyles.container}>
+              style={styles.container}>
               <ImageCarousel images={item.images} />
-              <View style={ListProdStyles.content}>
+              <View style={styles.content}>
                 <Text
-                  style={ListProdStyles.title}
+                  style={styles.title}
                   numberOfLines={1}
                   ellipsizeMode="tail">
                   {item.name}
                 </Text>
-                <View style={ListProdStyles.textWrap}>
-                  <Text
-                    style={[
-                      ListProdStyles.textContent,
-                      {color: colors.primary},
-                    ]}>
+                <View style={styles.textWrap}>
+                  <Text style={[styles.textContent, {color: colors.primary}]}>
                     {item.priceCurrent.toLocaleString()} VNĐ{' '}
                   </Text>
-                  <Text style={ListProdStyles.textContent}>
-                    Quỹ huy động từ{' '}
-                  </Text>
-                  <Text
-                    style={[
-                      ListProdStyles.textContent,
-                      {color: colors.primary},
-                    ]}>
+                  <Text style={styles.textContent}>Quỹ huy động từ </Text>
+                  <Text style={[styles.textContent, {color: colors.primary}]}>
                     {item.totalGoal.toLocaleString()} VNĐ
                   </Text>
                 </View>
@@ -87,16 +79,16 @@ const CampaignList = memo(
                         borderRadius: 10,
                       }}></View>
                   </View>
-                  <Text style={ListProdStyles.textPer}>{percent}%</Text>
+                  <Text style={styles.textPer}>{percent}%</Text>
                 </View>
                 <View style={AppStyles.rowContainerSpace}>
-                  <Text style={ListProdStyles.textContent}>
+                  <Text style={styles.textContent}>
                     <Text style={{color: colors.primary}}>
                       {item.donators.toLocaleString()}
                     </Text>{' '}
                     donators
                   </Text>
-                  <Text style={ListProdStyles.textContent}>
+                  <Text style={styles.textContent}>
                     <Text style={{color: colors.primary}}>{item.dayLeft}</Text>{' '}
                     days left
                   </Text>
