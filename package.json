@@ -11,7 +11,10 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/checkbox": "^0.5.20",
+    "@react-native-community/datetimepicker": "^8.4.2",
+    "@react-native-picker/picker": "^2.11.1",
     "@react-navigation/bottom-tabs": "^7.2.1",
     "@react-navigation/native": "^7.0.15",
     "@react-navigation/stack": "^7.1.2",
@@ -19,6 +22,7 @@
     "@shopify/flash-list": "^1.7.6",
     "axios": "^1.9.0",
     "fbjs": "^3.0.5",
+    "lucide-react-native": "^0.525.0",
     "react": "19.0.0",
     "react-native": "0.78.0",
     "react-native-gesture-handler": "^2.24.0",
@@ -30,9 +34,11 @@
     "react-native-safe-area-context": "^5.3.0",
     "react-native-screens": "^4.9.2",
     "react-native-text-recognition": "^1.0.2",
-    "react-native-video": "^6.11.0",
     "react-native-vision-camera": "^4.6.4",
-    "react-redux": "^9.2.0"
+    "react-native-svg": "^15.12.0",
+    "react-native-video": "^6.11.0",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -55,6 +61,8 @@
     "postinstall-postinstall": "^2.1.0",
     "prettier": "2.8.8",
     "react-test-renderer": "19.0.0",
+    "reactotron-react-native": "^5.1.14",
+    "reactotron-redux": "^3.2.0",
     "typescript": "5.0.4"
   },
   "engines": {

@@ -8,17 +8,22 @@ import {
   Text,
   View,
 } from 'react-native';
-import colors from '../../Color';
+import {useSelector, useDispatch} from 'react-redux';
+import {useTheme} from '../../utils/ThemeContext';
 import ButtonIcon from '../../../components/ButtonIcon';
 import AppStyles from '../../Styles/AppStyles';
 import TextLink from '../../../components/TextLink';
-import VideoList from '../../../components/RenderItem/VideoList';
+import VideoList from './components/VideoList';
 
 import Header from '../../../components/Header';
+import {ThemeToggle} from '../../../components/ThemeToggle';
 import Carousel from 'react-native-reanimated-carousel';
-import CampaignList from '../../../components/RenderItem/CampaignList';
-import CategoryList from '../../../components/RenderItem/CategoryList';
-import HomeStyles from '../../bottomTabStyles/HomeStyles';
+import CampaignList from './components/CampaignList';
+import CategoryList from './components/CategoryList';
+import createHomeStyles from '../../bottomTabStyles/HomeStyles';
+import {RootState, AppDispatch} from '../../../services/store/store';
+import {fetchGetAllCampaignsWithMedia} from '../../../services/campaignRedux/campaignSlice';
+import {resetGetAllStatus} from '../../../services/campaignRedux/campaignReducer';
 
 // Định nghĩa interface cho dữ liệu video
 interface VideoItem {
@@ -30,6 +35,11 @@ interface VideoItem {
 const {width} = Dimensions.get('window');
 
 const Home = ({navigation}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const {colors} = useTheme();
+  const {campaigns, isLoadingGetAll, isErrorGetAll, errorMessageGetAll} =
+    useSelector((state: RootState) => state.campaigns);
+
   const [videoData, setVideoData] = useState<VideoItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -37,19 +47,22 @@ const Home = ({navigation}: any) => {
   const img = [
     {
       id: 1,
-      url: 'https://i.pinimg.com/736x/8f/80/4a/8f804a99230cc29f84657ec6e747b0f7.jpg',
+      url: 'https://phunuvietnam.mediacdn.vn/179072216278405120/2021/12/31/yola-1-16409497614121089453110.jpg',
     },
     {
       id: 2,
-      url: 'https://i.pinimg.com/736x/65/37/eb/6537eb5cbdb7019e893c10a501894c8b.jpg',
+      url: 'https://chuthapdophutho.org.vn/uploads/news/2016_12/e2.jpg',
     },
     {
       id: 3,
-      url: 'https://i.pinimg.com/736x/de/50/59/de5059b1836a1d642bf341f285ee66ff.jpg',
+      url: 'https://taidat.vn/wp-content/uploads/2016/04/photo-bo-anh-nhung-em-be-vung-cao-17.jpg',
     },
   ];
 
   useEffect(() => {
+    // Fetch campaigns when component mounts
+    dispatch(fetchGetAllCampaignsWithMedia());
+
     setVideoData([
       {
         id: '1',
@@ -72,7 +85,14 @@ const Home = ({navigation}: any) => {
         title: 'Video 4',
       },
     ]);
-  }, []);
+  }, [dispatch]);
+
+  // Reset status when component unmounts
+  useEffect(() => {
+    return () => {
+      dispatch(resetGetAllStatus());
+    };
+  }, [dispatch]);
 
   const handleCarouselIndexChange = (index: number) => {
     setCurrentIndex(index); // Cập nhật chỉ số khi carousel thay đổi
@@ -99,47 +119,55 @@ const Home = ({navigation}: any) => {
     console.log('Selected Category:', categoryId);
   };
 
-  // campaign
-  const [data, setData] = useState([
-    {
-      id: '1',
-      name: 'Campaign 1',
-      image:
-        'https://i.pinimg.com/736x/8c/56/c4/8c56c483afc07fbbc8d1c937c53c26b1.jpg',
-      priceCurrent: 500,
-      pricegoal: 1000,
-      donators: 10,
-      dayLeft: '5',
-    },
-    {
-      id: '2',
-      name: 'Campaign 2',
-      image:
-        'https://i.pinimg.com/736x/69/06/61/690661e5f4fdf73f358ce77340d3d045.jpg',
-      priceCurrent: 700,
-      pricegoal: 2000,
-      donators: 20,
-      dayLeft: '10',
-    },
-    {
-      id: '2',
-      name: 'Campaign 3',
-      image:
-        'https://i.pinimg.com/736x/9c/a3/32/9ca332469e80c3416ec91ed8afe2f402.jpg',
-      priceCurrent: 2300,
-      pricegoal: 3000,
-      donators: 15,
-      dayLeft: '20',
-    },
-  ]);
+  // Transform campaigns data to match CampaignList component interface
+  const transformCampaignsData = () => {
+    return campaigns.map(campaign => {
+      // Get all images from media array
+      let images: string[] = ['https://picsum.photos/300/200'];
+
+      if (campaign.media && campaign.media.length > 0) {
+        // Filter only images (not videos)
+        const imageMedia = campaign.media.filter(
+          media => media.type === 'image',
+        );
+        if (imageMedia.length > 0) {
+          images = imageMedia.map(media => media.url);
+        } else {
+          // If no images found, use all media items
+          images = campaign.media.map(media => media.url);
+        }
+      }
+
+      return {
+        id: campaign._id,
+        name: campaign.campName,
+        images: images,
+        priceCurrent: campaign.currentFund,
+        pricegoal: campaign.totalGoal,
+        donators: 0, // This might need to come from a different API endpoint
+        totalGoal: campaign.totalGoal,
+        dayLeft: campaign.dateCreated
+          ? Math.ceil(
+              (new Date().getTime() -
+                new Date(campaign.dateCreated).getTime()) /
+                (1000 * 60 * 60 * 24),
+            ).toString()
+          : '0',
+      };
+    });
+  };
 
   const handleSelectItem = (id: string) => {
     console.log('Selected Item:', id);
+    // Navigate to campaign detail page
+    navigation.navigate('Detail', {campaignId: id});
   };
 
+  const HomeStyles = createHomeStyles(colors);
+
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView style={{backgroundColor: colors.background}}>
+      <ScrollView style={{backgroundColor: colors.background}}>
         <View style={HomeStyles.container}>
           <Header
             logo={require('../../../assets/images/Logo.png')}
@@ -148,6 +176,7 @@ const Home = ({navigation}: any) => {
             navigation={navigation}
             mg={20}
           />
+
           <View style={HomeStyles.carouselContainer}>
             <Carousel
               loop
@@ -159,7 +188,11 @@ const Home = ({navigation}: any) => {
               scrollAnimationDuration={1000}
               renderItem={({item}) => (
                 <View style={HomeStyles.card}>
-                  <Image source={{uri: item.url}} style={HomeStyles.image} />
+                  <Image
+                    source={{uri: item.url}}
+                    style={HomeStyles.image}
+                    resizeMode="cover"
+                  />
                 </View>
               )}
               onSnapToItem={handleCarouselIndexChange}
@@ -177,41 +210,47 @@ const Home = ({navigation}: any) => {
             </View>
           </View>
 
-          <View style={[HomeStyles.pd, AppStyles.rowContainerSpace]}>
-            <Text style={HomeStyles.txtWatch}>Watch the impact</Text>
-            <TextLink
-              text="See all"
-              size={18}
-              color={colors.primary}
-              fontw="600"
-            />
-          </View>
-
-          <View style={HomeStyles.pd}>
+          <View style={[HomeStyles.pd, HomeStyles.sectionContainer]}>
+            <Text style={HomeStyles.sectionTitle}>Categories</Text>
             <CategoryList
               data={categories}
               onChangeIndex={handleCategoryChange}
-              color={colors.white}
+              color={colors.card}
               colorActive={colors.primary}
               padV={10}
               width={100}
             />
           </View>
 
-          <CampaignList data={data} onSelectItem={handleSelectItem} />
-
-          <View style={[HomeStyles.pd, AppStyles.rowContainerSpace]}>
-            <Text style={HomeStyles.txtWatch}>Watch the impact</Text>
-            <TextLink
-              text="See all"
-              size={18}
-              color={colors.primary}
-              fontw="600"
-            />
+          <View style={[HomeStyles.pd, HomeStyles.sectionContainer]}>
+            <Text style={HomeStyles.sectionTitle}>Active Campaigns</Text>
+            {isLoadingGetAll ? (
+              <View style={HomeStyles.loadingContainer}>
+                <Text style={HomeStyles.loadingText}>Loading campaigns...</Text>
+              </View>
+            ) : isErrorGetAll ? (
+              <View style={HomeStyles.errorContainer}>
+                <Text style={HomeStyles.errorText}>{errorMessageGetAll}</Text>
+              </View>
+            ) : (
+              <CampaignList
+                data={transformCampaignsData()}
+                onSelectItem={handleSelectItem}
+              />
+            )}
           </View>
 
-          <View style={HomeStyles.viewVideo}>
-            <VideoList videoData={videoData} />
+          <View style={[HomeStyles.pd, HomeStyles.sectionContainer]}>
+            <View style={AppStyles.rowContainerSpace}>
+              <Text style={HomeStyles.sectionTitle}>Featured Videos</Text>
+              <TextLink
+                text="See all"
+                size={16}
+                color={colors.primary}
+                fontw="600"
+              />
+            </View>
+            {/* <VideoList videoData={videoData} /> */}
           </View>
         </View>
       </ScrollView>

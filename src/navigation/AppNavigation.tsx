@@ -22,17 +22,26 @@ import {
   Payment,
   InfoVerification,
   ScanDoneScreen,
+  VerifyingStart,
+  CountrySelector,
+  Search,
+  Setting,
+  EditProfile,
 } from '../Screen';
 import FaceCaptureScreen from '../Screen/ScanFace';
 import IDCardScannerScreen from '../Screen/ScanCCCD';
+
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="ScanCCCD"
+        initialRouteName="Splash"
         screenOptions={{headerShown: false}}>
+        <Stack.Screen name="Search" component={Search} />
+        <Stack.Screen name="CountrySelector" component={CountrySelector} />
+        <Stack.Screen name="VerifyingStart" component={VerifyingStart} />
         <Stack.Screen name="Payment" component={Payment} />
         <Stack.Screen name="Donation" component={Dontation} />
         <Stack.Screen name="Detail" component={Detail} />
@@ -55,6 +64,8 @@ const AppNavigator = () => {
         <Stack.Screen name="ScanDone" component={ScanDoneScreen} />
         <Stack.Screen name="ScanFace" component={FaceCaptureScreen} />
         <Stack.Screen name="ScanCCCD" component={IDCardScannerScreen} />
+        <Stack.Screen name="Setting" component={Setting} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

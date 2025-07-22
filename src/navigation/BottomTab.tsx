@@ -1,25 +1,37 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, StyleSheet} from 'react-native';
+import {useTheme} from '../utils/ThemeContext';
 import Home from '../(tabs)/Home';
-import colors from '../Color';
 import Notification from '../(tabs)/Notification';
-import Stats from '../(tabs)/Stats';
+import CreateCamp from '../Screen/CreateCamp';
 import Profile from '../(tabs)/Profile';
+import {Plus} from 'lucide-react-native';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+  const {colors} = useTheme();
+
+  const styles = StyleSheet.create({
+    icon: {
+      resizeMode: 'contain',
+    },
+  });
+
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: colors.secondary,
         tabBarStyle: {
-          backgroundColor: colors.white,
+          backgroundColor: colors.background,
           borderTopWidth: 0,
           height: 85,
-          shadowColor: 'gray',
-          shadowOpacity: 0.3,
+          shadowColor: colors.text,
+          shadowOpacity: 0.1,
+          shadowOffset: {width: 0, height: -2},
+          shadowRadius: 8,
+          elevation: 8,
         },
         tabBarLabelStyle: {
           fontSize: 10,
@@ -59,18 +71,10 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Stats"
-        component={Stats}
+        name="CreateCamp"
+        component={CreateCamp}
         options={{
-          tabBarIcon: ({color, size}) => (
-            <Image
-              source={require('../../assets/icons/database.png')}
-              style={[
-                styles.icon,
-                {tintColor: color, width: size, height: size},
-              ]}
-            />
-          ),
+          tabBarIcon: ({color, size}) => <Plus color={color} size={size} />,
         }}
       />
       <Tab.Screen
@@ -91,11 +95,5 @@ const BottomTabNavigator = () => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  icon: {
-    resizeMode: 'contain',
-  },
-});
 
 export default BottomTabNavigator;

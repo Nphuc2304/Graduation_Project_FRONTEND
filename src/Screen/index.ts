@@ -16,3 +16,8 @@ export * from './InfoVerify';
 export * from './ScanDone';
 export * from './ScanFace';
 export * from './ScanCCCD';
+export * from './VerifyingStart';
+export * from './CountrySelector';
+export * from './Search';
+export * from './Setting';
+export * from './Setting/EditProfile';

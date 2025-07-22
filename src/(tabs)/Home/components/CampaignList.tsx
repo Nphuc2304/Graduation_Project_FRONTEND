@@ -1,23 +1,27 @@
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {memo, useState} from 'react';
 import {FlashList} from '@shopify/flash-list';
-import colors from '../../src/Color';
-import ListProdStyles from '../../src/Styles/ListProdStyles';
-import AppStyles from '../../src/Styles/AppStyles';
+import {useTheme} from '../../../utils/ThemeContext';
+import createListProdStyles from '../../../Styles/ListProdStyles';
+import AppStyles from '../../../Styles/AppStyles';
+import ImageCarousel from './ImageCarousel';
 
 interface list {
   id: string;
   name: string;
-  image: string;
+  images: string[];
   priceCurrent: number;
   pricegoal: number;
   donators: number;
+  totalGoal: number;
   dayLeft: string;
 }
 
 const CampaignList = memo(
   (props: any) => {
     const {data, onSelectItem, onLongPress} = props;
+    const {colors} = useTheme();
+    const styles = createListProdStyles(colors);
 
     return (
       <FlashList
@@ -29,7 +33,7 @@ const CampaignList = memo(
           let percent = parseFloat(
             Math.min(
               100,
-              Math.max(0, (item.priceCurrent / item.pricegoal) * 100),
+              Math.max(0, (item.priceCurrent / item.totalGoal) * 100),
             ).toFixed(0),
           );
           return (
@@ -38,32 +42,22 @@ const CampaignList = memo(
                 onSelectItem?.(item.id);
               }}
               onLongPress={() => onLongPress?.(item)}
-              style={ListProdStyles.container}>
-              <Image source={{uri: item.image}} style={ListProdStyles.img} />
-              <View style={ListProdStyles.content}>
+              style={styles.container}>
+              <ImageCarousel images={item.images} />
+              <View style={styles.content}>
                 <Text
-                  style={ListProdStyles.title}
+                  style={styles.title}
                   numberOfLines={1}
                   ellipsizeMode="tail">
                   {item.name}
                 </Text>
-                <View style={ListProdStyles.textWrap}>
-                  <Text
-                    style={[
-                      ListProdStyles.textContent,
-                      {color: colors.primary},
-                    ]}>
-                    {item.priceCurrent}k MMK{' '}
+                <View style={styles.textWrap}>
+                  <Text style={[styles.textContent, {color: colors.primary}]}>
+                    {item.priceCurrent.toLocaleString()} VNĐ{' '}
                   </Text>
-                  <Text style={ListProdStyles.textContent}>
-                    fund raised from{' '}
-                  </Text>
-                  <Text
-                    style={[
-                      ListProdStyles.textContent,
-                      {color: colors.primary},
-                    ]}>
-                    {item.pricegoal}M MMK
+                  <Text style={styles.textContent}>Quỹ huy động từ </Text>
+                  <Text style={[styles.textContent, {color: colors.primary}]}>
+                    {item.totalGoal.toLocaleString()} VNĐ
                   </Text>
                 </View>
                 <View style={AppStyles.rowContainerSpace}>
@@ -85,14 +79,16 @@ const CampaignList = memo(
                         borderRadius: 10,
                       }}></View>
                   </View>
-                  <Text style={ListProdStyles.textPer}>{percent}%</Text>
+                  <Text style={styles.textPer}>{percent}%</Text>
                 </View>
                 <View style={AppStyles.rowContainerSpace}>
-                  <Text style={ListProdStyles.textContent}>
-                    <Text style={{color: colors.primary}}>{item.donators}</Text>{' '}
-                    Donators
+                  <Text style={styles.textContent}>
+                    <Text style={{color: colors.primary}}>
+                      {item.donators.toLocaleString()}
+                    </Text>{' '}
+                    donators
                   </Text>
-                  <Text style={ListProdStyles.textContent}>
+                  <Text style={styles.textContent}>
                     <Text style={{color: colors.primary}}>{item.dayLeft}</Text>{' '}
                     days left
                   </Text>

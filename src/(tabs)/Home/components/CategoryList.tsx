@@ -1,7 +1,7 @@
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {memo, useState} from 'react';
 import {FlashList} from '@shopify/flash-list';
-import colors from '../../src/Color';
+import colors from '../../../Color';
 
 interface list {
   id: string;
