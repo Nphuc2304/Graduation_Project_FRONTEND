@@ -26,6 +26,7 @@ import {
   CountrySelector,
   Search,
   Setting,
+  EditProfile,
 } from '../Screen';
 
 const Stack = createStackNavigator();
@@ -60,6 +61,7 @@ const AppNavigator = () => {
         <Stack.Screen name="InfoVerifycation" component={InfoVerification} />
         <Stack.Screen name="ScanDone" component={ScanDoneScreen} />
         <Stack.Screen name="Setting" component={Setting} />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

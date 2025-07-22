@@ -3,8 +3,9 @@ import {Image, StyleSheet} from 'react-native';
 import {useTheme} from '../utils/ThemeContext';
 import Home from '../(tabs)/Home';
 import Notification from '../(tabs)/Notification';
-import Stats from '../(tabs)/Stats';
+import CreateCamp from '../Screen/CreateCamp';
 import Profile from '../(tabs)/Profile';
+import {Plus} from 'lucide-react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -70,18 +71,10 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Stats"
-        component={Stats}
+        name="CreateCamp"
+        component={CreateCamp}
         options={{
-          tabBarIcon: ({color, size}) => (
-            <Image
-              source={require('../../assets/icons/database.png')}
-              style={[
-                styles.icon,
-                {tintColor: color, width: size, height: size},
-              ]}
-            />
-          ),
+          tabBarIcon: ({color, size}) => <Plus color={color} size={size} />,
         }}
       />
       <Tab.Screen

@@ -21,6 +21,7 @@ interface UserState {
   user: User | null;
   publicProfile: PublicUserRes | null;
   refreshToken: string;
+  accessToken: string;
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
@@ -69,6 +70,7 @@ const initialState: UserState = {
   user: null,
   publicProfile: null,
   refreshToken: '',
+  accessToken: '',
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -129,6 +131,7 @@ const UserReducer = createSlice({
     resetUser: state => {
       state.user = null;
       state.refreshToken = '';
+      state.accessToken = '';
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = false;
@@ -233,6 +236,7 @@ const UserReducer = createSlice({
         state.isSuccess = true;
         state.user = action.payload.user;
         state.refreshToken = action.payload.refreshToken;
+        state.accessToken = action.payload.accessToken;
 
         const userId = action.payload.user._id;
         const alreadyLoggedIn = state.loggedInUsers.some(u => u._id === userId);
@@ -246,6 +250,7 @@ const UserReducer = createSlice({
         state.errorMessage = action.payload?.message || 'Đăng nhập thất bại';
         state.user = null;
         state.refreshToken = '';
+        state.accessToken = '';
       })
 
       // Me cases
