@@ -11,10 +11,10 @@ import Wrapper from '../../../components/Wrapper';
 import ButtonIcon from '../../../components/ButtonIcon';
 import Color from '../../Color';
 import {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {resetUser} from '../../../services/userRedux/userReducer';
 import {clearTokens, clearLoginCredentials} from '../../utils/tokenStorage';
-import {AppDispatch} from '../../../services/store/store';
+import {AppDispatch, RootState} from '../../../services/store/store';
 
 import About from './compoenets/About';
 import Fundraising from './compoenets/Fundraising';
@@ -22,7 +22,8 @@ import Fundraising from './compoenets/Fundraising';
 const Profile = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [btnSelected, setBtnSelected] = useState('about');
-
+  const {user} = useSelector((state: RootState) => state.user);
+  console.log('🔍 User:', user);
   const handleLogout = () => {
     Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất?', [
       {
@@ -83,9 +84,13 @@ const Profile = ({navigation}: any) => {
           <View style={styles.avatarWrapper}>
             <Image
               style={styles.imgAvatar}
-              source={require('../../../assets/icons/Google.png')}
+              source={
+                user?.avatarImg
+                  ? {uri: user.avatarImg}
+                  : require('../../../assets/icons/Google.png')
+              }
             />
-            <Text style={styles.nameUser}>Nhut Viet</Text>
+            <Text style={styles.nameUser}>{user?.username}</Text>
           </View>
           <View style={styles.information}>
             <View style={styles.informationDetail}>

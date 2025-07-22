@@ -85,8 +85,8 @@ export const SignIn = ({navigation}: any) => {
 
       // If login was successful, save tokens and handle "Remember me"
       if (fetchLogin.fulfilled.match(result)) {
-        const {refreshToken} = result.payload;
-        await saveTokens({accessToken: '', refreshToken}); // accessToken will be handled by axios interceptor
+        const {refreshToken, accessToken} = result.payload;
+        await saveTokens({accessToken, refreshToken});
         console.log('Login successful, tokens saved');
 
         // Handle "Remember me" functionality

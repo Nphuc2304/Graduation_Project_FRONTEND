@@ -250,7 +250,7 @@ const Home = ({navigation}: any) => {
                 fontw="600"
               />
             </View>
-            <VideoList videoData={videoData} />
+            {/* <VideoList videoData={videoData} /> */}
           </View>
         </View>
       </ScrollView>

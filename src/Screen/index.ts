@@ -18,3 +18,4 @@ export * from './VerifyingStart';
 export * from './CountrySelector';
 export * from './Search';
 export * from './Setting';
+export * from './Setting/EditProfile';

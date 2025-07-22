@@ -46,7 +46,7 @@ export const fetchSignup = createAsyncThunk<
 
 // 2. Login
 export const fetchLogin = createAsyncThunk<
-  {user: User; refreshToken: string},
+  {user: User; refreshToken: string; accessToken: string},
   LoginRequest,
   {rejectValue: {message: string}}
 >('auth/login', async ({username, password}, {rejectWithValue}) => {
@@ -93,6 +93,7 @@ export const fetchLogin = createAsyncThunk<
     return {
       user: userData,
       refreshToken,
+      accessToken,
     };
   } catch (error: any) {
     console.error('❌ Login error:', error);

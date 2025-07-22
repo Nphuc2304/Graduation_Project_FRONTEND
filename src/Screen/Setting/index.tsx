@@ -37,6 +37,7 @@ export const Setting = ({navigation}: any) => {
       hasChevron: true,
       iconBg: '#E3F2FD',
       iconColor: '#1976D2',
+      onPress: () => navigation.navigate('EditProfile'),
     },
     {
       icon: Shield,
@@ -133,7 +134,7 @@ export const Setting = ({navigation}: any) => {
           <TouchableOpacity
             key={index}
             style={styles.menuItem}
-            onPress={() => handleMenuPress(item.label)}
+            onPress={() => item.onPress?.()}
             activeOpacity={0.7}>
             <View
               style={[styles.iconContainer, {backgroundColor: item.iconBg}]}>
