@@ -58,11 +58,6 @@ export const fetchGetCampaignById = createAsyncThunk<
   try {
     const response = await axiosInstance.get<CampaignResponse>(
       `${API.GET_CAMPAIGN_BY_ID}/${campaignId}?populate=media`,
-      {
-        headers: {
-          token: 'refresh',
-        },
-      },
     );
 
     return response.data.data.campaign;
@@ -113,7 +108,6 @@ export const fetchCreateCampaign = createAsyncThunk<
       {
         headers: {
           'Content-Type': 'multipart/form-data',
-          token: 'refresh',
         },
       },
     );
@@ -171,7 +165,6 @@ export const fetchUpdateCampaign = createAsyncThunk<
       {
         headers: {
           'Content-Type': 'multipart/form-data',
-          token: 'refresh',
         },
       },
     );

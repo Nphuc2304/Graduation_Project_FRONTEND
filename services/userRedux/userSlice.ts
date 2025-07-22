@@ -112,11 +112,7 @@ export const fetchMe = createAsyncThunk<
   {rejectValue: {message: string}}
 >('auth/me', async (_, {rejectWithValue}) => {
   try {
-    const response = await axiosInstance.get<MeResponse>(API.GET_ME, {
-      headers: {
-        token: 'refresh',
-      },
-    });
+    const response = await axiosInstance.get<MeResponse>(API.GET_ME);
 
     // Transform the user data to match our User interface
     const userData: User = {
@@ -151,11 +147,7 @@ export const fetchEditUser = createAsyncThunk<
   {rejectValue: {message: string}}
 >('user/editUser', async (userData, {rejectWithValue}) => {
   try {
-    const response = await axiosInstance.put(API.EDIT_USER, userData, {
-      headers: {
-        token: 'refresh',
-      },
-    });
+    const response = await axiosInstance.put(API.EDIT_USER, userData);
 
     return response.data.user;
   } catch (error: any) {
@@ -172,15 +164,7 @@ export const fetchEditEmail = createAsyncThunk<
   {rejectValue: {message: string}}
 >('user/editEmail', async ({email}, {rejectWithValue}) => {
   try {
-    const response = await axiosInstance.put(
-      API.EDIT_EMAIL,
-      {email},
-      {
-        headers: {
-          token: 'refresh',
-        },
-      },
-    );
+    const response = await axiosInstance.put(API.EDIT_EMAIL, {email});
 
     return response.data;
   } catch (error: any) {
@@ -199,18 +183,10 @@ export const fetchConfirmEmail = createAsyncThunk<
   'user/confirmEmail',
   async ({emailToken, confirmationCode}, {rejectWithValue}) => {
     try {
-      const response = await axiosInstance.put(
-        API.CONFIRM_EMAIL,
-        {
-          emailToken,
-          confirmationCode,
-        },
-        {
-          headers: {
-            token: 'refresh',
-          },
-        },
-      );
+      const response = await axiosInstance.put(API.CONFIRM_EMAIL, {
+        emailToken,
+        confirmationCode,
+      });
 
       return response.data;
     } catch (error: any) {
@@ -228,15 +204,7 @@ export const fetchCreditEditor = createAsyncThunk<
   {rejectValue: {message: string}}
 >('user/creditEditor', async ({keyword}, {rejectWithValue}) => {
   try {
-    const response = await axiosInstance.post(
-      API.CREDIT_EDITOR,
-      {keyword},
-      {
-        headers: {
-          token: 'refresh',
-        },
-      },
-    );
+    const response = await axiosInstance.post(API.CREDIT_EDITOR, {keyword});
 
     return response.data;
   } catch (error: any) {
@@ -296,15 +264,7 @@ export const fetchConfirmKYC = createAsyncThunk<
   {rejectValue: {message: string}}
 >('user/confirmKYC', async (_, {rejectWithValue}) => {
   try {
-    const response = await axiosInstance.post(
-      API.CONFIRM_KYC,
-      {},
-      {
-        headers: {
-          token: 'refresh',
-        },
-      },
-    );
+    const response = await axiosInstance.post(API.CONFIRM_KYC, {});
 
     return response.data;
   } catch (error: any) {
@@ -412,11 +372,7 @@ export const getPublicProfile = createAsyncThunk<
   {rejectValue: {message: string}}
 >('users/public', async ({userId}, {rejectWithValue}) => {
   try {
-    const res = await axiosInstance.get(`${API.GET_PUBLIC_PROFILE}/${userId}`, {
-      headers: {
-        token: 'refresh',
-      },
-    });
+    const res = await axiosInstance.get(`${API.GET_PUBLIC_PROFILE}/${userId}`);
 
     return res.data;
   } catch (error: any) {
@@ -435,11 +391,6 @@ export const fetchUserIdByHandleName = createAsyncThunk<
   try {
     const res = await axiosInstance.get(
       `${API.GET_USER_ID_BY_HANDLE}/${handleName}`,
-      {
-        headers: {
-          token: 'refresh',
-        },
-      },
     );
 
     return {userId: res.data.userId};

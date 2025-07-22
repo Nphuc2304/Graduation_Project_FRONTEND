@@ -34,15 +34,11 @@ const processQueue = (error: any, token: string | null = null) => {
 axiosInstance.interceptors.request.use(
   async config => {
     if (!config.headers) {
-      config.headers = {};
+      config.headers = {} as any;
     }
 
-    // Skip token for login and refresh endpoints
-    if (
-      config.url?.includes(API.LOGIN) ||
-      config.url?.includes(API.GET_ACCESS_TOKEN) ||
-      config.url?.includes(API.CHECK_REFRESH_TOKEN)
-    ) {
+    // Skip token for login endpoint only
+    if (config.url?.includes(API.LOGIN)) {
       delete config.headers.token;
       return config;
     }
@@ -122,12 +118,8 @@ axiosInstance.interceptors.response.use(
 
       // Handle 401 Unauthorized errors (token expired)
       if (error.response.status === 401 && !originalRequest._retry) {
-        // Skip refresh for login and refresh token endpoints to avoid infinite loops
-        if (
-          originalRequest.url?.includes(API.LOGIN) ||
-          originalRequest.url?.includes(API.GET_ACCESS_TOKEN) ||
-          originalRequest.url?.includes(API.CHECK_REFRESH_TOKEN)
-        ) {
+        // Skip refresh for login endpoint to avoid infinite loops
+        if (originalRequest.url?.includes(API.LOGIN)) {
           return Promise.reject(error);
         }
 
@@ -158,14 +150,13 @@ axiosInstance.interceptors.response.use(
           }
 
           // Call refresh token endpoint
-          const response = await axios.post(
-            `${BASE_URL}${API.GET_ACCESS_TOKEN}`,
+          const response = await axiosInstance.post(
+            API.GET_ACCESS_TOKEN,
             {},
             {
               headers: {
-                Authorization: `Bearer ${refreshToken}`,
-                'Content-Type': 'application/json',
-              },
+                token: 'refresh',
+              } as any,
             },
           );
 

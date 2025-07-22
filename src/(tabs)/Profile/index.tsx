@@ -10,7 +10,7 @@ import {
 import Wrapper from '../../../components/Wrapper';
 import ButtonIcon from '../../../components/ButtonIcon';
 import Color from '../../Color';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {resetUser} from '../../../services/userRedux/userReducer';
 import {clearTokens, clearLoginCredentials} from '../../utils/tokenStorage';
@@ -18,11 +18,17 @@ import {AppDispatch, RootState} from '../../../services/store/store';
 
 import About from './compoenets/About';
 import Fundraising from './compoenets/Fundraising';
+import {fetchMe} from '../../../services/userRedux/userSlice';
 
 const Profile = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [btnSelected, setBtnSelected] = useState('about');
   const {user} = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    dispatch(fetchMe() as any);
+  }, []);
+
   console.log('🔍 User:', user);
   const handleLogout = () => {
     Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất?', [
