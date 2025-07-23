@@ -65,6 +65,7 @@ export interface MeResponse {
 export interface EditUserRequest {
   fullName?: string;
   username?: string;
+  email?: string;
   password?: string;
   dateOfBirth?: string; // dd/MM/yyyy format
   phoneNum?: string;

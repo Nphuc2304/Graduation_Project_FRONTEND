@@ -124,7 +124,7 @@ export const fetchMe = createAsyncThunk<
       username: response.data.user.username,
       password: '', // We don't store password in frontend
       avatarImg: response.data.user.avatarImg,
-      dateOfBirth: response.data.user.dateOfBirth,
+      dateOfBirth: response.data.user.dateOfBirth || null,
       phoneNum: response.data.user.phoneNum,
       address: response.data.user.address,
       refreshToken: '', // This will be updated from state
@@ -149,7 +149,15 @@ export const fetchEditUser = createAsyncThunk<
   try {
     const response = await axiosInstance.put(API.EDIT_USER, userData);
 
-    return response.data.user;
+    // Handle different response structures
+    if (response.data.user) {
+      return response.data.user;
+    } else if (response.data) {
+      // If the response is the user data directly
+      return response.data;
+    } else {
+      throw new Error('Invalid response format');
+    }
   } catch (error: any) {
     return rejectWithValue({
       message: error.response?.data?.error || 'Cập nhật thông tin thất bại',
