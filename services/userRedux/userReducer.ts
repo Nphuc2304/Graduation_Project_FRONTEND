@@ -31,7 +31,6 @@ interface UserState {
   isErrorPublicProfile: boolean;
   errorMessagePublicProfile: string;
   loggedInUsers: User[];
-  // New states for additional actions
   isLoadingSignup: boolean;
   isSuccessSignup: boolean;
   isErrorSignup: boolean;
@@ -80,7 +79,6 @@ const initialState: UserState = {
   isErrorPublicProfile: false,
   errorMessagePublicProfile: '',
   loggedInUsers: [],
-  // Initialize new states
   isLoadingSignup: false,
   isSuccessSignup: false,
   isErrorSignup: false,
@@ -155,7 +153,6 @@ const UserReducer = createSlice({
         user => user._id !== action.payload,
       );
     },
-    // New reset actions for additional states
     resetSignupStatus: state => {
       state.isLoadingSignup = false;
       state.isErrorSignup = false;
