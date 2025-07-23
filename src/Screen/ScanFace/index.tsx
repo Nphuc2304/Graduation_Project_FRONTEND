@@ -3,18 +3,29 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {Camera, useCameraDevices, PhotoFile} from 'react-native-vision-camera';
 import {requestCameraPermission} from '../../utils/permission';
 
-export default function FaceCaptureScreen() {
+interface ScanFaceProps {
+  navigation: any;
+  route: {
+    params?: {
+      onImageCaptured?: (imagePath: string) => void;
+    };
+  };
+}
+
+export default function ScanFaceScreen({navigation, route}: ScanFaceProps) {
   const camera = useRef<Camera>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const devices = useCameraDevices();
   const deviceList = Object.values(devices ?? {});
 
-  // mặc định camera sau (index 0)
-  const [cameraIndex, setCameraIndex] = useState(0);
+  // Start with front camera (index 1) for selfies
+  const [cameraIndex, setCameraIndex] = useState(1);
   const device = deviceList[cameraIndex];
 
   const [isFlashOn, setIsFlashOn] = useState(false);
   const [photo, setPhoto] = useState<PhotoFile | null>(null);
+
+  const onImageCaptured = route.params?.onImageCaptured;
 
   useEffect(() => {
     (async () => {
@@ -46,9 +57,19 @@ export default function FaceCaptureScreen() {
       });
       setPhoto(photo);
       console.log('📸 Photo saved at:', photo.path);
+
+      // If there's a callback, call it with the photo path
+      if (onImageCaptured) {
+        onImageCaptured(`file://${photo.path}`);
+        navigation.goBack();
+      }
     } catch (error) {
       console.error('Error taking photo:', error);
     }
+  };
+
+  const goBack = () => {
+    navigation.goBack();
   };
 
   if (hasPermission === null) return <Text>Đang kiểm tra quyền...</Text>;
@@ -65,7 +86,7 @@ export default function FaceCaptureScreen() {
         photo={true}
         torch={isFlashOn ? 'on' : 'off'}
       />
-      <TouchableOpacity style={styles.backBTN}>
+      <TouchableOpacity style={styles.backBTN} onPress={goBack}>
         <Image
           style={styles.icon}
           source={require('../../../assets/icons/back.png')}
