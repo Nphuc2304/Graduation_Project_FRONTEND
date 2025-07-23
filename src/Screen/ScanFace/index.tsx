@@ -63,7 +63,7 @@ export default function FaceCaptureScreen() {
         device={device}
         isActive={true}
         photo={true}
-        flash={isFlashOn ? 'on' : 'off'}
+        torch={isFlashOn ? 'on' : 'off'}
       />
       <TouchableOpacity style={styles.backBTN}>
         <Image
