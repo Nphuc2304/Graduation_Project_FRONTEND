@@ -24,19 +24,20 @@ import {User} from '../../../services/userRedux/userTypes'
 export const CreateCamp = ({navigation}: {navigation: any}) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const userState: {user: User | null; isSuccessConfirmKYC: boolean} = useSelector(
-    (state: RootState) => ({
-      user: state.user.user,
-      isSuccessConfirmKYC: state.user.isSuccessConfirmKYC,
-    })
-  );
+  const user = useSelector((state: RootState) => state.user.user);
 
-  const {
-    isLoadingCreate,
-    isSuccessCreate,
-    isErrorCreate,
-    errorMessageCreate,
-  } = useSelector<RootState, CampaignState>(state => state.campaigns);
+  const isLoadingCreate = useSelector(
+    (state: RootState) => state.campaigns.isLoadingCreate
+  );
+  const isSuccessCreate = useSelector(
+    (state: RootState) => state.campaigns.isSuccessCreate
+  );
+  const isErrorCreate = useSelector(
+    (state: RootState) => state.campaigns.isErrorCreate
+  );
+  const errorMessageCreate = useSelector(
+    (state: RootState) => state.campaigns.errorMessageCreate
+  );
 
   const [formData, setFormData] = useState({
     title: '',
@@ -112,8 +113,8 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
   };
 
   const handleSubmit = () => {
-    if (!userState.user) return;
-    if (!userState.user.isKYC) {
+    if (!user) return;
+    if (!user.isKYC) {
       Alert.alert('KYC Required', 'You must complete KYC before creating a campaign');
       navigation.navigate('KycScreen');
       return;
@@ -130,7 +131,7 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
     }
 
     const payload = {
-      hostID: userState.user._id,
+      hostID: user._id,
       hostType: 'user' as const,
       totalGoal: Number(formData.totalFund) || 0,
       dateEnd: formData.expirationDate.toISOString(),
