@@ -3,7 +3,16 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {Camera, useCameraDevices, PhotoFile} from 'react-native-vision-camera';
 import {requestCameraPermission} from '../../utils/permission';
 
-export default function FaceCaptureScreen() {
+interface ScanCCCDProps {
+  navigation: any;
+  route: {
+    params?: {
+      onImageCaptured?: (imagePath: string) => void;
+    };
+  };
+}
+
+export default function ScanCCCDScreen({navigation, route}: ScanCCCDProps) {
   const camera = useRef<Camera>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const devices = useCameraDevices();
@@ -12,6 +21,8 @@ export default function FaceCaptureScreen() {
   const device = deviceList[cameraIndex];
   const [isFlashOn, setIsFlashOn] = useState(false);
   const [photo, setPhoto] = useState<PhotoFile | null>(null);
+
+  const onImageCaptured = route.params?.onImageCaptured;
 
   useEffect(() => {
     (async () => {
@@ -47,9 +58,19 @@ export default function FaceCaptureScreen() {
         width: photo.width,
         height: photo.height,
       });
+
+      // If there's a callback, call it with the photo path
+      if (onImageCaptured) {
+        onImageCaptured(`file://${photo.path}`);
+        navigation.goBack();
+      }
     } catch (error) {
       console.error('❌ Error taking photo:', error);
     }
+  };
+
+  const goBack = () => {
+    navigation.goBack();
   };
 
   if (hasPermission === null) return <Text>Đang kiểm tra quyền...</Text>;
@@ -64,9 +85,9 @@ export default function FaceCaptureScreen() {
         device={device}
         isActive={true}
         photo={true}
-        flash={isFlashOn ? 'on' : 'off'}
+        torch={isFlashOn ? 'on' : 'off'}
       />
-      <TouchableOpacity style={styles.backBTN}>
+      <TouchableOpacity style={styles.backBTN} onPress={goBack}>
         <Image
           style={styles.icon}
           source={require('../../../assets/icons/back.png')}

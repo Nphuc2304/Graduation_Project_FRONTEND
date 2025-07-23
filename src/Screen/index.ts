@@ -21,3 +21,4 @@ export * from './CountrySelector';
 export * from './Search';
 export * from './Setting';
 export * from './Setting/EditProfile';
+export * from './KYCScreen'

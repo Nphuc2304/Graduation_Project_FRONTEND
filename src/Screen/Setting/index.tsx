@@ -62,10 +62,11 @@ export const Setting = ({navigation}: any) => {
     },
     {
       icon: Users,
-      label: 'Invite Friends',
+      label: 'KYC',
       hasChevron: true,
       iconBg: '#E3F2FD',
       iconColor: '#1976D2',
+      onPress: () => navigation.navigate('KycScreen'),
     },
   ];
 

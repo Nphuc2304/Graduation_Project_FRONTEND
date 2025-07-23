@@ -124,7 +124,7 @@ export const fetchMe = createAsyncThunk<
       username: response.data.user.username,
       password: '', // We don't store password in frontend
       avatarImg: response.data.user.avatarImg,
-      dateOfBirth: response.data.user.dateOfBirth || null,
+      dateOfBirth: response.data.user.dateOfBirth,
       phoneNum: response.data.user.phoneNum,
       address: response.data.user.address,
       refreshToken: '', // This will be updated from state

@@ -30,6 +30,7 @@ import {
 } from '../Screen';
 import FaceCaptureScreen from '../Screen/ScanFace';
 import IDCardScannerScreen from '../Screen/ScanCCCD';
+import KycScreen from '../Screen/KYCScreen';
 
 const Stack = createStackNavigator();
 
@@ -66,6 +67,7 @@ const AppNavigator = () => {
         <Stack.Screen name="ScanCCCD" component={IDCardScannerScreen} />
         <Stack.Screen name="Setting" component={Setting} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="KycScreen" component={KycScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
