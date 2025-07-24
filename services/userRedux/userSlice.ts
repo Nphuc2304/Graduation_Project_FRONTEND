@@ -21,6 +21,8 @@ import {
   User,
   GoogleLoginRequest,
   GoogleLoginResponse,
+  UpdateAvatarRequest,
+  UpdateAvatarResponse,
 } from './userTypes';
 import axiosInstance from '../axiosInstance';
 import {API, BASE_URL} from '../api';
@@ -342,7 +344,32 @@ export const fetchConfirmKYC = createAsyncThunk<
   }
 });
 
-// 11. Check refresh token
+// 11. Update Avatar
+export const fetchUpdateAvatar = createAsyncThunk<
+  UpdateAvatarResponse,
+  UpdateAvatarRequest,
+  {rejectValue: {message: string}}
+>('user/updateAvatar', async ({avatar}, {rejectWithValue}) => {
+  try {
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append('avatar', avatar);
+
+    const response = await axiosInstance.post(API.UPDATE_AVATAR, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue({
+      message: error.response?.data?.error || 'Cập nhật ảnh đại diện thất bại',
+    });
+  }
+});
+
+// 12. Check refresh token
 export const fetchCheckRefreshToken = createAsyncThunk<
   {valid: boolean; message: string},
   void,
@@ -367,7 +394,7 @@ export const fetchCheckRefreshToken = createAsyncThunk<
   }
 });
 
-// 12. Logout
+// 13. Logout
 export const fetchLogout = createAsyncThunk<
   void,
   void,
@@ -393,7 +420,7 @@ export const fetchLogout = createAsyncThunk<
   }
 });
 
-// 13. Get access token from refresh
+// 14. Get access token from refresh
 export const getAccessTokenFromRefresh = async (): Promise<string | null> => {
   try {
     const response = await axiosInstance.post(

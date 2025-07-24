@@ -144,6 +144,23 @@ export interface ConfirmKYCResponse {
   success: boolean;
 }
 
+export interface UpdateAvatarRequest {
+  avatar: any; // FormData file object
+}
+
+export interface UpdateAvatarResponse {
+  message: string;
+  visual: {
+    _id: string;
+    visualID: string;
+    link: string;
+    mediaType: string;
+    usedBy: string;
+    usage: string;
+  };
+  avatarUrl: string;
+}
+
 export interface PublicUserRes {
   username: string;
   phoneNumber: string;
