@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,37 +8,12 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
-  Image
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {ChevronLeft, Plus, Calendar, Save, Send} from 'lucide-react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState, AppDispatch} from '../../../services/store/store';
-import {fetchCreateCampaign} from '../../../services/campaignRedux/campaignSlice';
-import {CampaignState} from '../../../services/campaignRedux/campaignTypes';
-import { resetCreateStatus } from '../../../services/campaignRedux';
-import {User} from '../../../services/userRedux/userTypes'
 
 export const CreateCamp = ({navigation}: {navigation: any}) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const user = useSelector((state: RootState) => state.user.user);
-
-  const isLoadingCreate = useSelector(
-    (state: RootState) => state.campaigns.isLoadingCreate
-  );
-  const isSuccessCreate = useSelector(
-    (state: RootState) => state.campaigns.isSuccessCreate
-  );
-  const isErrorCreate = useSelector(
-    (state: RootState) => state.campaigns.isErrorCreate
-  );
-  const errorMessageCreate = useSelector(
-    (state: RootState) => state.campaigns.errorMessageCreate
-  );
-
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -47,7 +22,6 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
     story: '',
     fundraiserName: '',
     patientName: '',
-    mediaFiles: [] as { uri: string; name: string; type: string }[],
   });
 
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -63,19 +37,6 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
     'Other',
   ];
 
-  useEffect(() => {
-    if (isSuccessCreate) {
-      Alert.alert('Success', 'Campaign created successfully!', [
-        {text: 'OK', onPress: () => navigation.goBack()},
-      ]);
-      dispatch(resetCreateStatus());
-    }
-    if (isErrorCreate) {
-      Alert.alert('Error', errorMessageCreate || 'Failed to create');
-      dispatch(resetCreateStatus());
-    }
-  }, [isSuccessCreate, isErrorCreate]);
-
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -90,35 +51,7 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
     }
   };
 
-  const pickImage = () => {
-    launchImageLibrary({ mediaType: 'photo', quality: 0.8 }, response => {
-      if (response.didCancel) return;
-      if (response.errorCode) {
-        Alert.alert('Error', response.errorMessage || 'Image pick error');
-        return;
-      }
-      const asset = response.assets?.[0];
-      if (asset && asset.uri) {
-        const file = {
-          uri: asset.uri,
-          name: asset.fileName || `photo_${Date.now()}.jpg`,
-          type: asset.type || 'image/jpeg',
-        };
-        setFormData(prev => ({
-          ...prev,
-          mediaFiles: [...prev.mediaFiles, file],
-        }));
-      }
-    });
-  };
-
   const handleSubmit = () => {
-    if (!user) return;
-    if (!user.isKYC) {
-      Alert.alert('KYC Required', 'You must complete KYC before creating a campaign');
-      navigation.navigate('KycScreen');
-      return;
-    }
     // Validate required fields
     if (
       !formData.title ||
@@ -129,18 +62,6 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
       Alert.alert('Error', 'Please fill in all required fields');
       return;
     }
-
-    const payload = {
-      hostID: user._id,
-      hostType: 'user' as const,
-      totalGoal: Number(formData.totalFund) || 0,
-      dateEnd: formData.expirationDate.toISOString(),
-      campTypeID: formData.category,
-      campName: formData.title,
-      campDescription: formData.story,
-      mediaFiles: formData.mediaFiles as unknown as File[],
-    };
-    dispatch(fetchCreateCampaign(payload));
 
     Alert.alert('Success', 'Campaign created successfully!');
   };
@@ -165,19 +86,11 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
         {/* Cover Photo Section */}
-        <TouchableOpacity style={styles.coverPhotoContainer} onPress={pickImage}>
-          {formData.mediaFiles.length === 0 ? (
-            <View style={styles.coverPhotoPlaceholder}>
-              <Plus size={32} color="#999" />
-              <Text style={styles.coverPhotoText}>Add Cover Photo</Text>
-            </View>
-          ) : (
-            <Image
-              source={{ uri: formData.mediaFiles[0].uri }}
-              style={styles.coverPhotoPlaceholder}
-              resizeMode="cover"
-            />
-          )}
+        <TouchableOpacity style={styles.coverPhotoContainer}>
+          <View style={styles.coverPhotoPlaceholder}>
+            <Plus size={32} color="#999" />
+            <Text style={styles.coverPhotoText}>Add a Cover Photo</Text>
+          </View>
         </TouchableOpacity>
 
         {/* Campaign Details */}
@@ -300,9 +213,9 @@ export const CreateCamp = ({navigation}: {navigation: any}) => {
             <Text style={styles.draftButtonText}>Draft</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} disabled={isLoadingCreate}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Send size={16} color="#fff" style={{marginRight: 8}} />
-            <Text style={styles.submitButtonText}>{isLoadingCreate ? 'Creating...' : 'Create'}</Text>
+            <Text style={styles.submitButtonText}>Submit & Create</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

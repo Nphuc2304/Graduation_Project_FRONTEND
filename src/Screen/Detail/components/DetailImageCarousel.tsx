@@ -209,6 +209,22 @@ const DetailImageCarousel: React.FC<DetailImageCarouselProps> = ({
         )}
         onSnapToItem={handleManualScroll}
       />
+
+      {/* Navigation buttons */}
+      <TouchableOpacity
+        style={[styles.navButton, styles.leftButton]}
+        onPress={goToPrevious}
+        activeOpacity={0.7}>
+        <Text style={styles.navButtonText}>‹</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.navButton, styles.rightButton]}
+        onPress={goToNext}
+        activeOpacity={0.7}>
+        <Text style={styles.navButtonText}>›</Text>
+      </TouchableOpacity>
+
       {/* Dots indicator */}
       <View style={styles.dotsContainer}>
         {images.map((_, index) => (
@@ -220,11 +236,11 @@ const DetailImageCarousel: React.FC<DetailImageCarouselProps> = ({
       </View>
 
       {/* Image counter */}
-      {/* <View style={styles.counterContainer}>
+      <View style={styles.counterContainer}>
         <Text style={styles.counterText}>
           {currentIndex + 1} / {images.length}
         </Text>
-      </View> */}
+      </View>
     </View>
   );
 };

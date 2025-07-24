@@ -270,7 +270,7 @@ export const Detail = () => {
               left
             </Text>
           </View>
-          {/* <View style={DetailStyles.rowSpace}>
+          <View style={DetailStyles.rowSpace}>
             <TouchableOpacity style={DetailStyles.btnSmall}>
               <Text style={[DetailStyles.textXXS, {color: colors.white}]}>
                 {getCampaignTypeName(currentCampaign.campTypeID)}
@@ -285,7 +285,7 @@ export const Detail = () => {
                 style={DetailStyles.smallIcon}
               />
             </TouchableOpacity>
-          </View> */}
+          </View>
           <TouchableOpacity
             style={DetailStyles.btnLarge}
             onPress={() => navigation.navigate('Donation')}>

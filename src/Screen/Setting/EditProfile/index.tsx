@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,34 +9,22 @@ import {
   Alert,
   Modal,
   TextInput,
-  Platform,
-  Linking,
-  PermissionsAndroid,
-  Animated,
 } from 'react-native';
-import {
-  launchImageLibrary,
-  ImagePickerResponse,
-  MediaType,
-} from 'react-native-image-picker';
 import {useProfileEditingStyles} from './components/ProfileEditingStyles';
 import {UserInfo} from './components/UserInfo';
 import {ChevronLeft} from 'lucide-react-native';
 import {useTheme} from '../../../utils/ThemeContext';
 import {Colors} from '../../../utils/Colors';
-import {requestPhotoLibraryPermission} from '../../../utils/permission';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchEditUser,
   fetchEditEmail,
   fetchConfirmEmail,
-  fetchUpdateAvatar,
 } from '../../../../services/userRedux/userSlice';
 import {
   resetStatus,
   resetEditEmailStatus,
   resetConfirmEmailStatus,
-  resetUpdateAvatarStatus,
 } from '../../../../services/userRedux/userReducer';
 import {RootState} from '../../../../services/store/store';
 
@@ -115,9 +103,6 @@ export const EditProfile = ({navigation}: any) => {
     isLoadingConfirmEmail,
     isErrorConfirmEmail,
     errorMessageConfirmEmail,
-    isLoadingUpdateAvatar,
-    isErrorUpdateAvatar,
-    errorMessageUpdateAvatar,
   } = useSelector((state: RootState) => state.user);
 
   // Local state for editing
@@ -139,31 +124,6 @@ export const EditProfile = ({navigation}: any) => {
   const [newEmail, setNewEmail] = useState('');
   const [isEmailChangeInProgress, setIsEmailChangeInProgress] = useState(false);
 
-  // Avatar upload loading state
-  const [showAvatarLoadingModal, setShowAvatarLoadingModal] = useState(false);
-  const spinValue = useRef(new Animated.Value(0)).current;
-
-  // Animation functions
-  const startSpinningAnimation = () => {
-    spinValue.setValue(0);
-    Animated.loop(
-      Animated.timing(spinValue, {
-        toValue: 1,
-        duration: 1000,
-        useNativeDriver: true,
-      }),
-    ).start();
-  };
-
-  const stopSpinningAnimation = () => {
-    spinValue.stopAnimation();
-  };
-
-  const spin = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
-
   // Initialize form data when user data is available
   useEffect(() => {
     if (user) {
@@ -180,155 +140,6 @@ export const EditProfile = ({navigation}: any) => {
       });
     }
   }, [user]);
-
-  // Debug function to check all permissions
-  const debugPermissions = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const androidVersion = Platform.Version;
-        console.log('=== DEBUG PERMISSIONS ===');
-        console.log('Android version:', androidVersion);
-
-        if (androidVersion >= 33) {
-          const hasReadMediaImages = await PermissionsAndroid.check(
-            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
-          );
-          console.log('READ_MEDIA_IMAGES granted:', hasReadMediaImages);
-        }
-
-        const hasReadExternalStorage = await PermissionsAndroid.check(
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        );
-        console.log('READ_EXTERNAL_STORAGE granted:', hasReadExternalStorage);
-
-        const hasWriteExternalStorage = await PermissionsAndroid.check(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        );
-        console.log('WRITE_EXTERNAL_STORAGE granted:', hasWriteExternalStorage);
-        console.log('=== END DEBUG ===');
-      } catch (error) {
-        console.log('Error checking permissions:', error);
-      }
-    }
-  };
-
-  // Handle image picker
-  const handleImagePicker = async () => {
-    try {
-      console.log('Starting image picker process...');
-
-      // Debug permissions first
-      await debugPermissions();
-
-      // Request permission first
-      const hasPermission = await requestPhotoLibraryPermission();
-      console.log('Photo library permission result:', hasPermission);
-
-      if (!hasPermission) {
-        Alert.alert(
-          'Lỗi',
-          'Cần quyền truy cập thư viện ảnh để thay đổi ảnh đại diện. Vui lòng cấp quyền trong Cài đặt.',
-          [
-            {
-              text: 'Hủy',
-              style: 'cancel',
-            },
-            {
-              text: 'Cài đặt',
-              onPress: () => {
-                // Try to open app settings
-                if (Platform.OS === 'ios') {
-                  Linking.openURL('app-settings:');
-                } else {
-                  Linking.openSettings();
-                }
-              },
-            },
-          ],
-        );
-        return;
-      }
-
-      const options = {
-        mediaType: 'photo' as MediaType,
-        includeBase64: false,
-        maxHeight: 2000,
-        maxWidth: 2000,
-        quality: 0.8 as const,
-        selectionLimit: 1,
-      };
-
-      console.log('Launching image library with options:', options);
-
-      launchImageLibrary(options, (response: ImagePickerResponse) => {
-        console.log('Image picker response:', response);
-
-        if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.errorCode) {
-          console.log(
-            'Image picker error:',
-            response.errorCode,
-            response.errorMessage,
-          );
-          Alert.alert(
-            'Lỗi',
-            `Không thể truy cập thư viện ảnh: ${
-              response.errorMessage || response.errorCode
-            }`,
-          );
-        } else if (response.assets && response.assets[0]) {
-          const imageUri = response.assets[0].uri;
-          console.log('Selected image URI:', imageUri);
-
-          if (imageUri) {
-            // Store the selected image file for immediate upload
-            const file = {
-              uri: imageUri,
-              type: response.assets[0].type || 'image/jpeg',
-              name: response.assets[0].fileName || 'avatar.jpg',
-            };
-
-            // Upload avatar immediately
-            handleAvatarUpload(file);
-          }
-        } else {
-          console.log('No image selected or assets array is empty');
-        }
-      });
-    } catch (error) {
-      console.error('Error in handleImagePicker:', error);
-      Alert.alert('Lỗi', 'Có lỗi xảy ra khi truy cập thư viện ảnh');
-    }
-  };
-
-  // Handle avatar upload
-  const handleAvatarUpload = async (file: any) => {
-    try {
-      console.log('🖼️ Starting avatar upload with file:', file);
-
-      // Show loading modal and start spinning animation
-      setShowAvatarLoadingModal(true);
-      startSpinningAnimation();
-
-      const result = await dispatch(fetchUpdateAvatar({avatar: file}) as any);
-
-      if (fetchUpdateAvatar.fulfilled.match(result)) {
-        console.log('✅ Avatar upload successful:', result.payload);
-        Alert.alert('Thành công', 'Cập nhật ảnh đại diện thành công');
-      } else {
-        console.log('❌ Avatar upload failed:', result.error);
-      }
-      // Error handling is done in useEffect
-    } catch (error) {
-      console.error('❌ Error uploading avatar:', error);
-      Alert.alert('Lỗi', 'Cập nhật ảnh đại diện thất bại');
-    } finally {
-      // Hide loading modal and stop animation
-      setShowAvatarLoadingModal(false);
-      stopSpinningAnimation();
-    }
-  };
 
   // Handle form field changes
   const handleFieldChange = (field: string, value: string) => {
@@ -448,8 +259,6 @@ export const EditProfile = ({navigation}: any) => {
         editData.password = formData.password;
       }
 
-      // Avatar is handled separately through handleAvatarUpload
-
       const result = await dispatch(fetchEditUser(editData) as any);
       return fetchEditUser.fulfilled.match(result);
     } catch (error) {
@@ -514,7 +323,6 @@ export const EditProfile = ({navigation}: any) => {
 
     // If email hasn't changed, save other data directly
     setIsEmailChangeInProgress(false);
-
     const success = await saveUserData();
 
     // If save was successful, show success message and exit edit mode
@@ -565,20 +373,6 @@ export const EditProfile = ({navigation}: any) => {
       setIsEmailChangeInProgress(false);
     }
   }, [isErrorConfirmEmail, errorMessageConfirmEmail, dispatch]);
-
-  // Handle avatar upload errors
-  useEffect(() => {
-    if (isErrorUpdateAvatar) {
-      Alert.alert(
-        'Lỗi',
-        errorMessageUpdateAvatar || 'Cập nhật ảnh đại diện thất bại',
-      );
-      dispatch(resetUpdateAvatarStatus());
-      // Hide loading modal on error
-      setShowAvatarLoadingModal(false);
-      stopSpinningAnimation();
-    }
-  }, [isErrorUpdateAvatar, errorMessageUpdateAvatar, dispatch]);
 
   // Update form data when user data changes (after successful edit)
   useEffect(() => {
@@ -657,8 +451,8 @@ export const EditProfile = ({navigation}: any) => {
       {
         label: 'Địa chỉ',
         value: formData.address,
-        placeholder: 'Chọn tỉnh/thành phố',
-        type: 'address' as const,
+        placeholder: 'Chưa cập nhật',
+        type: 'text' as const,
         editable: isEditing,
         onChangeText: (text: string) => handleFieldChange('address', text),
       },
@@ -700,25 +494,16 @@ export const EditProfile = ({navigation}: any) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleSave}
-              disabled={
-                isLoading || isLoadingEditEmail || isLoadingUpdateAvatar
-              }>
+              disabled={isLoading || isLoadingEditEmail}>
               <Text
                 style={[
                   styles.headerText,
-                  {
-                    color:
-                      isLoading || isLoadingEditEmail || isLoadingUpdateAvatar
-                        ? '#999'
-                        : '#3897F0',
-                  },
+                  {color: isLoading || isLoadingEditEmail ? '#999' : '#3897F0'},
                 ]}>
                 {isLoading
                   ? 'Đang lưu...'
                   : isLoadingEditEmail
                   ? 'Đang gửi mã...'
-                  : isLoadingUpdateAvatar
-                  ? 'Đang tải ảnh...'
                   : 'Lưu'}
               </Text>
             </TouchableOpacity>
@@ -733,18 +518,18 @@ export const EditProfile = ({navigation}: any) => {
       <ScrollView>
         <View>
           <View style={styles.profileSection}>
-            <View style={{position: 'relative'}}>
-              <Image
-                source={
-                  user?.avatarImg
-                    ? {uri: user.avatarImg}
-                    : {uri: 'https://via.placeholder.com/95'}
-                }
-                style={styles.avatar}
-              />
-            </View>
-            <TouchableOpacity onPress={handleImagePicker}>
-              <Text style={styles.changeText}>Thay đổi ảnh đại diện</Text>
+            <Image
+              source={
+                user?.avatarImg
+                  ? {uri: user.avatarImg}
+                  : {uri: 'https://via.placeholder.com/95'}
+              }
+              style={styles.avatar}
+            />
+            <TouchableOpacity disabled={!isEditing}>
+              <Text style={[styles.changeText, !isEditing && {opacity: 0.5}]}>
+                Thay đổi ảnh đại diện
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -797,29 +582,6 @@ export const EditProfile = ({navigation}: any) => {
                   {isLoadingConfirmEmail ? 'Đang xác nhận...' : 'Xác nhận'}
                 </Text>
               </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Avatar Upload Loading Modal */}
-      <Modal
-        visible={showAvatarLoadingModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => {}}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Đang tải ảnh lên</Text>
-            <Text style={styles.modalSubtitle}>
-              Vui lòng chờ trong khi chúng tôi đang xử lý ảnh của bạn...
-            </Text>
-
-            {/* Loading indicator */}
-            <View style={styles.loadingContainer}>
-              <Animated.View
-                style={[styles.loadingSpinner, {transform: [{rotate: spin}]}]}
-              />
             </View>
           </View>
         </View>
