@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 
 import Wrapper from '../../../components/Wrapper';
 import InputComponent from '../../../components/InputComponent';
@@ -23,7 +24,7 @@ export const SignUp = ({ navigation }: any) => {
   const [hide, setHide] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {
     isLoadingSignup,
     isErrorSignup,
@@ -32,7 +33,7 @@ export const SignUp = ({ navigation }: any) => {
     isLoadingGoogleLogin,
     isSuccessGoogleLogin,
     errorMessageGoogleLogin,
-  } = useSelector((state: RootState) => state.user);
+  } = useAppSelector((state: RootState) => state.user);
 
   // Navigate after normal signup
   useEffect(() => {
@@ -55,6 +56,7 @@ export const SignUp = ({ navigation }: any) => {
   const handleGoogleSignIn = async () => {
     setErr(null);
     try {
+      await GoogleSignin.signOut();
       await GoogleSignin.hasPlayServices();
 
       // 1) signIn() now returns the user directly
@@ -63,14 +65,16 @@ export const SignUp = ({ navigation }: any) => {
 
       // 2) fetch tokens separately
       const { idToken, accessToken } = await GoogleSignin.getTokens();
+      console.log("idToken:", idToken);
+      console.log("accessToken:", accessToken);
+
       if (!idToken) throw new Error('ID token not returned');
+      if (!accessToken) throw new Error('Access token not returned');
 
       // 3) dispatch 
-      const result = await dispatch(
-        fetchGoogleLogin({ googleToken: idToken }) as any
-      );
+      const result = await dispatch(fetchGoogleLogin({ googleToken: accessToken }));
       if (fetchGoogleLogin.fulfilled.match(result)) {
-        const { refreshToken, accessToken: backendAT } = result.payload;
+        const { accessToken: backendAT, refreshToken } = result.payload;
         await saveTokens({ accessToken: backendAT, refreshToken });
       }
     } catch (error: any) {

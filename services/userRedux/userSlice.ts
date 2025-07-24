@@ -72,10 +72,10 @@ export const fetchGoogleLogin = createAsyncThunk<
     const userData: User = {
       _id: userFromBackend.id,
       fullName: userFromBackend.fullName,
+      username: userFromBackend.fullName,
       credit: 0,
       isKYC: false,
       email: userFromBackend.email,
-      username: '', // Google users don't have username
       password: '',
       googleId: userFromBackend.id,
       loginMethod: 'google',

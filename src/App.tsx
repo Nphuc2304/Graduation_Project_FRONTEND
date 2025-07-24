@@ -9,6 +9,9 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 GoogleSignin.configure({
   webClientId: '622343681897-bnelbp2nuq3rlnjf2mhsbq9vi71uuvvb.apps.googleusercontent.com',
+  offlineAccess: true,
+  forceCodeForRefreshToken: true,
+  accountName: '',
 });
 
 // Import Reactotron for debugging
