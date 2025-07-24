@@ -1,17 +1,33 @@
 import React, {useState} from 'react';
-import {View, Text, Platform, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Platform,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+  Modal,
+} from 'react-native';
 import {useProfileEditingStyles} from './ProfileEditingStyles';
 import {Picker} from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {useTheme} from '../../../../utils/ThemeContext';
 import {Colors} from '../../../../utils/Colors';
-import {Calendar} from 'lucide-react-native';
+import {Calendar, Search, MapPin} from 'lucide-react-native';
+import provinceData from '../DataAddress/province.json';
+
+type Province = {
+  code: string;
+  name: string;
+  nameWithType: string;
+  type: string;
+};
 
 type Row = {
   label: string;
   value?: string;
   placeholder?: string;
-  type?: 'text' | 'date' | 'dropdown';
+  type?: 'text' | 'date' | 'dropdown' | 'address';
   options?: {label: string; value: string}[];
   editable?: boolean;
   onChangeText?: (text: string) => void;
@@ -32,6 +48,32 @@ export const UserInfo: React.FC<UserInfoProps> = ({title, subtitle, rows}) => {
   const {theme} = useTheme();
   const color = Colors[theme];
   const [showDatePicker, setShowDatePicker] = useState<number | null>(null);
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [addressSearchText, setAddressSearchText] = useState('');
+  const [selectedAddressRow, setSelectedAddressRow] = useState<number | null>(
+    null,
+  );
+
+  // Convert province data to array format for easier handling
+  const provinceList: Province[] = Object.values(provinceData).map(
+    province => ({
+      code: province.code,
+      name: province.name,
+      nameWithType: province.name_with_type,
+      type: province.type,
+    }),
+  );
+
+  // Filter provinces based on search text and sort alphabetically
+  const filteredProvinces = provinceList
+    .filter(
+      province =>
+        province.name.toLowerCase().includes(addressSearchText.toLowerCase()) ||
+        province.nameWithType
+          .toLowerCase()
+          .includes(addressSearchText.toLowerCase()),
+    )
+    .sort((a, b) => a.name.localeCompare(b.name, 'vi'));
 
   const handleDateChange = (
     event: any,
@@ -43,6 +85,20 @@ export const UserInfo: React.FC<UserInfoProps> = ({title, subtitle, rows}) => {
       const formattedDate = selectedDate.toLocaleDateString('vi-VN');
       rows[rowIndex].onChangeText!(formattedDate);
     }
+  };
+
+  const handleAddressSelect = (province: Province) => {
+    if (selectedAddressRow !== null && rows[selectedAddressRow].onChangeText) {
+      rows[selectedAddressRow].onChangeText!(province.nameWithType);
+    }
+    setShowAddressModal(false);
+    setAddressSearchText('');
+    setSelectedAddressRow(null);
+  };
+
+  const handleAddressPress = (rowIndex: number) => {
+    setSelectedAddressRow(rowIndex);
+    setShowAddressModal(true);
   };
 
   const getDateFromString = (dateString: string): Date => {
@@ -81,6 +137,14 @@ export const UserInfo: React.FC<UserInfoProps> = ({title, subtitle, rows}) => {
     // Fallback to current date
     return new Date();
   };
+
+  const renderProvinceItem = ({item}: {item: Province}) => (
+    <TouchableOpacity
+      style={styles.modalOption}
+      onPress={() => handleAddressSelect(item)}>
+      <Text style={styles.modalOptionText}>{item.nameWithType}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
@@ -143,6 +207,27 @@ export const UserInfo: React.FC<UserInfoProps> = ({title, subtitle, rows}) => {
                 </Text>
               </View>
             )
+          ) : row.type === 'address' ? (
+            row.editable ? (
+              <TouchableOpacity
+                style={[styles.input, styles.dateInputContainer]}
+                onPress={() => handleAddressPress(idx)}>
+                <Text
+                  style={[
+                    styles.txtDate,
+                    {color: row.value ? color.text : color.textSecondary},
+                  ]}>
+                  {row.value || row.placeholder || 'Chọn tỉnh/thành phố'}
+                </Text>
+                <MapPin size={20} color={color.primary} />
+              </TouchableOpacity>
+            ) : (
+              <View style={[styles.input, {paddingLeft: 16}]}>
+                <Text style={[styles.txtDate, {color: color.text}]}>
+                  {row.value || row.placeholder || 'Chưa cập nhật'}
+                </Text>
+              </View>
+            )
           ) : row.editable ? (
             <TextInput
               style={[styles.input, styles.textInput]}
@@ -188,6 +273,73 @@ export const UserInfo: React.FC<UserInfoProps> = ({title, subtitle, rows}) => {
           maximumDate={new Date()}
         />
       )}
+
+      {/* Address Selection Modal */}
+      <Modal
+        visible={showAddressModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => {
+          setShowAddressModal(false);
+          setAddressSearchText('');
+          setSelectedAddressRow(null);
+        }}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.addressModalContent}>
+            <Text style={styles.modalTitle}>Chọn Tỉnh/Thành phố</Text>
+
+            {/* Search Input */}
+            <View style={styles.addressSearchContainer}>
+              <Search size={20} color={color.text} />
+              <TextInput
+                style={styles.addressSearchInput}
+                placeholder="Tìm kiếm tỉnh/thành phố..."
+                placeholderTextColor={color.textSecondary}
+                value={addressSearchText}
+                onChangeText={setAddressSearchText}
+              />
+            </View>
+
+            {/* Results count */}
+            <Text
+              style={{
+                color: color.textSecondary,
+                fontSize: 14,
+                marginBottom: 8,
+                alignSelf: 'flex-start',
+              }}>
+              {filteredProvinces.length} tỉnh/thành phố
+            </Text>
+
+            {/* Province List */}
+            <FlatList
+              data={filteredProvinces}
+              renderItem={renderProvinceItem}
+              keyExtractor={item => item.code}
+              style={styles.addressListContainer}
+              showsVerticalScrollIndicator={true}
+              ListEmptyComponent={
+                <View style={{padding: 20, alignItems: 'center'}}>
+                  <Text style={{color: color.textSecondary, fontSize: 16}}>
+                    Không tìm thấy tỉnh/thành phố phù hợp
+                  </Text>
+                </View>
+              }
+            />
+
+            {/* Cancel Button */}
+            <TouchableOpacity
+              style={styles.modalCancel}
+              onPress={() => {
+                setShowAddressModal(false);
+                setAddressSearchText('');
+                setSelectedAddressRow(null);
+              }}>
+              <Text style={styles.modalCancelText}>Hủy</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
