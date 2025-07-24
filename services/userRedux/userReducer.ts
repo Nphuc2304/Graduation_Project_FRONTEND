@@ -10,6 +10,7 @@ import {
   fetchForgotPassword,
   fetchConfirmForgotPassword,
   fetchConfirmKYC,
+  fetchUpdateAvatar,
   fetchLogout,
   fetchCheckRefreshToken,
   fetchCheckEmail,
@@ -68,6 +69,10 @@ interface UserState {
   isSuccessGoogleLogin: boolean;
   isErrorGoogleLogin: boolean;
   errorMessageGoogleLogin: string;
+  isLoadingUpdateAvatar: boolean;
+  isSuccessUpdateAvatar: boolean;
+  isErrorUpdateAvatar: boolean;
+  errorMessageUpdateAvatar: string;
 }
 
 const initialState: UserState = {
@@ -120,6 +125,10 @@ const initialState: UserState = {
   isSuccessGoogleLogin: false,
   isErrorGoogleLogin: false,
   errorMessageGoogleLogin: '',
+  isLoadingUpdateAvatar: false,
+  isSuccessUpdateAvatar: false,
+  isErrorUpdateAvatar: false,
+  errorMessageUpdateAvatar: '',
 };
 
 const UserReducer = createSlice({
@@ -216,6 +225,12 @@ const UserReducer = createSlice({
       state.isSuccessGoogleLogin = false;
       state.errorMessageGoogleLogin = '';
     },
+    resetUpdateAvatarStatus: state => {
+      state.isLoadingUpdateAvatar = false;
+      state.isErrorUpdateAvatar = false;
+      state.isSuccessUpdateAvatar = false;
+      state.errorMessageUpdateAvatar = '';
+    },
   },
   extraReducers: builder => {
     builder
@@ -261,7 +276,7 @@ const UserReducer = createSlice({
       .addCase(fetchGoogleLogin.rejected, (state, action) => {
         state.isLoadingGoogleLogin = false;
         state.isErrorGoogleLogin = true;
-        state.errorMessageGoogleLogin = 
+        state.errorMessageGoogleLogin =
           action.payload?.message || 'Google đăng nhập thất bại';
         state.user = null;
         state.refreshToken = '';
@@ -449,6 +464,27 @@ const UserReducer = createSlice({
           action.payload?.message || 'Xác nhận KYC thất bại';
       })
 
+      // Update avatar cases
+      .addCase(fetchUpdateAvatar.pending, state => {
+        state.isLoadingUpdateAvatar = true;
+        state.isErrorUpdateAvatar = false;
+        state.isSuccessUpdateAvatar = false;
+      })
+      .addCase(fetchUpdateAvatar.fulfilled, (state, action) => {
+        state.isLoadingUpdateAvatar = false;
+        state.isSuccessUpdateAvatar = true;
+        if (state.user) {
+          state.user.avatarImg = action.payload.avatarUrl;
+        }
+        state.errorMessageUpdateAvatar = '';
+      })
+      .addCase(fetchUpdateAvatar.rejected, (state, action) => {
+        state.isLoadingUpdateAvatar = false;
+        state.isErrorUpdateAvatar = true;
+        state.errorMessageUpdateAvatar =
+          action.payload?.message || 'Cập nhật ảnh đại diện thất bại';
+      })
+
       // Logout cases
       .addCase(fetchLogout.pending, state => {
         state.isLoading = true;
@@ -528,5 +564,6 @@ export const {
   resetConfirmForgotPasswordStatus,
   resetConfirmKYCStatus,
   resetGoogleLoginStatus,
+  resetUpdateAvatarStatus,
 } = UserReducer.actions;
 export default UserReducer.reducer;
