@@ -16,6 +16,9 @@ export const API = {
   CONFIRM_KYC: 'users/confirm-kyc',
   CHECK_REFRESH_TOKEN: 'users/check-refresh-token',
   CHECK_EMAIL: 'users/check-email',
+
+  //// Google login
+  GOOGLE_LOGIN: 'users/auth/google/mobile',
   ////Logout
   POST_LOGOUT: 'users/logout',
 

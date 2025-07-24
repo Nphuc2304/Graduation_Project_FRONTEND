@@ -19,6 +19,8 @@ import {
   ConfirmForgotPasswordResponse,
   ConfirmKYCResponse,
   User,
+  GoogleLoginRequest,
+  GoogleLoginResponse,
 } from './userTypes';
 import axiosInstance from '../axiosInstance';
 import {API, BASE_URL} from '../api';
@@ -40,6 +42,64 @@ export const fetchSignup = createAsyncThunk<
   } catch (error: any) {
     return rejectWithValue({
       message: error.response?.data?.error || 'Đăng ký thất bại',
+    });
+  }
+});
+
+export const fetchGoogleLogin = createAsyncThunk<
+  {user: User; refreshToken: string; accessToken: string},
+  GoogleLoginRequest,
+  {rejectValue: {message: string}}
+>('auth/googleLogin', async ({googleToken}, {rejectWithValue}) => {
+  try {
+    console.log('🔐 Starting Google login process');
+    console.log('🌐 Making request to:', BASE_URL + API.GOOGLE_LOGIN);
+
+    // Send Google token to your backend
+    const response = await axiosInstance.post(API.GOOGLE_LOGIN, {
+      googleToken,
+    });
+
+    console.log('✅ Google login response received:', response.data);
+
+    const {accessToken, refreshToken, user: userFromBackend} = response.data;
+
+    console.log(
+      '🔑 Tokens extracted - refreshToken:',
+      refreshToken ? 'present' : 'missing',
+    );
+
+    const userData: User = {
+      _id: userFromBackend.id,
+      fullName: userFromBackend.fullName,
+      credit: 0,
+      isKYC: false,
+      email: userFromBackend.email,
+      username: '', // Google users don't have username
+      password: '',
+      googleId: userFromBackend.id,
+      loginMethod: 'google',
+      avatarImg: userFromBackend.avatarImg,
+      dateOfBirth: new Date().toISOString(),
+      phoneNum: '',
+      address: '',
+      refreshToken: refreshToken,
+      lockedAccount: false,
+    };
+
+    console.log('👤 Google user data created:', userData);
+
+    return {
+      user: userData,
+      refreshToken,
+      accessToken,
+    };
+  } catch (error: any) {
+    console.error('❌ Google login error:', error);
+    console.error('❌ Error response:', error.response?.data);
+    console.error('❌ Error status:', error.response?.status);
+    return rejectWithValue({
+      message: error.response?.data?.error || 'Google đăng nhập thất bại',
     });
   }
 });

@@ -14,6 +14,7 @@ import {
   fetchCheckRefreshToken,
   fetchCheckEmail,
   getPublicProfile,
+  fetchGoogleLogin,
 } from './userSlice';
 import {User, PublicUserRes} from './userTypes';
 
@@ -63,6 +64,10 @@ interface UserState {
   isSuccessConfirmKYC: boolean;
   isErrorConfirmKYC: boolean;
   errorMessageConfirmKYC: string;
+  isLoadingGoogleLogin: boolean;
+  isSuccessGoogleLogin: boolean;
+  isErrorGoogleLogin: boolean;
+  errorMessageGoogleLogin: string;
 }
 
 const initialState: UserState = {
@@ -111,6 +116,10 @@ const initialState: UserState = {
   isSuccessConfirmKYC: false,
   isErrorConfirmKYC: false,
   errorMessageConfirmKYC: '',
+  isLoadingGoogleLogin: false,
+  isSuccessGoogleLogin: false,
+  isErrorGoogleLogin: false,
+  errorMessageGoogleLogin: '',
 };
 
 const UserReducer = createSlice({
@@ -201,6 +210,12 @@ const UserReducer = createSlice({
       state.isSuccessConfirmKYC = false;
       state.errorMessageConfirmKYC = '';
     },
+    resetGoogleLoginStatus: state => {
+      state.isLoadingGoogleLogin = false;
+      state.isErrorGoogleLogin = false;
+      state.isSuccessGoogleLogin = false;
+      state.errorMessageGoogleLogin = '';
+    },
   },
   extraReducers: builder => {
     builder
@@ -220,6 +235,37 @@ const UserReducer = createSlice({
         state.isErrorSignup = true;
         state.errorMessageSignup =
           action.payload?.message || 'Đăng ký thất bại';
+      })
+
+      // Add Google Login cases
+      .addCase(fetchGoogleLogin.pending, state => {
+        state.isLoadingGoogleLogin = true;
+        state.isErrorGoogleLogin = false;
+        state.isSuccessGoogleLogin = false;
+      })
+      .addCase(fetchGoogleLogin.fulfilled, (state, action) => {
+        state.isLoadingGoogleLogin = false;
+        state.isSuccessGoogleLogin = true;
+        state.user = action.payload.user;
+        state.refreshToken = action.payload.refreshToken;
+        state.accessToken = action.payload.accessToken;
+        state.errorMessageGoogleLogin = '';
+
+        // Add to logged in users if not already present
+        const userId = action.payload.user._id;
+        const alreadyLoggedIn = state.loggedInUsers.some(u => u._id === userId);
+        if (!alreadyLoggedIn) {
+          state.loggedInUsers.push(action.payload.user);
+        }
+      })
+      .addCase(fetchGoogleLogin.rejected, (state, action) => {
+        state.isLoadingGoogleLogin = false;
+        state.isErrorGoogleLogin = true;
+        state.errorMessageGoogleLogin = 
+          action.payload?.message || 'Google đăng nhập thất bại';
+        state.user = null;
+        state.refreshToken = '';
+        state.accessToken = '';
       })
 
       // Login cases
@@ -481,5 +527,6 @@ export const {
   resetForgotPasswordStatus,
   resetConfirmForgotPasswordStatus,
   resetConfirmKYCStatus,
+  resetGoogleLoginStatus,
 } = UserReducer.actions;
 export default UserReducer.reducer;

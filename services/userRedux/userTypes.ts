@@ -7,6 +7,8 @@ export interface User {
   username: string;
   password: string;
   avatarImg: string;
+  googleId?: string;
+  loginMethod?: 'traditional' | 'google';
   dateOfBirth: Date | string;
   phoneNum: string;
   address: string;
@@ -15,6 +17,23 @@ export interface User {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface GoogleLoginRequest {
+  googleToken: string;
+}
+
+export interface GoogleLoginResponse {
+  success: boolean;
+  accessToken: string;
+  refreshToken: string;
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+    avatarImg: string;
+  };
+}
+
 
 export interface UserRes {
   user: User;
