@@ -35,7 +35,6 @@ export interface GoogleLoginResponse {
   };
 }
 
-
 export interface UserRes {
   user: User;
 }

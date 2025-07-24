@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View, Alert } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 

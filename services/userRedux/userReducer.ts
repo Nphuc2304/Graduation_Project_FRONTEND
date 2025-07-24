@@ -143,6 +143,7 @@ const UserReducer = createSlice({
       state.isSuccess = false;
       state.isError = false;
       state.errorMessage = '';
+      Object.assign(state, initialState);
     },
     resetPublicProfileStatus: state => {
       state.isLoadingPublicProfile = false;
@@ -455,18 +456,20 @@ const UserReducer = createSlice({
         state.isError = false;
         state.isSuccess = false;
       })
-      .addCase(fetchLogout.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = false;
-        state.user = null;
-        state.refreshToken = '';
+      .addCase(fetchLogout.fulfilled, (state) => {
+        // Reset to complete initial state on successful logout
+        Object.assign(state, initialState);
       })
       .addCase(fetchLogout.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.errorMessage = action.payload?.message || 'Đăng xuất thất bại';
+        // Even if logout fails on server, clear client state
+        Object.assign(state, {
+          ...initialState,
+          isLoading: false,
+          isError: true,
+          errorMessage: action.payload?.message || 'Đăng xuất thất bại',
+        });
       })
-
+      
       // Check refresh token cases
       .addCase(fetchCheckRefreshToken.pending, state => {
         state.isLoading = true;
