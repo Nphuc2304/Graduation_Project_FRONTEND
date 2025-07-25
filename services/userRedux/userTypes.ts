@@ -30,6 +30,7 @@ export interface GoogleLoginResponse {
     id: string;
     email: string;
     fullName: string;
+    username: string;
     avatarImg: string;
   };
 }

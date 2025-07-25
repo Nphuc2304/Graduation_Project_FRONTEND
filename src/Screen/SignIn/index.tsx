@@ -1,4 +1,5 @@
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+// SignIn/index.tsx
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Wrapper from '../../../components/Wrapper';
 import ButtonIcon from '../../../components/ButtonIcon';
 import colors from '../../Color';
@@ -16,14 +17,22 @@ import {
   clearLoginCredentials,
 } from '../../utils/tokenStorage';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchLogin} from '../../../services/userRedux/userSlice';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {fetchLogin, fetchGoogleLogin} from '../../../services/userRedux/userSlice';
 import {AppDispatch, RootState} from '../../../services/store/store';
 
 export const SignIn = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const {isLoading, isError, errorMessage, isSuccess, user} = useSelector(
-    (state: RootState) => state.user,
-  );
+  const {
+    isLoading, 
+    isError, 
+    errorMessage, 
+    isSuccess, 
+    user,
+    isLoadingGoogleLogin,
+    isSuccessGoogleLogin,
+    errorMessageGoogleLogin,
+  } = useSelector((state: RootState) => state.user);
 
   // Debug Redux state
   console.log('🔍 SignIn Redux state:', {
@@ -33,13 +42,14 @@ export const SignIn = ({navigation}: any) => {
     isSuccess,
     user: user ? 'present' : 'null',
   });
+  
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [hide, setHide] = useState(true);
   const [check, setCheck] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  // Handle successful login
+  // Handle successful login (normal login)
   useEffect(() => {
     console.log(
       '🔄 SignIn useEffect - isSuccess:',
@@ -49,10 +59,20 @@ export const SignIn = ({navigation}: any) => {
     );
     if (isSuccess && user) {
       console.log('✅ Login successful, navigating to BottomTabs');
-      // Navigate to bottom tabs without passing user data
       navigation.replace('BottomTabs');
     }
   }, [isSuccess, user, navigation]);
+
+  // Handle successful Google login
+  useEffect(() => {
+    if (isSuccessGoogleLogin) {
+      console.log('✅ Google login successful, navigating to BottomTabs');
+      navigation.replace('BottomTabs');
+    }
+    if (errorMessageGoogleLogin) {
+      setErr(errorMessageGoogleLogin);
+    }
+  }, [isSuccessGoogleLogin, errorMessageGoogleLogin, navigation]);
 
   // Handle login error
   useEffect(() => {
@@ -67,6 +87,37 @@ export const SignIn = ({navigation}: any) => {
       setErr(errorMessage);
     }
   }, [isError, errorMessage]);
+
+  // Google Sign-In handler
+  const handleGoogleSignIn = async () => {
+    setErr(null);
+    try {
+      await GoogleSignin.signOut();
+      await GoogleSignin.hasPlayServices();
+
+      // 1) signIn() now returns the user directly
+      const userInfo = await GoogleSignin.signIn();
+      console.log('Google user info:', userInfo);
+
+      // 2) fetch tokens separately
+      const { idToken, accessToken } = await GoogleSignin.getTokens();
+      console.log("idToken:", idToken);
+      console.log("accessToken:", accessToken);
+
+      if (!idToken) throw new Error('ID token not returned');
+      if (!accessToken) throw new Error('Access token not returned');
+
+      // 3) dispatch 
+      const result = await dispatch(fetchGoogleLogin({ googleToken: accessToken }));
+      if (fetchGoogleLogin.fulfilled.match(result)) {
+        const { accessToken: backendAT, refreshToken } = result.payload;
+        await saveTokens({ accessToken: backendAT, refreshToken });
+      }
+    } catch (error: any) {
+      console.error('Google Sign-In error', error);
+      setErr(error.message || 'Google đăng nhập thất bại');
+    }
+  };
 
   const handleSignIn = async () => {
     if (!userName || !password) {
@@ -128,7 +179,8 @@ export const SignIn = ({navigation}: any) => {
           navigation.goBack();
         }}
       />
-      <View style={AppStyles.container}>
+      <ScrollView>
+        <View style={AppStyles.container}>
         <Image
           style={WelcomePageStyles.logo}
           source={require('../../../assets/images/img_splash.png')}
@@ -182,7 +234,16 @@ export const SignIn = ({navigation}: any) => {
           disabled={isLoading || !userName || !password}
           func={handleSignIn}
         />
-        <View style={[AppStyles.rowContainer, {marginTop: 50}]}>
+
+        <Text style={[LoginStyles.textBlack, { marginVertical: 20 }]}>
+          Or continue with
+        </Text>
+
+        <TouchableOpacity onPress={handleGoogleSignIn} disabled={isLoadingGoogleLogin}>
+          <Image source={require('../../../assets/icons/Google.png')} />
+        </TouchableOpacity>
+
+        <View style={[AppStyles.rowContainer, {marginTop: 30}]}>
           <Text style={LoginStyles.textBlack}>Don't have an account. </Text>
           <TextLink
             text="Sign up"
@@ -192,7 +253,8 @@ export const SignIn = ({navigation}: any) => {
             }}
           />
         </View>
-      </View>
+              </View>
+      </ScrollView>
     </Wrapper>
   );
 };

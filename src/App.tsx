@@ -5,6 +5,14 @@ import {Provider} from 'react-redux';
 import AppNavigator from './navigation/AppNavigation';
 import {store} from '../services/store/store';
 import {ThemeProvider} from './utils/ThemeContext';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+GoogleSignin.configure({
+  webClientId: '622343681897-bnelbp2nuq3rlnjf2mhsbq9vi71uuvvb.apps.googleusercontent.com',
+  offlineAccess: true,
+  forceCodeForRefreshToken: true,
+  accountName: '',
+});
 
 // Import Reactotron for debugging
 import './config/ReactotronConfig';

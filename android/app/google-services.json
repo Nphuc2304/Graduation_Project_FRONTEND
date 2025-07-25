@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "368528485101",
+    "firebase_url": "https://project-no1-daseinzumtode-default-rtdb.firebaseio.com",
+    "project_id": "project-no1-daseinzumtode",
+    "storage_bucket": "project-no1-daseinzumtode.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368528485101:android:022f5a98d0ae79e5d13ae4",
+        "android_client_info": {
+          "package_name": "com.graduation_project_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368528485101-ccrjeejqslg8t7uaokaduposs0c96qne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsu4hWC_lHX7Rw088NsSm-Lg7V2RqpHtg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368528485101-ccrjeejqslg8t7uaokaduposs0c96qne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
