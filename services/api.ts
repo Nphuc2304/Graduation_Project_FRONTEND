@@ -38,6 +38,7 @@ export const API = {
   GET_CAMPAIGN_BY_ID: 'campaigns',
   CREATE_CAMPAIGN: 'campaigns/new',
   UPDATE_CAMPAIGN: 'campaigns',
+  FILTER_CAMPAIGNS: 'campaigns/filter',
 
   //// Media
   GET_MEDIA_BY_ID: 'media',

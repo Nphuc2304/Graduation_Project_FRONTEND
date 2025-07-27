@@ -5,6 +5,8 @@ import {
   CampaignsResponse,
   CreateCampaignRequest,
   UpdateCampaignRequest,
+  FilterParams,
+  FilterCampaignsResponse,
 } from './campaignTypes';
 import axiosInstance from '../axiosInstance';
 import {API} from '../api';
@@ -173,6 +175,79 @@ export const fetchUpdateCampaign = createAsyncThunk<
   } catch (error: any) {
     return rejectWithValue({
       message: error.response?.data?.error || 'Cập nhật chiến dịch thất bại',
+    });
+  }
+});
+
+// 5. Filter campaigns
+export const fetchFilterCampaigns = createAsyncThunk<
+  {
+    campaigns: Campaign[];
+    pagination: any;
+    filters: any;
+  },
+  FilterParams,
+  {rejectValue: {message: string}}
+>('campaigns/filter', async (filterParams, {rejectWithValue}) => {
+  try {
+    // Build query string from filter parameters
+    const queryParams = new URLSearchParams();
+
+    if (filterParams.campName) {
+      queryParams.append('campName', filterParams.campName);
+    }
+    if (filterParams.minProgress !== undefined) {
+      queryParams.append('minProgress', filterParams.minProgress.toString());
+    }
+    if (filterParams.maxProgress !== undefined) {
+      queryParams.append('maxProgress', filterParams.maxProgress.toString());
+    }
+    if (filterParams.minGoal !== undefined) {
+      queryParams.append('minGoal', filterParams.minGoal.toString());
+    }
+    if (filterParams.maxGoal !== undefined) {
+      queryParams.append('maxGoal', filterParams.maxGoal.toString());
+    }
+    if (filterParams.minRemaining !== undefined) {
+      queryParams.append('minRemaining', filterParams.minRemaining.toString());
+    }
+    if (filterParams.maxRemaining !== undefined) {
+      queryParams.append('maxRemaining', filterParams.maxRemaining.toString());
+    }
+    if (filterParams.status) {
+      queryParams.append('status', filterParams.status);
+    }
+    if (filterParams.page) {
+      queryParams.append('page', filterParams.page.toString());
+    }
+    if (filterParams.limit) {
+      queryParams.append('limit', filterParams.limit.toString());
+    }
+    if (filterParams.sortBy) {
+      queryParams.append('sortBy', filterParams.sortBy);
+    }
+    if (filterParams.sortOrder) {
+      queryParams.append('sortOrder', filterParams.sortOrder);
+    }
+    if (filterParams.populate) {
+      queryParams.append('populate', filterParams.populate);
+    }
+
+    const queryString = queryParams.toString();
+    const url = queryString
+      ? `${API.FILTER_CAMPAIGNS}?${queryString}`
+      : API.FILTER_CAMPAIGNS;
+
+    const response = await axiosInstance.get<FilterCampaignsResponse>(url);
+
+    return {
+      campaigns: response.data.data.campaigns,
+      pagination: response.data.data.pagination,
+      filters: response.data.data.filters,
+    };
+  } catch (error: any) {
+    return rejectWithValue({
+      message: error.response?.data?.error || 'Lọc chiến dịch thất bại',
     });
   }
 });
