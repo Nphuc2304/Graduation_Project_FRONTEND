@@ -5,6 +5,7 @@ import {
   fetchGetCampaignById,
   fetchCreateCampaign,
   fetchUpdateCampaign,
+  fetchFilterCampaigns,
 } from './campaignSlice';
 import {Campaign, CampaignState} from './campaignTypes';
 
@@ -36,6 +37,15 @@ const initialState: CampaignState = {
   isSuccessUpdate: false,
   isErrorUpdate: false,
   errorMessageUpdate: '',
+
+  // Filter campaigns states
+  isLoadingFilter: false,
+  isSuccessFilter: false,
+  isErrorFilter: false,
+  errorMessageFilter: '',
+  filteredCampaigns: [],
+  filterPagination: null,
+  appliedFilters: null,
 };
 
 const CampaignReducer = createSlice({
@@ -83,6 +93,17 @@ const CampaignReducer = createSlice({
       state.isErrorUpdate = false;
       state.isSuccessUpdate = false;
       state.errorMessageUpdate = '';
+    },
+    resetFilterStatus: state => {
+      state.isLoadingFilter = false;
+      state.isErrorFilter = false;
+      state.isSuccessFilter = false;
+      state.errorMessageFilter = '';
+    },
+    clearFilteredCampaigns: state => {
+      state.filteredCampaigns = [];
+      state.filterPagination = null;
+      state.appliedFilters = null;
     },
   },
   extraReducers: builder => {
@@ -198,6 +219,27 @@ const CampaignReducer = createSlice({
         state.isErrorUpdate = true;
         state.errorMessageUpdate =
           action.payload?.message || 'Cập nhật chiến dịch thất bại';
+      })
+
+      // Filter campaigns cases
+      .addCase(fetchFilterCampaigns.pending, state => {
+        state.isLoadingFilter = true;
+        state.isErrorFilter = false;
+        state.isSuccessFilter = false;
+      })
+      .addCase(fetchFilterCampaigns.fulfilled, (state, action) => {
+        state.isLoadingFilter = false;
+        state.isSuccessFilter = true;
+        state.filteredCampaigns = action.payload.campaigns;
+        state.filterPagination = action.payload.pagination;
+        state.appliedFilters = action.payload.filters;
+        state.errorMessageFilter = '';
+      })
+      .addCase(fetchFilterCampaigns.rejected, (state, action) => {
+        state.isLoadingFilter = false;
+        state.isErrorFilter = true;
+        state.errorMessageFilter =
+          action.payload?.message || 'Lọc chiến dịch thất bại';
       });
   },
 });
@@ -211,6 +253,8 @@ export const {
   resetGetByIdStatus,
   resetCreateStatus,
   resetUpdateStatus,
+  resetFilterStatus,
+  clearFilteredCampaigns,
 } = CampaignReducer.actions;
 
 export default CampaignReducer.reducer;

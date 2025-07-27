@@ -87,4 +87,59 @@ export interface CampaignState {
   isSuccessUpdate: boolean;
   isErrorUpdate: boolean;
   errorMessageUpdate: string;
+
+  // Filter campaigns states
+  isLoadingFilter: boolean;
+  isSuccessFilter: boolean;
+  isErrorFilter: boolean;
+  errorMessageFilter: string;
+  filteredCampaigns: Campaign[];
+  filterPagination: PaginationInfo | null;
+  appliedFilters: FilterParams | null;
+}
+
+// Filter parameters interface
+export interface FilterParams {
+  campName?: string;
+  minProgress?: number;
+  maxProgress?: number;
+  minGoal?: number;
+  maxGoal?: number;
+  minRemaining?: number;
+  maxRemaining?: number;
+  status?: 'preparing' | 'active' | 'ended';
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  populate?: string;
+}
+
+// Pagination information interface
+export interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+// Filter response interface
+export interface FilterCampaignsResponse {
+  status: string;
+  data: {
+    campaigns: Campaign[];
+    pagination: PaginationInfo;
+    filters: {
+      campName: string | null;
+      minProgress: number | null;
+      maxProgress: number | null;
+      minGoal: number | null;
+      maxGoal: number | null;
+      minRemaining: number | null;
+      maxRemaining: number | null;
+      status: string | null;
+    };
+  };
 }

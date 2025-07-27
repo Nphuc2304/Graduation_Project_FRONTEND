@@ -8,6 +8,7 @@ export {
   fetchGetCampaignById,
   fetchCreateCampaign,
   fetchUpdateCampaign,
+  fetchFilterCampaigns,
 } from './campaignSlice';
 
 // Export reducer actions
@@ -20,6 +21,8 @@ export {
   resetGetByIdStatus,
   resetCreateStatus,
   resetUpdateStatus,
+  resetFilterStatus,
+  clearFilteredCampaigns,
 } from './campaignReducer';
 
 // Export reducer
