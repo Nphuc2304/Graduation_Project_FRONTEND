@@ -19,6 +19,7 @@ export interface Campaign {
   media: Media[];
   createdAt?: string;
   updatedAt?: string;
+  volunteers: string[];
 }
 
 export interface CampaignResponse {

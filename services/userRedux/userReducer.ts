@@ -16,6 +16,7 @@ import {
   fetchCheckEmail,
   getPublicProfile,
   fetchGoogleLogin,
+  fetchVolunteer
 } from './userSlice';
 import {User, PublicUserRes} from './userTypes';
 
@@ -547,6 +548,25 @@ const UserReducer = createSlice({
         state.errorMessagePublicProfile =
           action.payload?.message || 'Lấy thông tin người dùng thất bại';
         state.publicProfile = null;
+      })
+      // Volunteer campaign
+      .addCase(fetchVolunteer.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.errorMessage = '';
+      })
+      .addCase(fetchVolunteer.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        if (state.user && state.isSuccess === true) {
+          if (!state.user.joinedCampaigns) state.user.joinedCampaigns = [];
+          state.user.joinedCampaigns.push(action.payload.campaignId!);
+        }
+      })
+      .addCase(fetchVolunteer.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload?.message || 'Đăng ký thất bại';
       });
   },
 });

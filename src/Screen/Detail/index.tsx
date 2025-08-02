@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  Alert,
 } from 'react-native';
 import React, {useEffect} from 'react';
 import createDetailStyles from '../../Styles/DetailStyles';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, useIsFocused} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState, AppDispatch} from '../../../services/store/store';
 import {fetchGetCampaignById} from '../../../services/campaignRedux/campaignSlice';
@@ -18,10 +19,12 @@ import {resetGetByIdStatus} from '../../../services/campaignRedux/campaignReduce
 import {useTheme} from '../../utils/ThemeContext';
 import DetailImageCarousel from './components/DetailImageCarousel';
 import {BASE_URL} from '../../../services/api';
+import { fetchVolunteer } from '../../../services/userRedux/userSlice';
 
 const {width: screenWidth} = Dimensions.get('window');
 
 export const Detail = () => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const dispatch = useDispatch<AppDispatch>();
@@ -38,6 +41,8 @@ export const Detail = () => {
     isErrorGetById,
     errorMessageGetById,
   } = useSelector((state: RootState) => state.campaigns);
+
+  const { user } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     if (campaignId) {
@@ -114,6 +119,39 @@ export const Detail = () => {
     }
     return 0;
   };
+
+  const handleVolunteer = async () => {
+    if (!campaignId) {
+      return console.log('Error', 'Undefined campaign.');
+    }
+    const action = await dispatch(fetchVolunteer({ campaignId }));
+    if (fetchVolunteer.fulfilled.match(action)) {
+      const result = action.payload;
+      if (result.isSuccess) {
+        Alert.alert('Volunteer successful');
+      } else {
+        if (result.missingFields && result.missingFields.length > 0) {
+          Alert.alert(
+          'Missing profile info',
+          '',
+          [
+            {
+              text: 'Update profile info now',
+              onPress: () => navigation.navigate('EditProfile')
+            },
+            { text: 'Cancel', style: 'cancel' }
+          ]
+        );
+        } else {
+          Alert.alert('Volunteer error')
+        }
+      }
+    } else {
+      console.log('Network or server error:', action.payload?.message);
+    }
+  };
+
+  const alreadyVolunteered = currentCampaign?.volunteers?.includes(user?._id!);
 
   // Get campaign type name from ID
   const getCampaignTypeName = (typeId: string) => {
@@ -335,6 +373,31 @@ export const Detail = () => {
                 </Text>
               </View>
             </View>
+          </View>
+          <View style={DetailStyles.fourContainer}>
+            <Text style={DetailStyles.textL}>Volunteer</Text>
+            <Text
+              style={[
+                DetailStyles.textM,
+                {fontWeight: '400', textAlign: 'justify', color: colors.text},
+              ]}>
+              Current volunteer: {currentCampaign?.volunteers?.length ?? 0}
+            </Text>
+            <TouchableOpacity
+              style={[
+                DetailStyles.btnSmall,
+                { 
+                  alignItems: 'center',
+                  backgroundColor: alreadyVolunteered ? colors.backgroundSecondary : colors.primary
+                }
+              ]}
+              onPress={handleVolunteer}
+              disabled={alreadyVolunteered}
+            >
+              <Text style={[DetailStyles.textM, {color: colors.white}]}>
+                {alreadyVolunteered ? 'Already Volunteered' : 'Sign up to volunteer'}
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={DetailStyles.fourContainer}>
             <Text style={DetailStyles.textL}>Story</Text>
