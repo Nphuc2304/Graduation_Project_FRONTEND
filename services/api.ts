@@ -1,6 +1,6 @@
 // export const BASE_URL = 'http://192.168.1.6:3000/api/';
 // export const BASE_URL = 'http://192.168.100.157:3000/api/'; // for QA
-export const BASE_URL = 'http://192.168.1.7:3000/api/'; // for TrinhPhuc
+export const BASE_URL = 'http://192.168.1.8:3000/api/'; // for TrinhPhuc
 // export const BASE_URL = 'http://localhost:3000/api/'; // For iOS simulator
 
 export const API = {
@@ -26,6 +26,7 @@ export const API = {
   GET_PUBLIC_PROFILE: '/users/public',
   GET_USER_ID_BY_HANDLE: '/users/username-by-handle',
   CHANGE_PASSWORD: '/users/password',
+  VOLUNTEER: 'users/volunteer',
 
   //// Auth
   GET_ACCESS_TOKEN: 'users/refresh-access-token',

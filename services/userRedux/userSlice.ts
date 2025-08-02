@@ -19,6 +19,8 @@ import {
   ConfirmForgotPasswordResponse,
   ConfirmKYCResponse,
   User,
+  VolunteerRequest,
+  VolunteerResponse,
 } from './userTypes';
 import axiosInstance from '../axiosInstance';
 import {API, BASE_URL} from '../api';
@@ -406,5 +408,21 @@ export const fetchUserIdByHandleName = createAsyncThunk<
     return rejectWithValue({
       message: error.response?.data?.message || 'Lấy ID người dùng thất bại',
     });
+  }
+});
+
+export const fetchVolunteer = createAsyncThunk<
+  VolunteerResponse,
+  VolunteerRequest,
+  { rejectValue: { message: string } }
+>('user/volunteer', async ({ campaignId }, { rejectWithValue }) => {
+  try {
+    const response = await axiosInstance.post<VolunteerResponse>(
+      `${API.VOLUNTEER}/${campaignId}`,
+      {},
+    );  
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue({ message: error.response?.data?.error || 'Đăng ký thất bại' });
   }
 });

@@ -14,6 +14,7 @@ export interface User {
   lockedAccount: boolean;
   createdAt?: string;
   updatedAt?: string;
+  joinedCampaigns?: string[];
 }
 
 export interface UserRes {
@@ -136,4 +137,16 @@ export interface PublicUserRes {
   isVip: boolean;
   userFollowing: boolean;
   userBlocked: boolean;
+}
+
+export interface VolunteerRequest {
+  campaignId: string;
+}
+
+export interface VolunteerResponse {
+  isSuccess: boolean;
+  message: string;
+  campaignId?: string;
+  userId?: string;
+  missingFields?: string;
 }
