@@ -20,6 +20,7 @@ export interface Campaign {
   createdAt?: string;
   updatedAt?: string;
   volunteers: string[];
+  isVolunteered: boolean;
 }
 
 export interface CampaignResponse {
@@ -97,6 +98,10 @@ export interface CampaignState {
   filteredCampaigns: Campaign[];
   filterPagination: PaginationInfo | null;
   appliedFilters: FilterParams | null;
+
+  // volunteer
+  volunteerCount: number;
+  isVolunteered: boolean;
 }
 
 // Filter parameters interface

@@ -40,6 +40,8 @@ export const Detail = () => {
     isLoadingGetById,
     isErrorGetById,
     errorMessageGetById,
+    volunteerCount,
+    isVolunteered
   } = useSelector((state: RootState) => state.campaigns);
 
   const { user } = useSelector((state: RootState) => state.user);
@@ -48,6 +50,7 @@ export const Detail = () => {
     if (campaignId) {
       // Fetch campaign details when component mounts
       dispatch(fetchGetCampaignById(campaignId));
+      
     }
 
     // Reset status when component unmounts
@@ -128,6 +131,7 @@ export const Detail = () => {
     if (fetchVolunteer.fulfilled.match(action)) {
       const result = action.payload;
       if (result.isSuccess) {
+        dispatch(fetchGetCampaignById(campaignId));
         Alert.alert('Volunteer successful');
       } else {
         if (result.missingFields && result.missingFields.length > 0) {
@@ -150,8 +154,6 @@ export const Detail = () => {
       console.log('Network or server error:', action.payload?.message);
     }
   };
-
-  const alreadyVolunteered = currentCampaign?.volunteers?.includes(user?._id!);
 
   // Get campaign type name from ID
   const getCampaignTypeName = (typeId: string) => {
@@ -381,21 +383,21 @@ export const Detail = () => {
                 DetailStyles.textM,
                 {fontWeight: '400', textAlign: 'justify', color: colors.text},
               ]}>
-              Current volunteer: {currentCampaign?.volunteers?.length ?? 0}
+              Current volunteer: {volunteerCount}
             </Text>
             <TouchableOpacity
               style={[
                 DetailStyles.btnSmall,
                 { 
                   alignItems: 'center',
-                  backgroundColor: alreadyVolunteered ? colors.backgroundSecondary : colors.primary
+                  backgroundColor: isVolunteered ? colors.backgroundSecondary : colors.primary
                 }
               ]}
               onPress={handleVolunteer}
-              disabled={alreadyVolunteered}
+              disabled={isVolunteered}
             >
               <Text style={[DetailStyles.textM, {color: colors.white}]}>
-                {alreadyVolunteered ? 'Already Volunteered' : 'Sign up to volunteer'}
+                {isVolunteered ? 'Already Volunteered' : 'Sign up to volunteer'}
               </Text>
             </TouchableOpacity>
           </View>

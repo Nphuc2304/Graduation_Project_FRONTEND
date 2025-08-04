@@ -181,6 +181,7 @@ export interface VolunteerRequest {
 
 export interface VolunteerResponse {
   isSuccess: boolean;
+  isVolunteered: boolean;
   message: string;
   campaignId?: string;
   userId?: string;
