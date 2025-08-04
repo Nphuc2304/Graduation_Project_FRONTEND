@@ -46,6 +46,10 @@ const initialState: CampaignState = {
   filteredCampaigns: [],
   filterPagination: null,
   appliedFilters: null,
+
+  // volunteer
+  volunteerCount: 0,
+  isVolunteered: false,
 };
 
 const CampaignReducer = createSlice({
@@ -157,6 +161,10 @@ const CampaignReducer = createSlice({
         state.isSuccessGetById = true;
         state.currentCampaign = action.payload;
         state.errorMessageGetById = '';
+
+        const vols = action.payload.volunteers || [];
+        state.volunteerCount = vols.length;
+        state.isVolunteered = action.payload.isVolunteered;
       })
       .addCase(fetchGetCampaignById.rejected, (state, action) => {
         state.isLoadingGetById = false;
