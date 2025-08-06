@@ -1,4 +1,3 @@
-// SignIn/index.tsx
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Wrapper from '../../../components/Wrapper';
 import ButtonIcon from '../../../components/ButtonIcon';
@@ -87,6 +86,10 @@ export const SignIn = ({navigation}: any) => {
       setErr(errorMessage);
     }
   }, [isError, errorMessage]);
+
+  const handleForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
 
   // Google Sign-In handler
   const handleGoogleSignIn = async () => {
@@ -223,7 +226,7 @@ export const SignIn = ({navigation}: any) => {
           </TouchableOpacity>
           <Text>Remember me</Text>
         </View>
-        <TextLink text="Forgot password?" color={colors.primary} mg={20} />
+        <TextLink text="Forgot password?" color={colors.primary} mg={20} func={handleForgotPassword} />
         <ButtonActive
           text={isLoading ? 'Signing in…' : 'Sign In'}
           color={colors.white}
