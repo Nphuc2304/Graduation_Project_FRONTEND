@@ -4,7 +4,6 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   View,
   TextInput,
@@ -14,14 +13,14 @@ import {
 import Slider from '@react-native-community/slider';
 import {useSelector, useDispatch} from 'react-redux';
 import {useTheme} from '../../utils/ThemeContext';
-import ButtonIcon from '../../../components/ButtonIcon';
+// import ButtonIcon from '../../../components/ButtonIcon';
 import AppStyles from '../../Styles/AppStyles';
 import TextLink from '../../../components/TextLink';
-import VideoList from './components/VideoList';
+// import VideoList from './components/VideoList';
 import {useHeadAlert} from '../../../components/HeadAlertProvider';
 
 import Header from '../../../components/Header';
-import {ThemeToggle} from '../../../components/ThemeToggle';
+// import {ThemeToggle} from '../../../components/ThemeToggle';
 import Carousel from 'react-native-reanimated-carousel';
 import CampaignList from './components/CampaignList';
 import createHomeStyles from '../../bottomTabStyles/HomeStyles';
@@ -64,7 +63,7 @@ const Home = ({navigation}: any) => {
     appliedFilters,
   } = useSelector((state: RootState) => state.campaigns);
 
-  const [videoData, setVideoData] = useState<VideoItem[]>([]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Filter states
@@ -126,28 +125,7 @@ const Home = ({navigation}: any) => {
     // Fetch campaigns when component mounts
     dispatch(fetchGetAllCampaignsWithMedia());
 
-    setVideoData([
-      {
-        id: '1',
-        uri: 'https://www.w3schools.com/html/mov_bbb.mp4',
-        title: 'Video 1',
-      },
-      {
-        id: '2',
-        uri: 'https://www.w3schools.com/html/mov_bbb.mp4',
-        title: 'Video 2',
-      },
-      {
-        id: '3',
-        uri: 'https://www.w3schools.com/html/mov_bbb.mp4',
-        title: 'Video 3',
-      },
-      {
-        id: '4',
-        uri: 'https://www.w3schools.com/html/mov_bbb.mp4',
-        title: 'Video 4',
-      },
-    ]);
+
   }, [dispatch]);
 
   // Reset status when component unmounts
@@ -294,8 +272,8 @@ const Home = ({navigation}: any) => {
     }
   };
 
-  // Transform campaigns data to match CampaignList component interface
-  const transformCampaignsData = (campaignsData: any[]) => {
+  // Memoized transform function for better performance
+  const transformCampaignsData = useCallback((campaignsData: any[]) => {
     return campaignsData.map(campaign => {
       // Get all images from media array
       let images: string[] = ['https://picsum.photos/300/200'];
@@ -330,20 +308,43 @@ const Home = ({navigation}: any) => {
           : '0',
       };
     });
-  };
+  }, []);
 
-  const handleSelectItem = (id: string) => {
+  // Memoized callbacks for better performance
+  const handleSelectItem = useCallback((id: string) => {
     console.log('Selected Item:', id);
     // Navigate to campaign detail page
     navigation.navigate('Detail', {campaignId: id});
-  };
+  }, [navigation]);
+
+  const handleLongPress = useCallback((item: any) => {
+    console.log('Long pressed item:', item);
+    // Handle long press action (e.g., show context menu)
+    Alert.alert(
+      'Campaign Options',
+      `What would you like to do with "${item.name}"?`,
+      [
+        {text: 'View Details', onPress: () => handleSelectItem(item.id)},
+        {text: 'Share', onPress: () => console.log('Share campaign')},
+        {text: 'Cancel', style: 'cancel'},
+      ]
+    );
+  }, [handleSelectItem]);
 
   const HomeStyles = createHomeStyles(colors);
 
-  // Determine which campaigns to display
-  const displayCampaigns =
-    filteredCampaigns.length > 0 ? filteredCampaigns : campaigns;
-  const isFiltered = filteredCampaigns.length > 0;
+  // Memoized campaigns data to prevent unnecessary re-renders
+  const displayCampaigns = React.useMemo(() => {
+    return filteredCampaigns.length > 0 ? filteredCampaigns : campaigns;
+  }, [filteredCampaigns, campaigns]);
+
+  const isFiltered = React.useMemo(() => {
+    return filteredCampaigns.length > 0;
+  }, [filteredCampaigns.length]);
+
+  const transformedCampaigns = React.useMemo(() => {
+    return transformCampaignsData(displayCampaigns);
+  }, [displayCampaigns, transformCampaignsData]);
 
   return (
     <SafeAreaView style={{backgroundColor: colors.background}}>
@@ -611,8 +612,9 @@ const Home = ({navigation}: any) => {
             ) : (
               <>
                 <CampaignList
-                  data={transformCampaignsData(displayCampaigns)}
+                  data={transformedCampaigns}
                   onSelectItem={handleSelectItem}
+                  onLongPress={handleLongPress}
                 />
                 {isFiltered &&
                   filterPagination &&
