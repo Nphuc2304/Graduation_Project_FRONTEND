@@ -28,10 +28,9 @@ export const ForgotPassword = ({navigation}: any) => {
   const [hidePassword, setHidePassword] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  // Enable button only when both fields are filled
   const isFormValid = email.trim() !== '' && newPassword.trim() !== '';
 
-  // Handle success - navigate to verification screen
+  // Handle success and navigate to verification screen
   useEffect(() => {
     if (isSuccessForgotPassword && emailToken) {
       console.log('✅ Forgot password successful, navigating to Verification');
@@ -40,12 +39,11 @@ export const ForgotPassword = ({navigation}: any) => {
         newPassword: newPassword,
         emailToken: emailToken
       });
-      // Reset the status after navigation
+      // Reset the status
       dispatch(resetForgotPasswordStatus());
     }
   }, [isSuccessForgotPassword, emailToken, email, newPassword, navigation, dispatch]);
 
-  // Handle error from Redux
   useEffect(() => {
     if (isErrorForgotPassword && errorMessageForgotPassword) {
       console.log('❌ Forgot password error:', errorMessageForgotPassword);
@@ -82,7 +80,6 @@ export const ForgotPassword = ({navigation}: any) => {
     console.log('Attempting to send confirmation code to:', email);
 
     try {
-      // Dispatch the forgot password action
       const result = await dispatch(fetchForgotPassword({
         email: email,
         newPassword: newPassword
@@ -90,10 +87,8 @@ export const ForgotPassword = ({navigation}: any) => {
 
       console.log('Forgot password result:', result);
 
-      // Error handling is done in useEffect above
       if (fetchForgotPassword.rejected.match(result)) {
         console.log('Forgot password rejected:', result.error);
-        // Error will be set by useEffect
       }
     } catch (error: any) {
       console.error('Forgot password error:', error);

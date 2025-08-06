@@ -30,26 +30,23 @@ export const Verification = ({navigation, route}: any) => {
   const [codes, setCodes] = useState(['', '', '', '', '', '']);
   const [err, setErr] = useState<string | null>(null);
   
-  // Create refs for each input - Fixed TypeScript error
   const inputRefs = useRef<(TextInput | null)[]>([]);
   
   // Check if all codes are filled
   const isCodeComplete = codes.every(code => code !== '');
 
   useEffect(() => {
-    // Focus on first input when component mounts
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus();
     }
   }, []);
 
-  // Handle successful confirmation
   useEffect(() => {
     if (isSuccessConfirmForgotPassword) {
       console.log('✅ Password reset confirmed successfully');
       // Navigate back to SignIn screen
       navigation.navigate('SignIn');
-      // Reset the status after navigation
+      // Reset the status 
       dispatch(resetConfirmForgotPasswordStatus());
     }
   }, [isSuccessConfirmForgotPassword, navigation, dispatch]);
@@ -132,10 +129,8 @@ export const Verification = ({navigation, route}: any) => {
 
       console.log('Confirm forgot password result:', result);
 
-      // Error handling is done in useEffect above
       if (fetchConfirmForgotPassword.rejected.match(result)) {
         console.log('Confirm forgot password rejected:', result.error);
-        // Error will be set by useEffect
       }
     } catch (error: any) {
       console.error('Confirm forgot password error:', error);
@@ -157,7 +152,6 @@ export const Verification = ({navigation, route}: any) => {
 
       console.log('Resend code result:', result);
 
-      // Success handling is done in useEffect above
       if (fetchForgotPassword.rejected.match(result)) {
         console.log('Resend code rejected:', result.error);
         setErr('Failed to resend code. Please try again.');
