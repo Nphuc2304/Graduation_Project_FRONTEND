@@ -54,14 +54,17 @@ interface UserState {
   isSuccessCreditEditor: boolean;
   isErrorCreditEditor: boolean;
   errorMessageCreditEditor: string;
+
   isLoadingForgotPassword: boolean;
   isSuccessForgotPassword: boolean;
   isErrorForgotPassword: boolean;
   errorMessageForgotPassword: string;
+  emailToken: string,
   isLoadingConfirmForgotPassword: boolean;
   isSuccessConfirmForgotPassword: boolean;
   isErrorConfirmForgotPassword: boolean;
   errorMessageConfirmForgotPassword: string;
+
   isLoadingConfirmKYC: boolean;
   isSuccessConfirmKYC: boolean;
   isErrorConfirmKYC: boolean;
@@ -110,14 +113,17 @@ const initialState: UserState = {
   isSuccessCreditEditor: false,
   isErrorCreditEditor: false,
   errorMessageCreditEditor: '',
+
   isLoadingForgotPassword: false,
   isSuccessForgotPassword: false,
   isErrorForgotPassword: false,
   errorMessageForgotPassword: '',
+  emailToken: '',
   isLoadingConfirmForgotPassword: false,
   isSuccessConfirmForgotPassword: false,
   isErrorConfirmForgotPassword: false,
   errorMessageConfirmForgotPassword: '',
+
   isLoadingConfirmKYC: false,
   isSuccessConfirmKYC: false,
   isErrorConfirmKYC: false,
@@ -419,6 +425,7 @@ const UserReducer = createSlice({
         state.isLoadingForgotPassword = false;
         state.isSuccessForgotPassword = true;
         state.errorMessageForgotPassword = '';
+        state.emailToken = action.payload.emailToken;
       })
       .addCase(fetchForgotPassword.rejected, (state, action) => {
         state.isLoadingForgotPassword = false;
