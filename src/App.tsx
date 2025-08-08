@@ -1,12 +1,12 @@
 import React from 'react';
-import {enableScreens} from 'react-native-screens';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {Provider} from 'react-redux';
+import { enableScreens } from 'react-native-screens';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
 import AppNavigator from './navigation/AppNavigation';
-import {store} from '../services/store/store';
-import {ThemeProvider} from './utils/ThemeContext';
-import {HeadAlertProvider} from '../components/HeadAlertProvider';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { store } from '../services/store/store';
+import { ThemeProvider } from './utils/ThemeContext';
+import { HeadAlertProvider } from '../components/HeadAlertProvider';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 GoogleSignin.configure({
   webClientId:

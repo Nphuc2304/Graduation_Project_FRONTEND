@@ -2,37 +2,37 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
   Dimensions,
   Alert,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import createDetailStyles from '../../Styles/DetailStyles';
-import {useNavigation, useRoute, useIsFocused} from '@react-navigation/native';
-import {useSelector, useDispatch} from 'react-redux';
-import {RootState, AppDispatch} from '../../../services/store/store';
-import {fetchGetCampaignById} from '../../../services/campaignRedux/campaignSlice';
-import {resetGetByIdStatus} from '../../../services/campaignRedux/campaignReducer';
-import {useTheme} from '../../utils/ThemeContext';
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../../services/store/store';
+import { fetchGetCampaignById } from '../../../services/campaignRedux/campaignSlice';
+import { resetGetByIdStatus } from '../../../services/campaignRedux/campaignReducer';
+import { useTheme } from '../../utils/ThemeContext';
 import DetailImageCarousel from './components/DetailImageCarousel';
-import {BASE_URL} from '../../../services/api';
+import { BASE_URL } from '@services/api';
 import { fetchVolunteer } from '../../../services/userRedux/userSlice';
+import { fetchAddFavoriteCampaign } from '@services/bookMarkRedux';
 
-const {width: screenWidth} = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
 
 export const Detail = () => {
   const isFocused = useIsFocused();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
   const dispatch = useDispatch<AppDispatch>();
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const DetailStyles = createDetailStyles(colors);
 
   // Get campaign ID from route params
-  const {campaignId} = route.params || {};
+  const { campaignId } = route.params || {};
 
   // Get campaign data from Redux store
   const {
@@ -46,11 +46,26 @@ export const Detail = () => {
 
   const { user } = useSelector((state: RootState) => state.user);
 
+  const handleAddToBookmark = async () => {
+    if (!user?._id || !currentCampaign?._id) {
+      Alert.alert('Error', 'Unable to add to bookmark. Please try again.');
+      return;
+    }
+    try {
+      await dispatch(fetchAddFavoriteCampaign({
+        userId: user._id,
+        campaignId: currentCampaign._id
+      })).unwrap();
+    } catch (error) {
+      Alert.alert('Error', 'Failed to add to bookmarks. Please try again.');
+    }
+  };
+
   useEffect(() => {
     if (campaignId) {
       // Fetch campaign details when component mounts
       dispatch(fetchGetCampaignById(campaignId));
-      
+
     }
 
     // Reset status when component unmounts
@@ -62,14 +77,14 @@ export const Detail = () => {
   // Calculate percentage if campaign data exists
   const percent = currentCampaign
     ? parseFloat(
-        Math.min(
-          100,
-          Math.max(
-            0,
-            (currentCampaign.currentFund / currentCampaign.totalGoal) * 100,
-          ),
-        ).toFixed(0),
-      )
+      Math.min(
+        100,
+        Math.max(
+          0,
+          (currentCampaign.currentFund / currentCampaign.totalGoal) * 100,
+        ),
+      ).toFixed(0),
+    )
     : 0;
 
   // Get all images from campaign media
@@ -116,7 +131,7 @@ export const Detail = () => {
       const daysSinceCreation = Math.ceil(
         (new Date().getTime() -
           new Date(currentCampaign.dateCreated).getTime()) /
-          (1000 * 60 * 60 * 24),
+        (1000 * 60 * 60 * 24),
       );
       return daysSinceCreation > 0 ? daysSinceCreation : 0;
     }
@@ -136,16 +151,16 @@ export const Detail = () => {
       } else {
         if (result.missingFields && result.missingFields.length > 0) {
           Alert.alert(
-          'Missing profile info',
-          '',
-          [
-            {
-              text: 'Update profile info now',
-              onPress: () => navigation.navigate('EditProfile')
-            },
-            { text: 'Cancel', style: 'cancel' }
-          ]
-        );
+            'Missing profile info',
+            '',
+            [
+              {
+                text: 'Update profile info now',
+                onPress: () => navigation.navigate('EditProfile')
+              },
+              { text: 'Cancel', style: 'cancel' }
+            ]
+          );
         } else {
           Alert.alert('Volunteer error')
         }
@@ -157,7 +172,7 @@ export const Detail = () => {
 
   // Get campaign type name from ID
   const getCampaignTypeName = (typeId: string) => {
-    const typeMapping: {[key: string]: string} = {
+    const typeMapping: { [key: string]: string } = {
       '1': 'Medical Aid',
       '2': 'Disaster Relief',
       '3': 'Education Fund',
@@ -175,9 +190,9 @@ export const Detail = () => {
   if (isLoadingGetById) {
     return (
       <SafeAreaView
-        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: colors.primary}}>
+        style={[DetailStyles.container, { backgroundColor: colors.background }]}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: colors.primary }}>
             Loading campaign details...
           </Text>
         </View>
@@ -188,9 +203,9 @@ export const Detail = () => {
   if (isErrorGetById) {
     return (
       <SafeAreaView
-        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: colors.error}}>{errorMessageGetById}</Text>
+        style={[DetailStyles.container, { backgroundColor: colors.background }]}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: colors.error }}>{errorMessageGetById}</Text>
           <TouchableOpacity
             style={{
               marginTop: 20,
@@ -199,7 +214,7 @@ export const Detail = () => {
               borderRadius: 5,
             }}
             onPress={() => navigation.goBack()}>
-            <Text style={{color: colors.white}}>Go Back</Text>
+            <Text style={{ color: colors.white }}>Go Back</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -209,9 +224,9 @@ export const Detail = () => {
   if (!currentCampaign) {
     return (
       <SafeAreaView
-        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{color: colors.error}}>Campaign not found</Text>
+        style={[DetailStyles.container, { backgroundColor: colors.background }]}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: colors.error }}>Campaign not found</Text>
           <TouchableOpacity
             style={{
               marginTop: 20,
@@ -220,7 +235,7 @@ export const Detail = () => {
               borderRadius: 5,
             }}
             onPress={() => navigation.goBack()}>
-            <Text style={{color: colors.white}}>Go Back</Text>
+            <Text style={{ color: colors.white }}>Go Back</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -229,10 +244,10 @@ export const Detail = () => {
 
   return (
     <SafeAreaView
-      style={[DetailStyles.container, {backgroundColor: colors.background}]}>
+      style={[DetailStyles.container, { backgroundColor: colors.background }]}>
       <ScrollView
-        style={[DetailStyles.container, {backgroundColor: colors.background}]}>
-        <View style={{width: '100%'}}>
+        style={[DetailStyles.container, { backgroundColor: colors.background }]}>
+        <View style={{ width: '100%' }}>
           <DetailImageCarousel
             images={getCampaignImages()}
             height={250}
@@ -242,12 +257,12 @@ export const Detail = () => {
             <TouchableOpacity
               style={[
                 DetailStyles.btnRounded,
-                {backgroundColor: colors.background},
+                { backgroundColor: colors.background },
               ]}
               onPress={() => navigation.goBack()}>
               <Image
                 source={require('../../../assets/icons/back.png')}
-                style={[DetailStyles.iconBack, {tintColor: colors.text}]}
+                style={[DetailStyles.iconBack, { tintColor: colors.text }]}
               />
             </TouchableOpacity>
             <View style={[DetailStyles.row, DetailStyles.fourContainer]}>
@@ -257,7 +272,7 @@ export const Detail = () => {
                   style={DetailStyles.icon}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleAddToBookmark}>
                 <Image
                   source={require('../../../assets/icons/mark.png')}
                   style={DetailStyles.icon}
@@ -274,11 +289,11 @@ export const Detail = () => {
             {currentCampaign.campName}
           </Text>
           <View style={DetailStyles.row}>
-            <Text style={[DetailStyles.textS, {color: colors.primary}]}>
+            <Text style={[DetailStyles.textS, { color: colors.primary }]}>
               {currentCampaign.currentFund.toLocaleString()} VNĐ{' '}
             </Text>
             <Text style={DetailStyles.textS}>Quỹ huy động từ </Text>
-            <Text style={[DetailStyles.textS, {color: colors.primary}]}>
+            <Text style={[DetailStyles.textS, { color: colors.primary }]}>
               {currentCampaign.totalGoal.toLocaleString()} VNĐ
             </Text>
           </View>
@@ -294,19 +309,19 @@ export const Detail = () => {
                   top: 0,
                 }}></View>
             </View>
-            <Text style={[DetailStyles.textXS, {marginLeft: 15}]}>
+            <Text style={[DetailStyles.textXS, { marginLeft: 15 }]}>
               {percent}%
             </Text>
           </View>
           <View style={DetailStyles.rowSpace}>
             <Text style={DetailStyles.textS}>
-              <Text style={{color: colors.primary}}>
+              <Text style={{ color: colors.primary }}>
                 {currentCampaign.currentFund.toLocaleString()}
               </Text>{' '}
               raised
             </Text>
             <Text style={DetailStyles.textS}>
-              <Text style={{color: colors.primary}}>{getDaysLeft()}</Text> days
+              <Text style={{ color: colors.primary }}>{getDaysLeft()}</Text> days
               left
             </Text>
           </View>
@@ -329,7 +344,7 @@ export const Detail = () => {
           <TouchableOpacity
             style={DetailStyles.btnLarge}
             onPress={() => navigation.navigate('Donation')}>
-            <Text style={[DetailStyles.textL, {color: colors.white}]}>
+            <Text style={[DetailStyles.textL, { color: colors.white }]}>
               Donation Now
             </Text>
           </TouchableOpacity>
@@ -338,13 +353,13 @@ export const Detail = () => {
           <View style={DetailStyles.fourContainer}>
             <Text style={DetailStyles.textL}>Fundraiser</Text>
             <View style={DetailStyles.rowSpace}>
-              <View style={[DetailStyles.btnRounded, {width: 46, height: 46}]}>
+              <View style={[DetailStyles.btnRounded, { width: 46, height: 46 }]}>
                 <Image
                   source={require('../../../assets/icons/homeB.png')}
                   style={DetailStyles.smallIcon}
                 />
               </View>
-              <View style={[DetailStyles.mgL, {flex: 1}]}>
+              <View style={[DetailStyles.mgL, { flex: 1 }]}>
                 <Text style={DetailStyles.textM}>
                   {currentCampaign.hostType === 'admin'
                     ? 'Organization'
@@ -353,7 +368,7 @@ export const Detail = () => {
                 <Text style={DetailStyles.textXXS}>Verfied ✅</Text>
               </View>
               <TouchableOpacity style={DetailStyles.btnBorder}>
-                <Text style={[DetailStyles.textXXS, {color: colors.primary}]}>
+                <Text style={[DetailStyles.textXXS, { color: colors.primary }]}>
                   Follow
                 </Text>
               </TouchableOpacity>
@@ -362,7 +377,7 @@ export const Detail = () => {
           <View style={DetailStyles.fourContainer}>
             <Text style={DetailStyles.textL}>Patient</Text>
             <View style={DetailStyles.row}>
-              <View style={[DetailStyles.btnRounded, {width: 46, height: 46}]}>
+              <View style={[DetailStyles.btnRounded, { width: 46, height: 46 }]}>
                 <Image
                   source={require('../../../assets/icons/userB.png')}
                   style={DetailStyles.smallIcon}
@@ -381,14 +396,14 @@ export const Detail = () => {
             <Text
               style={[
                 DetailStyles.textM,
-                {fontWeight: '400', textAlign: 'justify', color: colors.text},
+                { fontWeight: '400', textAlign: 'justify', color: colors.text },
               ]}>
               Current volunteer: {volunteerCount}
             </Text>
             <TouchableOpacity
               style={[
                 DetailStyles.btnSmall,
-                { 
+                {
                   alignItems: 'center',
                   backgroundColor: isVolunteered ? colors.backgroundSecondary : colors.primary
                 }
@@ -396,7 +411,7 @@ export const Detail = () => {
               onPress={handleVolunteer}
               disabled={isVolunteered}
             >
-              <Text style={[DetailStyles.textM, {color: colors.white}]}>
+              <Text style={[DetailStyles.textM, { color: colors.white }]}>
                 {isVolunteered ? 'Already Volunteered' : 'Sign up to volunteer'}
               </Text>
             </TouchableOpacity>
@@ -406,10 +421,10 @@ export const Detail = () => {
             <Text
               style={[
                 DetailStyles.textM,
-                {fontWeight: '400', textAlign: 'justify'},
+                { fontWeight: '400', textAlign: 'justify' },
               ]}>
               {currentCampaign.campDescription || 'No description available'}{' '}
-              <Text style={[DetailStyles.textM, {color: colors.primary}]}>
+              <Text style={[DetailStyles.textM, { color: colors.primary }]}>
                 Read more ...
               </Text>
             </Text>

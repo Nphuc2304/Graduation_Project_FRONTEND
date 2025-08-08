@@ -1,3 +1,68 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@components": [
+        "components"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@screens/*": [
+        "src/Screen/*"
+      ],
+      "@tabs/*": [
+        "src/(tabs)/*"
+      ],
+      "@home": [
+        "src/(tabs)/Home"
+      ],
+      "@home/*": [
+        "src/(tabs)/Home/*"
+      ],
+      "@services": [
+        "services"
+      ],
+      "@services/*": [
+        "services/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@utils": [
+        "src/utils"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@styles": [
+        "src/Styles"
+      ],
+      "@styles/*": [
+        "src/Styles/*"
+      ],
+      "@hooks": [
+        "src/hooks"
+      ],
+      "@hooks/*": [
+        "src/hooks/*"
+      ],
+      "@config/*": [
+        "src/config/*"
+      ],
+      "@navigation/*": [
+        "src/navigation/*"
+      ]
+    },
+  },
+  "include": [
+    "src/**/*",
+    "components/**/*",
+    "services/**/*",
+    "assets/**/*"
+  ]
 }
