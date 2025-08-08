@@ -1,7 +1,7 @@
 // export const BASE_URL = 'http://192.168.1.6:3000/api/';
 // export const BASE_URL = 'http://192.168.100.157:3000/api/'; // for QA
-export const BASE_URL = 'http://192.168.1.9:3000/api/'; // for TrinhPhuc
-// export const BASE_URL = 'http://localhost:3000/api/'; // For iOS simulator
+// export const BASE_URL = 'http://192.168.1.9:3000/api/'; // for TrinhPhuc
+export const BASE_URL = 'http://10.0.2.2:3000/api/'; // For iOS simulator
 
 export const API = {
   //// Auth - Updated to match backend routes

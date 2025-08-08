@@ -1,7 +1,7 @@
-import {Image, Text, View} from 'react-native';
+import { Image, Text, View } from 'react-native';
 import ButtonIcon from './ButtonIcon';
-import AppStyles from '../src/Styles/AppStyles';
-import {useTheme} from '../src/utils/ThemeContext';
+import AppStyles from '@styles/AppStyles';
+import { useTheme } from '@utils/ThemeContext';
 
 const Header = (props: any) => {
   const {
@@ -16,10 +16,10 @@ const Header = (props: any) => {
     navigation,
   } = props;
 
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return (
-    <View style={[AppStyles.rowContainerSpace, {margin: mg}]}>
+    <View style={[AppStyles.rowContainerSpace, { margin: mg }]}>
       <View style={AppStyles.rowContainer}>
         {logo && <Image style={AppStyles.logo} source={logo} />}
         {iconBack && (
@@ -34,7 +34,7 @@ const Header = (props: any) => {
           />
         )}
         {title && (
-          <Text style={[AppStyles.textTitle, {color: colors.text}]}>
+          <Text style={[AppStyles.textTitle, { color: colors.text }]}>
             {title}
           </Text>
         )}
@@ -47,7 +47,7 @@ const Header = (props: any) => {
             iconColor={colors.primary}
             borderRa="10%"
             ml={10}
-            func={() => {}}
+            func={() => { }}
           />
         )}
         {iconSave && (

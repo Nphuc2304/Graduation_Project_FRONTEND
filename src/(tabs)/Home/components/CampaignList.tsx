@@ -1,12 +1,12 @@
-import {Text, TouchableOpacity, View} from 'react-native';
-import {memo, useCallback} from 'react';
-import {FlashList} from '@shopify/flash-list';
-import {useTheme} from '../../../utils/ThemeContext';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { memo, useCallback } from 'react';
+import { FlashList } from '@shopify/flash-list';
+import { useTheme } from '../../../utils/ThemeContext';
 import createListProdStyles from '../../../Styles/ListProdStyles';
 import AppStyles from '../../../Styles/AppStyles';
 import ImageCarousel from './ImageCarousel';
 
-interface CampaignItem {
+export interface CampaignItem {
   id: string;
   name: string;
   images: string[];
@@ -17,6 +17,9 @@ interface CampaignItem {
   dayLeft: string;
 }
 
+// Type for compatibility with bookmark Campaign
+export type CampaignType = CampaignItem;
+
 interface CampaignItemProps {
   item: CampaignItem;
   onSelectItem: (id: string) => void;
@@ -25,8 +28,8 @@ interface CampaignItemProps {
 
 // Memoized Campaign Item Component
 const CampaignItemComponent = memo<CampaignItemProps>(
-  ({item, onSelectItem, onLongPress}) => {
-    const {colors} = useTheme();
+  ({ item, onSelectItem, onLongPress }) => {
+    const { colors } = useTheme();
     const styles = createListProdStyles(colors);
 
     const percent = parseFloat(
@@ -41,6 +44,7 @@ const CampaignItemComponent = memo<CampaignItemProps>(
     }, [onSelectItem, item.id]);
 
     const handleLongPress = useCallback(() => {
+      console.log('CampaignList: Long press detected for item:', item.id);
       onLongPress(item);
     }, [onLongPress, item]);
 
@@ -48,6 +52,7 @@ const CampaignItemComponent = memo<CampaignItemProps>(
       <TouchableOpacity
         onPress={handlePress}
         onLongPress={handleLongPress}
+        delayLongPress={500}
         style={styles.container}>
         <ImageCarousel images={item.images} />
         <View style={styles.content}>
@@ -58,11 +63,11 @@ const CampaignItemComponent = memo<CampaignItemProps>(
             {item.name}
           </Text>
           <View style={styles.textWrap}>
-            <Text style={[styles.textContent, {color: colors.primary}]}>
+            <Text style={[styles.textContent, { color: colors.primary }]}>
               {item.priceCurrent.toLocaleString()} VNĐ{' '}
             </Text>
             <Text style={styles.textContent}>Quỹ huy động từ </Text>
-            <Text style={[styles.textContent, {color: colors.primary}]}>
+            <Text style={[styles.textContent, { color: colors.primary }]}>
               {item.totalGoal.toLocaleString()} VNĐ
             </Text>
           </View>
@@ -89,13 +94,13 @@ const CampaignItemComponent = memo<CampaignItemProps>(
           </View>
           <View style={AppStyles.rowContainerSpace}>
             <Text style={styles.textContent}>
-              <Text style={{color: colors.primary}}>
+              <Text style={{ color: colors.primary }}>
                 {item.donators.toLocaleString()}
               </Text>{' '}
               donators
             </Text>
             <Text style={styles.textContent}>
-              <Text style={{color: colors.primary}}>{item.dayLeft}</Text>{' '}
+              <Text style={{ color: colors.primary }}>{item.dayLeft}</Text>{' '}
               days left
             </Text>
           </View>
@@ -125,9 +130,9 @@ interface CampaignListProps {
 }
 
 const CampaignList = memo<CampaignListProps>(
-  ({data, onSelectItem, onLongPress}) => {
+  ({ data, onSelectItem, onLongPress }) => {
     const renderItem = useCallback(
-      ({item}: {item: CampaignItem}) => (
+      ({ item }: { item: CampaignItem }) => (
         <CampaignItemComponent
           item={item}
           onSelectItem={onSelectItem}
@@ -158,7 +163,7 @@ const CampaignList = memo<CampaignListProps>(
     if (prevProps.data.length !== nextProps.data.length) {
       return false;
     }
-    
+
     // Check if callback functions are the same
     if (
       prevProps.onSelectItem !== nextProps.onSelectItem ||
