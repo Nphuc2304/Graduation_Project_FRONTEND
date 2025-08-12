@@ -1,5 +1,7 @@
+
 // export const BASE_URL = 'http://192.168.1.6:3000/api/';
 export const BASE_URL = 'http://192.168.100.157:3000/api/'; // for QA
+
 // export const BASE_URL = 'http://192.168.1.9:3000/api/'; // for TrinhPhuc
 // export const BASE_URL = 'http://localhost:3000/api/'; // For iOS simulator
 
@@ -44,4 +46,12 @@ export const API = {
 
   //// Media
   GET_MEDIA_BY_ID: 'media',
+
+  //// ZaloPay Payment
+  ZALOPAY_CREATE: 'zalopay/create',
+  ZALOPAY_QUERY: 'zalopay/query',
+  ZALOPAY_DONATION: 'zalopay/donation',
+  ZALOPAY_DONATIONS_CAMPAIGN: 'zalopay/donations/campaign',
+  ZALOPAY_DONATIONS_USER: 'zalopay/donations/user',
+  ZALOPAY_DONATIONS_STATS: 'zalopay/donations/stats',
 };

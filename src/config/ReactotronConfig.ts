@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-const reactotron = Reactotron.configure({name: 'MyApp', host: '192.168.1.6'}) // 👈 tên hiển thị trong app Reactotron
+const reactotron = Reactotron.configure({name: 'MyApp', host: '192.168.1.3'}) // 👈 tên hiển thị trong app Reactotron
   .useReactNative({
     networking: {ignoreUrls: /symbolicate/},
     asyncStorage: true,
