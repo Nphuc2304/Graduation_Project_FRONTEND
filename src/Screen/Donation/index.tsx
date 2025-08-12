@@ -3,8 +3,10 @@ import React, {useEffect, useState} from 'react';
 import ThreeCol from '../../../components/ThreeCol';
 import CheckBox from '@react-native-community/checkbox';
 import DonationStyles from '../../Styles/DonationStyles';
-import colors from '../../Color';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../services/store/store';
+import {useTheme} from '../../utils/ThemeContext';
 
 const Prices = [20000, 50000, 100000, 200000, 500000, 1000000];
 
@@ -14,6 +16,9 @@ export const Dontation = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [isMatchAmount, setIsMatchAmount] = useState(false);
   const navigation = useNavigation<any>();
+  const route = useRoute<any>();
+  const {colors} = useTheme();
+  const {currentCampaign} = useSelector((state: RootState) => state.campaigns);
 
   const handleSelectionChange = (items: string[]) => {
     if (items[0] == null) {
@@ -37,7 +42,9 @@ export const Dontation = () => {
   return (
     <View style={DonationStyles.container}>
       <View style={DonationStyles.rowContainerSpace}>
-        <TouchableOpacity style={DonationStyles.backBox} onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={DonationStyles.backBox}
+          onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../assets/icons/back.png')}
             style={DonationStyles.iconback}
@@ -102,13 +109,24 @@ export const Dontation = () => {
         </View>
       </View>
       <View style={{backgroundColor: colors.white}}>
-        <TouchableOpacity style={DonationStyles.btn} onPress={() => {navigation.navigate("Payment");
-          setSelectedItems(0);
-        }}>
-        <Text style={[DonationStyles.textL, {color: colors.white}]}>
-          Donate Now
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={DonationStyles.btn}
+          onPress={() => {
+            navigation.navigate('Payment', {
+              amount: selectedItems,
+              campaignId: currentCampaign?._id,
+              campaignName: currentCampaign?.campName,
+              isAnonymous: isCheck,
+              description: `Quyên góp cho ${
+                currentCampaign?.campName || 'chiến dịch từ thiện'
+              }`,
+            });
+            setSelectedItems(0);
+          }}>
+          <Text style={[DonationStyles.textL, {color: colors.white}]}>
+            Donate Now
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
